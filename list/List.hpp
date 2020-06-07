@@ -33,59 +33,85 @@ namespace ft
 	template<typename T, class Allocator = std::allocator<El<T> > >
 	class List
 	{
-		class Iterator
+		public:
+		struct Iterator
 		{
-			public:
 			Iterator()
 			{
-				_t = NULL;
+				_el = NULL;
 			};
 
 			Iterator(const Iterator& it)
 			{
-				_t = it->_t;
+				_el = it._el;
 			};
 
 			~Iterator()
 			{};
 
-			void operator = (const Iterator& it)
+			Iterator& operator = (const Iterator& it)
 			{
-				_t = it->_t;
+				_el = it._el;
+				return (*this);
 			};
 
 			bool operator == (const Iterator& it)
 			{
-				return (it->_t == _t);
+				return (it._el == _el);
 			};
 
 			bool operator != (const Iterator& it)
 			{
-				return (it->_t != _t);
+				return (it._el != _el);
 			};
 
 			T& operator * ()
 			{
-				return (this->_t->_t);
+				return (this->_el->_t);
 			};
 
 			T* operator ->()
 			{
-				return (&this->_t->_t);
+				return (&this->_el->_t);
 			};
 
+			Iterator& operator ++()
+			{
+				this->_el = this->_el->next;
+				return (*this);
+			};
 
+			Iterator& operator --()
+			{
+				this->_el = this->_el->prev;
+				return (*this);
+			};
 
-			private:
-			El<T>* _t;
+			Iterator operator ++ (int)
+			{
+				Iterator b = *this;
+
+				this->_el = this->_el->next;
+				return (b);
+			};
+
+			Iterator operator -- (int)
+			{
+				Iterator b = *this;
+
+				this->_el = this->_el->prev;
+				return (b);
+			};
+
+			El<T>* _el;
 		};
+
 
 
 		public:
 		List()
 		{
 			_el = NULL;
-			_end = _allocator.allocate(1);
 			_end->prev = NULL;
 			_size = 0;
 			_max_size = 0;
@@ -102,8 +128,16 @@ namespace ft
 
 		List(const List& list)
 		{
-			clear();
 			// avec iterator
+			Iterator end = list.end();
+			Iterator begin = list.begin();
+
+			_size = 0;
+			_max_size = 0;
+			while (--end != begin)
+			{
+				push_front(*end);
+			}
 		};
 
 		~List() // WHAT THE FUCK !!!!
@@ -111,9 +145,18 @@ namespace ft
 			clear();
 		};
 
-		void operator = (const List& list)
+		void operator = (const List& list) // not implemented yet, needs const iterator
 		{
+			clear();
 
+			/*_size = 0;
+			_max_size = 0;
+			El<T> *b = list._el;
+			while (b)
+			{
+				push_front(b->_t);
+				b = b->next;
+			}*/
 		};
 
 		/* Methods */
@@ -141,33 +184,22 @@ namespace ft
 
 		T& back()
 		{
-			El<T>* b = _el;
-			int i;
-			for (i = 0; i < _size - 1; i++)
-				b = b->next;
+			El<T>* b = access_last();
 			return (b->_t);
-
-			/*int i = 0;
-			while (b->next != NULL)
-			{
-				b = b->next;
-				i++;
-			}*/
-
-			return (b->_t);
-
 		};
 
 		void push_front(T t)
 		{
 			El<T>* b;
+
 			b = _allocator.allocate(1);
 			_allocator.construct(b, t);
 			if (_el == NULL)
 			{
 				_el = b;
-				_el->next = _end;
+				_el->next = &_end;
 				_size = 1;
+				_end.prev = _el;
 				return ;
 			}
 			b->next = _el;
@@ -179,13 +211,15 @@ namespace ft
 		void push_back(T t)
 		{
 			El<T>* b;
+
 			b = _allocator.allocate(1);
 			_allocator.construct(b, t);
 			if (_el == NULL)
 			{
 				_el = b;
 				_size = 1;
-				_el->next = _end;
+				_el->next = &_end;
+				_end.prev = _el;
 				return ;
 			}
 			El<T>* it = _el;
@@ -193,7 +227,8 @@ namespace ft
 				it = it->next;
 			it->next = b;
 			b->prev = it;
-			b->next = _end;
+			b->next = &_end;
+			_end.prev = b;
 			_size += 1;
 		};
 
@@ -217,28 +252,48 @@ namespace ft
 			for (int i = 0; i < _size - 1; i++)
 				it = it->next;
 			if (it->prev)
-				it->prev->next = _end;
+				it->prev->next = &_end;
 			_allocator.deallocate(it, 1);
 			_size -= 1;
 		};
 
-		/*Iterator begin()
+		Iterator begin()
 		{
-			return (Iterator());
-		};*/
+			Iterator it;
+			it._el = _el;
+			return (it);
+		};
+
+		Iterator end()
+		{
+			Iterator it;
+			it._el = &_end;
+			return (it);
+		};
 
 		void clear()
 		{
 			if (empty())
 				return ;
+			/*
 			El<T>* b = _el;
 			while (_size--)
 			{
 				pop_front();
+			}*/
+			Iterator it(begin());
+			Iterator end2(end());
+			while (it != end2)
+			{
+				_allocator.deallocate(it->_el, 1);
+				it++;
 			}
+			_size = 0;
+			_max_size = 0;
+			_end.prev = 0;
 		};
 
-		void swap(List& list)
+		void swap(List& list) // not implemented yet
 		{
 			El<T>* b;
 			b = list->_el;
@@ -252,13 +307,24 @@ namespace ft
 
 		private:
 		El<T>			*_el;
-		El<T>			*_end;
+		El<T>			_end;
 		unsigned int	_size;
 		unsigned int	_max_size;
 		Allocator		_allocator;
 
-		El<T>			*get_first();
-		El<T>			*get_last();
+		El<T>*			access_first()
+		{
+			return (_el);
+		};
+
+		El<T>*			access_last()
+		{
+			El<T> *b = _el;
+			for (int i = 0; i < _size - 1; i++)
+				b = b->next;
+			return (b);
+		};
+
 
 	};
 };
