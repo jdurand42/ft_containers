@@ -281,13 +281,17 @@ namespace ft
 			{
 				pop_front();
 			}*/
+			std::cout << "lol";
 			Iterator it(begin());
+			std::cout << "lol";
 			Iterator end2(end());
+			std::cout << "lol";
 			while (it != end2)
 			{
-				_allocator.deallocate(it->_el, 1);
+				_allocator.deallocate(it._el, 1);
 				it++;
 			}
+			std::cout << "lol";
 			_size = 0;
 			_max_size = 0;
 			_end.prev = 0;
