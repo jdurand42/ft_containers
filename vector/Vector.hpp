@@ -10,7 +10,7 @@ namespace ft
 	{
 
 		typedef size_t		size_type;
-		typedef long		difference_type;
+		typedef ptrdiff_t		difference_type;
 		typedef T*			pointer;
 		typedef T&			reference;
 		typedef T			type;
@@ -215,6 +215,21 @@ namespace ft
 			return (b);
 		};
 
+		Iterator rbegin()
+		{
+			Iterator b;
+
+			b._t = &_v[-1];
+			return (b);
+		};
+
+		Iterator rend()
+		{
+			Iterator b;
+
+			b._t = &_v[_size - 1];
+			return (b);
+		};
 		/*
 		** ACCESS
 		** Don't forget to throw the out of range exception
@@ -360,6 +375,37 @@ namespace ft
 			}
 		};
 
+		Iterator insert(Iterator pos)
+		{
+			
+		};
+
+		Iterator insert(Iterator start, Iterator last)
+		{
+
+		};
+
+		void 	erase(Iterator pos)
+		{
+			difference_type diff = pos - begin();
+
+			for (int i = diff; i < _size - 1; i++)
+			{
+				_v[i] = _v[i + 1];
+			}
+			_size -= 1;
+		};
+
+		void 	erase(Iterator start, Iterator last) // check errors ?
+		{
+			difference_type diff = start - begin();
+
+			for (int i = diff; last != end(); i++, last++)
+			{
+				_v[i] = *last;
+			}
+			_size -= last - start;
+		};
 
 		private:
 		T*				_v;

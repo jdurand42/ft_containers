@@ -95,6 +95,4 @@ int main()
 	while (it != end)
 		std::cout << *it++ << std::endl;
 	std::cout << "Size: " << assign.size() << " | capacity: " << assign.capacity() << std::endl;
-
-
 }
