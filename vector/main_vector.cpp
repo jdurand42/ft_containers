@@ -95,4 +95,38 @@ int main()
 	while (it != end)
 		std::cout << *it++ << std::endl;
 	std::cout << "Size: " << assign.size() << " | capacity: " << assign.capacity() << std::endl;
+
+	ft::Vector<int>::Iterator it2 = assign.begin();
+
+
+	assign.erase(it2 + 4);
+	it = assign.begin();
+
+	assign.resize(10);
+		end = assign.end();
+
+	std::cout << std::endl;
+	while (it != end)
+		std::cout << *it++ << std::endl;
+
+
+	ft::Vector<int>::Iterator it3 =	it2 + 3;
+	ft::Vector<int>::Iterator it4 = it2 + 7;
+	std::cout << "la : " << it4 - it2 << std::endl;
+	assign.erase(it3, it4);
+	std::cout << "lol";
+	it = assign.begin();
+	end = assign.end();
+	std::cout << "lol";
+	std::cout << std::endl;
+	while (it != end)
+		std::cout << *it++ << std::endl;
+
+std::cout << std::endl;
+	assign.insert(assign.begin() + 2, 50, 42);
+	it = assign.begin();
+	end = assign.end();
+	while (it != end)
+		std::cout << *it++ << std::endl;
+
 }

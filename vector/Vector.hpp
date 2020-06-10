@@ -99,7 +99,7 @@ namespace ft
 				return (b);
 			};
 
-			difference_type operator - (Iterator& it)
+			difference_type operator - (Iterator it)
 			{
 				return (_t - it._t);
 			};
@@ -375,17 +375,69 @@ namespace ft
 			}
 		};
 
-		Iterator insert(Iterator pos)
+		Iterator insert(Iterator pos, const T& value)
 		{
-			
+			T* vb = new T[end() - pos];
+
+			std::cout << "ici " << end() - pos << std::endl;
+			for (int i = 0; i < end() - pos; i++)
+				vb[i] = _v[pos - begin() + i];
+
+			if (_size + 1 <= _capacity_size)
+			{
+				_v[pos - begin()] = value;
+				_size += 1;
+				for (int i = pos - begin() + 1, j = 0; i < _size; i++, j++)
+					_v[i] = vb[j];
+			}
+			else
+			{
+				size_type vb_size = end() - pos;
+				_size = pos - begin();
+				push_back(value);
+				for (int i = 0; i < vb_size; i++)
+					push_back(vb[i]);
+			}
+			delete[] vb;
+			return (pos);
 		};
 
-		Iterator insert(Iterator start, Iterator last)
+		Iterator insert(Iterator pos, size_type n, const T& value)
 		{
+			T* vb = new T[end() - pos];
 
+			for (int i = 0; i < end() - pos; i++)
+				vb[i] = _v[pos - begin() + i];
+
+			if (_size + n <= _capacity_size)
+			{
+				for (int i = pos - begin(), j = 0; j < n; i++, j++)
+					_v[i] = value;
+				_size += n;
+				for (int i = pos - begin() + n, j = 0; i < _size; i++, j++)
+					_v[i] = vb[j];
+			}
+			else
+			{
+				size_type vb_size = end() - pos;
+				_size = pos - begin();
+				for (int i = 0; i < n; i++)
+					push_back(value);
+				for (int i = 0; i < vb_size; i++)
+					push_back(vb[i]);
+			}
+			delete[] vb;
+			return (pos);
 		};
 
-		void 	erase(Iterator pos)
+	/*	template<class InputIterator> // probleme dans l'overload -> try catch?
+		Iterator insert(Iterator pos, InputIterator first, InputIterator last)
+		{
+						std::cout << "lollllll\n";
+			return (pos);
+		};*/
+
+		Iterator 	erase(Iterator pos)
 		{
 			difference_type diff = pos - begin();
 
@@ -394,17 +446,19 @@ namespace ft
 				_v[i] = _v[i + 1];
 			}
 			_size -= 1;
+			return (pos + 1);
 		};
 
-		void 	erase(Iterator start, Iterator last) // check errors ?
+		Iterator	erase(Iterator start, Iterator last) // check errors ?
 		{
 			difference_type diff = start - begin();
 
+			difference_type length = last - start;
+
 			for (int i = diff; last != end(); i++, last++)
-			{
 				_v[i] = *last;
-			}
-			_size -= last - start;
+			_size -= length;
+			return (begin() + diff + 1);
 		};
 
 		private:
@@ -413,4 +467,44 @@ namespace ft
 		size_type		_capacity_size;
 		Allocator 		_allocator;
 	};
-};
+
+	template<typename T, class Allocator>
+	void swap(Vector<T, Allocator>& x, Vector<T, Allocator>& y) // friend
+	{
+		Vector<T,Allocator> b = x;
+		x = y;
+		y = b;
+	};
+
+	template <class T, class Allocator>
+	bool operator == (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
+	{
+		if (x._size == y._size)
+		{
+			for (int i = 0; i < x._size; i++)
+			{
+				if (x._v[i] != y._v[i])
+					return (false);
+			}
+			return (true);
+		}
+		return (false);
+	};
+
+	template <class T, class Allocator>
+	bool operator != (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
+	{
+		return (!(x == y));
+	};
+
+	template <class T, class Allocator>
+	bool operator < (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
+	{
+		// check comportement on empty containers
+		for (int i = 0, j = 0; i < x._size && j < y._size; i++, j++)
+		{
+			if (!(x._v[i] < y.v[i]))
+				return (false);
+		}
+		return (true);
+	};
