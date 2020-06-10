@@ -130,6 +130,12 @@ std::cout << std::endl;
 		std::cout << *it++ << std::endl;
 
 	ft::swap(v1, assign);
+	std::cout << "\nafter swap\n\n";
+	for (int i = 0; i < v1.size(); i++)
+		std::cout << v1[i] << std::endl;
+
+	for (int i = 0; i < assign.size(); i++)
+		std::cout << assign[i] << std::endl;
 
 	if (assign == assign)
 		std::cout << "oui\n";
