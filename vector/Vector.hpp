@@ -1,6 +1,12 @@
 #include <iostream>
 #include <string>
 
+/*
+** everything is implemented
+** Need to check return values, degree of protection agains't bad Iterators
+** Need to stress it
+*/
+
 namespace ft
 {
 	#define CAPACITY 5
