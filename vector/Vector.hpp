@@ -283,7 +283,7 @@ namespace ft
 			return (_size == 0);
 		};
 
-		size_type size()
+		size_type size() const
 		{
 			return (_size);
 		};
@@ -461,6 +461,17 @@ namespace ft
 			return (begin() + diff + 1);
 		};
 
+		/*
+		** FRIENDS
+		*/
+		friend void swap(Vector<T, Allocator>& x, Vector<T, Allocator>& y);
+	/*	friend bool operator == (const Vector<T,Allocator>& x, const Vector<T,Allocator>& y);
+		friend bool operator != (const Vector<T,Allocator>& x, const Vector<T,Allocator>& y);
+		friend bool operator < (const Vector<T,Allocator>& x, const Vector<T,Allocator>& y);
+		friend bool operator <= (const Vector<T,Allocator>& x, const Vector<T,Allocator>& y);
+		friend bool operator > (const Vector<T,Allocator>& x, const Vector<T,Allocator>& y);
+		friend bool operator >= (const Vector<T,Allocator>& x, const Vector<T,Allocator>& y);*/
+
 		private:
 		T*				_v;
 		size_type 			_size;
@@ -475,36 +486,62 @@ namespace ft
 		x = y;
 		y = b;
 	};
+}
 
-	template <class T, class Allocator>
-	bool operator == (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
+template <class T, class Allocator>
+bool operator == (const ft::Vector<T,Allocator>& x, const ft::Vector<T,Allocator>& y)
+{
+	if (x.size() == y.size())
 	{
-		if (x._size == y._size)
+		for (int i = 0; i < x.size(); i++)
 		{
-			for (int i = 0; i < x._size; i++)
-			{
-				if (x._v[i] != y._v[i])
-					return (false);
-			}
-			return (true);
-		}
-		return (false);
-	};
-
-	template <class T, class Allocator>
-	bool operator != (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
-	{
-		return (!(x == y));
-	};
-
-	template <class T, class Allocator>
-	bool operator < (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
-	{
-		// check comportement on empty containers
-		for (int i = 0, j = 0; i < x._size && j < y._size; i++, j++)
-		{
-			if (!(x._v[i] < y.v[i]))
+			if (x[i] != y[i])
 				return (false);
 		}
 		return (true);
-	};
+	}
+	return (false);
+};
+
+template <class T, class Allocator>
+bool operator != (const ft::Vector<T,Allocator>& x, const ft::Vector<T,Allocator>& y)
+{
+	return (!(x == y));
+};
+
+template <class T, class Allocator>
+bool operator < (const ft::Vector<T,Allocator>& x, const ft::Vector<T,Allocator>& y)
+{
+	// check comportement on empty containers
+	for (int i = 0, j = 0; i < x.size() && j < y.size(); i++, j++)
+	{
+		if (!(x[i] < y[i]))
+			return (false);
+	}
+	return (true);
+};
+
+template <class T, class Allocator>
+bool operator <= (const ft::Vector<T,Allocator>& x, const ft::Vector<T,Allocator>& y)
+{
+	// check comportement on empty containers
+	for (int i = 0, j = 0; i < x.size() && j < y.size(); i++, j++)
+	{
+		if (!(x[i] <= y[i]))
+			return (false);
+	}
+	return (true);
+};
+
+template <class T, class Allocator>
+bool operator > (const ft::Vector<T,Allocator>& x, const ft::Vector<T,Allocator>& y)
+{
+	// check comportement on empty containers
+	return (!(x < y));
+};
+template <class T, class Allocator>
+bool operator >= (const ft::Vector<T,Allocator>& x, const ft::Vector<T,Allocator>& y)
+{
+	// check comportement on empty containers
+	return (!(x <= y));
+};

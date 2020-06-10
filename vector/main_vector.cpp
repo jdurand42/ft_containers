@@ -129,4 +129,15 @@ std::cout << std::endl;
 	while (it != end)
 		std::cout << *it++ << std::endl;
 
+	ft::swap(v1, assign);
+
+	if (assign == assign)
+		std::cout << "oui\n";
+	std::cout << (assign == assign) << std::endl;
+	std::cout << (assign !=  v1) << std::endl;
+	std::cout << (assign <= assign) << std::endl;
+	std::cout << (assign < v1) << std::endl;
+	std::cout << (assign > v1) << std::endl;
+
+	return (0);
 }
