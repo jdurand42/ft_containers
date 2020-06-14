@@ -1,3 +1,6 @@
+#ifndef VECTOR_HPP
+#define VECTOR_HPP
+
 #include <iostream>
 #include <string>
 
@@ -581,3 +584,5 @@ bool operator >= (const ft::Vector<T,Allocator>& x, const ft::Vector<T,Allocator
 	// check comportement on empty containers
 	return (!(x <= y));
 };
+
+#endif

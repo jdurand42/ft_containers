@@ -1,3 +1,6 @@
+#ifndef LIST_HPP
+#define LIST_HPP
+
 #include <iostream>
 #include <exception>
 #include <string>
@@ -633,3 +636,5 @@ namespace ft
 		}
 	};
 }
+
+#endif
