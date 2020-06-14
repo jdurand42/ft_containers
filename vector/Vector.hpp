@@ -5,6 +5,10 @@
 ** everything is implemented
 ** Need to check return values, degree of protection agains't bad Iterators
 ** Need to stress it
+** Need to throw outofrange exception and maybe, not permitted
+** Need to check on reverse_iterator
+** CONSTRUCTORS with iterators
+** need to double check and test comparison operators
 */
 
 namespace ft
@@ -19,7 +23,7 @@ namespace ft
 		typedef ptrdiff_t		difference_type;
 		typedef T*			pointer;
 		typedef T&			reference;
-		typedef T			type;
+		typedef T			value_type;
 
 		public:
 		struct Iterator // random access iterator
@@ -175,6 +179,18 @@ namespace ft
 				_v[i] = value;
 		};
 
+		// NEED TO DO CONSTRUCTORS with an Array
+
+		Vector(T* first, T* last) // not tested yet
+		{
+			_v = _allocator.allocate(CAPACITY + last - first);
+			_size = last - first;
+			_capacity_size = size + CAPACITY;
+
+			while (first != last)
+				push_back(*first++);
+		};
+
 		/*
 		** SHOULD I USE CONSTRUCT AND DESTORY?
 		*/
@@ -242,36 +258,50 @@ namespace ft
 		*/
 		T& operator [] (size_type i)
 		{
+			if (i < 0 || i >= _size)
+				throw (std::out_of_range("Index is out of range"));
 			return (_v[i]);
 		};
 
 		const T& operator [] (size_type i) const
 		{
+			if (i < 0 || i >= _size)
+				throw (std::out_of_range("Index is out of range"));
 			return (_v[i]);
 		};
 
 		T& front()
 		{
+			if (empty())
+				throw(std::out_of_range("List empty, operation not permitted"));
 			return (_v[0]);
 		};
 
 		const T& front() const
 		{
+			if (empty())
+				throw(std::out_of_range("List empty, operation not permitted"));
 			return (_v[0]);
 		};
 
 		T& back()
 		{
+			if (empty())
+				throw(std::out_of_range("List empty, operation not permitted"));
 			return (_v[_size - 1]);
 		};
 
 		const T& back() const
 		{
+			if (empty())
+				throw(std::out_of_range("List empty, operation not permitted"));
 			return (_v[_size - 1]);
 		};
 
-		T& at(size_t i)
+		T& at(size_type i)
 		{
+			if (i < 0 || i >= _size)
+				throw (std::out_of_range("Index is out of range"));
 			return (_v[i]);
 		};
 
@@ -282,7 +312,7 @@ namespace ft
 
 		/*
 		** CAPACITY
-		** waht is maX_size??
+		**
 		*/
 		bool	empty()
 		{

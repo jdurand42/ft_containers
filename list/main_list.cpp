@@ -3,120 +3,118 @@
 
 int main()
 {
-	int a;
+	//ft::List<int> list1;
+	ft::List<int> list1(10, 42);
+	std::cout << list1.front() << " " << list1.back() << std::endl;
+	std::cout << list1.size() << std::endl;
 
-	ft::List<std::string> list2(15, "henrichard");
-	ft::List<std::string> list12(15, "henrichard");
-	std::cout << list2.front() << std::endl;
-	std::cout << list2.back() << std::endl;
+	std::cout << "Access: " << list1[0] << " " << list1[5] << " " << list1[9] << " " << std::endl;
+	std::cout << "Access: " << list1[1] << " " << list1[2] << " " << list1[8] << " " << std::endl;
+	list1[0] = 18;
+	list1[9] = 25;
+	std::cout << list1[2] << " " << list1[3] << " " << list1.front() << " " << list1.back() << std::endl;
+
+	ft::List<int> list2(list1);
+
+
+	std::cout << "Access: " << list2[0] << " " << list2[5] << " " << list2[9] << " " << std::endl;
+	std::cout << "Access: " << list2[1] << " " << list2[2] << " " << list2[8] << " " << std::endl;
+	list2[0] = 18;
+	list2[9] = 25;
+	std::cout << list2[2] << " " << list2[3] << " " << list2.front() << " " << list2.back() << std::endl;
+	list2.pop_front();
+	list2.pop_back();
+	std::cout << list2.front() << " " << list2.back() << std::endl;
 	std::cout << list2.size() << std::endl;
+	while (list2.size() > 1)
+		list2.pop_front();
+	std::cout << list2.size() << std::endl;
+	std::cout << list2.front() << " " << list2.back() << std::endl;
+	list2[0] = 162;
+	std::cout << "ici\n";
+	std::cout << list2.front() << " " << list2.back() << std::endl;
+	list2.resize(25, 72);
+	std::cout << list2.size() << std::endl;
+	std::cout << list2.front() << " " << list2.back() << std::endl;
+	std::cout << list2[24] << " ";
+	std::cout << list2[0] << " ";
+	std::cout << list2[12] << std::endl;
+	list2.resize(21, 72);
+	std::cout << list2.size() << std::endl;
+	std::cout << list2.front() << " " << list2.back() << std::endl;
+	std::cout << list2[20] << " ";
+	std::cout << list2[0] << " ";
+	std::cout << list2[12] << std::endl;
 
-	std::cout << "\n Iterations \n";
-	ft::List<std::string>::Iterator end = list2.end();
+	std::cout << "assign:  |||" << std::endl;
+	list2.assign(50, 125);
+	std::cout << list2.size() << std::endl;
+	std::cout << list2.front() << " " << list2.back() << std::endl;
+	std::cout << list2[49] << " ";
+	std::cout << list2[0] << " ";
+	std::cout << list2[12] << std::endl;
 
-	for (ft::List<std::string>::Iterator it = list2.begin(); it != end; it++)
-	{
-		std::cout << "Great Succes: " << *it << std::endl;
-	}
 
-/*	for (ft::List<std::string>::Iterator it = list2.begin(); it != end; it++)
-	{
-		*it = "Borat approves";
-	//	std::cout << "Great Succes: " << *it << std::endl;
-	}
-*/
-	list12 = list2;
-	ft::List<std::string>::Iterator end12 = list12.end();
-/*	for (ft::List<std::string>::Iterator it = list2.begin(); it != end; it++)
-	{
-		std::cout << "Great Succes: " << *it << std::endl;
-	}
-*/
-	for (ft::List<std::string>::Iterator it = list12.begin(); it != end12; it++)
-	{
-		std::cout << "Great Succes12: " << *it << std::endl;
-	}
+	std::cout << "\nRemove ||\n";
+	list2.remove(2);
+	std::cout << list2.size() << std::endl;
+	std::cout << list2.front() << " " << list2.back() << std::endl;
 
-	ft::List<int> list3(10, 50);
-	std::cout << list3.front() << std::endl;
-	std::cout << list3.back() << std::endl;
+	list2[49] = 130;
+	list2[48] = 130;
+	list2[47] = 130;
+
+/*	list2.remove(125);*/
+	list2.unique();
+		std::cout << list2.size() << std::endl;
+	list2.unique();
+	std::cout << list2.size() << std::endl;
+	std::cout << list2.front() << " " << list2.back() << std::endl;
+
+	std::cout << "\nEntering the sorting stuff||||\n";
+
+	int myints[] = {16, 34, 23, 1, 28};
+	ft::List<int> list_ordered(myints, myints + 5);
+	for (int i = 0; i < list_ordered.size(); i++)
+		std::cout << list_ordered[i] << " ";
+	std::cout << std::endl;
+	list_ordered.sort();
+
+	for (int i = 0; i < list_ordered.size(); i++)
+		std::cout << list_ordered[i] << " ";
+	std::cout << std::endl;
+	list_ordered.merge(list1);
+
+	for (int i = 0; i < list_ordered.size(); i++)
+		std::cout << list_ordered[i] << " ";
+	std::cout << std::endl;
+
+	list_ordered.reverse();
+
+	for (int i = 0; i < list_ordered.size(); i++)
+		std::cout << list_ordered[i] << " ";
+	std::cout << std::endl;
+/*	std::cout << list2[2] << " ";
+	std::cout << list2[0] << " ";
+	std::cout << list2[1] << std::endl;*/
+
+	/*int myints[] = {1, 2, 3, 4, 5};
+	ft::List<int> list3(myints, myints + 5);
 	std::cout << list3.size() << std::endl;
+	std::cout << list3.front() << " " << list3.back() << std::endl;
+	std::cout << list3[4] << " ";
+	std::cout << list3[0] << " ";
+	std::cout << list3[2] << std::endl;*/
 
-	ft::List<int> list(4, 42);
-	std::cout << "empty?: " << list.empty() << std::endl;
-		std::cout << std::endl;
-	list.push_front(12);
-	std::cout << list.front() << std::endl;
-	std::cout << list.back() << std::endl;
-	list.push_front(24);
-		std::cout << std::endl;
-	std::cout << list.front() << std::endl;
-	std::cout << list.back() << std::endl;
-	list.push_back(25);
-		std::cout << std::endl;
-	std::cout << list.front() << std::endl;
-	std::cout << list.back() << std::endl;
-	std::cout << list.size() << std::endl;
-
-//	list.clear();
-	std::cout << list.size() << std::endl;
-
-	ft::List<int> list5(1, 42);
-	std::cout << "la\n";
-	std::cout << list5.front() << std::endl;
-	std::cout << list5.back() << std::endl;
-	std::cout << list5.size() << std::endl;
+/*
+	list2 = list1;
 
 
-std::cout << std::endl;std::cout << std::endl;std::cout << std::endl;
-	std::list<std::string> b(5, "lol");
-	std::list<std::string>::iterator it = b.begin();
-	std::list<std::string>::iterator it2 = b.end();
-	while (it != it2)
-	{
-		std::cout << *it << '\n';
-		it++;
-	}
-
-	std::list<std::string> c(3, "merde");
-	c = b;
-	/**it--;
-	std::cout << *it << '\n';*/
-	//std::cout << *it << std::endl;
-	//std::cout << *it2 << std::endl;
-
-	/*std::cout << std::endl;
-	list.pop_front();
-	std::cout << list.front() << std::endl;
-	std::cout << list.back() << std::endl;
-	std::cout << list.size() << std::endl;
-
-	std::cout << std::endl;
-	list.pop_front();
-	std::cout << list.front() << std::endl;
-	std::cout << list.back() << std::endl;
-	std::cout << list.size() << std::endl;
-
-	std::cout << std::endl;
-	list.pop_front();
-	std::cout << list.front() << std::endl;
-	std::cout << list.back() << std::endl;
-	std::cout << list.size() << std::endl;
-	*/
-
-	/*std::cout << std::endl;
-	list.pop_back();
-	std::cout << list.front() << std::endl;
-	std::cout << list.back() << std::endl;
-	std::cout << list.size() << std::endl;
-
-	std::cout << std::endl;
-	list.pop_back();
-	std::cout << list.front() << std::endl;
-	std::cout << list.back() << std::endl;
-	std::cout << list.size() << std::endl;
-
-	std::cout << std::endl;
-	list.pop_back();
-	std::cout << list.size() << std::endl;*/
+		std::cout << "Access: " << list2[0] << " " << list2[5] << " " << list2[9] << " " << std::endl;
+		std::cout << "Access: " << list2[1] << " " << list2[2] << " " << list2[8] << " " << std::endl;
+		list2[0] = 18;
+		list2[9] = 25;
+		std::cout << list2[2] << " " << list2[3] << " " << list2.front() << " " << list2.back() << std::endl;*/
+	/*list1.clear();
+	std::cout << list1.size() << " " << list1.empty() << std::endl;*/
 }
