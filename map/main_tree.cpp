@@ -29,10 +29,11 @@ int main()
 */
 std::cout << "ici" << std::endl;
 	bst.inorder();
-	bst.iterate(0);
+	//bst.iterate(0);
 	std::cout << "ici" << std::endl;
-	for (int i = 0; i < 8; i++)
-		bst.iterate(i);
+	bst.iterate(5);
+	//for (int i = 0; i < 8; i++)
+	//	bst.iterate(i);
 
 
 }

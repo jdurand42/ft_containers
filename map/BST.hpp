@@ -17,14 +17,17 @@ namespace ft
 				_pair = pair;
 				_left = NULL;
 				_right = NULL;
+				_parent = NULL;
 			}
 
 			//private:
 			/*Key				key;
 			T			value;*/
 			std::pair<Key,T> 	_pair;
+			size_t				_i;
 			Node				*_left;
 			Node				*_right;
+			Node				*_parent;
 		};
 
 		public:
@@ -71,18 +74,23 @@ namespace ft
 
 		void  insert(std::pair<Key,T> pair)
 		{
-			_root = insert(pair, _root);
+			_root = insert(pair, _root, NULL);
+			int i = 0;
 		};
 
-		Node* insert(std::pair<Key,T> pair, Node* node)
+		Node* insert(std::pair<Key,T> pair, Node* node, Node *parent)
 		{
 		    if (node == NULL)
-				return (new Node(pair));
+			{
+				Node *new_node = new Node(pair);
+				new_node._parent = parent;
+				return (new_node;
+			}
 
 		    if (pair.first < node->_pair.first)
-		        node->_left  = insert(pair, node->_left);
+		        node->_left  = insert(pair, node->_left, node);
 		    else if (pair.first > node->_pair.first)
-		        node->_right = insert(pair, node->_right);
+		        node->_right = insert(pair, node->_right, node);
 
 		    return node;
 		};
@@ -90,6 +98,7 @@ namespace ft
 		void delete_key(Key key)
 		{
 			_root = delete_node(key, _root);
+			int i = 0;
 		}
 
 		Node *min_value_node(Node* node)
@@ -117,39 +126,7 @@ namespace ft
 		    }
 		}
 
-		void iterate(size_t idx)
-		{
-			if (_root != NULL)
-		    {
-				//Node *node;
-				int c = 0;
-				Node* node = iterate(_root, idx, &c);
-
-				std::cout << node->_pair.first << ": " << node->_pair.second << std::endl;
-		    }
-		}
-
-		Node *iterate(Node *node, int n, int *c)
-		{
-    		*c += 1;
-    		while (*c <= n)
-			{
-				if (node->_left != NULL)
-				{
-            		node = iterate(node->_left, n, c);
-        		}
-        	//	*c += 1;
-        		if (node->_right != NULL)
-				{
-            		node = iterate(node->_right, n, c);
-				}
-        	}
-    		return node;
-		}
-
-
-
-		Node* delete_node(Key key, Node *node)
+		Node* delete_node(Key key, Node *node) // put parent in here
 		{
 		    // base case
 		    if (node == NULL)
