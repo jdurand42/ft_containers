@@ -27,17 +27,83 @@ namespace ft
 		typedef T&			reference;
 		typedef T			value_type;
 
-		class Iterator
+		struct Iterator // bi_directionnal iterator
 		{
+			Iterator()
+			{
+				_node = NULL;
+			};
 
+			Iterator(const Iterator& it)
+			{
+				_node = it._node;
+			};
+
+			void operator = (const Iterator& it)
+			{
+				_node = it._node;
+			};
+
+			~Iterator() {};
+
+			bool operator == (const Iterator& it)
+			{
+				return (it._node == _node);
+			};
+
+			bool operator != (const Iterator& it)
+			{
+				return (it._node != _node);
+			};
+
+			T& operator * ()
+			{
+				return (_node->_data);
+			};
+
+			T* operator -> ()
+			{
+				return (&_node->_data);
+			};
+
+			Iterator& operator ++ ()
+			{
+				_node = _node->_next;
+				return (*this);
+			};
+
+			Iterator& operator -- ()
+			{
+				_node = _node->_prev;
+				return (*this);
+			};
+
+			Iterator operator ++ (int)
+			{
+				Iterator b = *this;
+
+				_node = _node->_next;
+				return (b);
+			};
+
+			Iterator operator -- (int)
+			{
+				Iterator b = *this;
+
+				_node = _node->_prev;
+				return (b);
+			};
+
+			Node			*_node;
 		};
-
 		/*
 		**CONSTRUCTORS
 		*/
 
 		List(): _head(NULL), _tail(NULL), _size(0)
 		{
+			_past_end._prev = _head;
+			_past_begin._next = _tail;
 		};
 
 		List(const List& list): _head(NULL), _tail(NULL), _size(0)
@@ -102,6 +168,7 @@ namespace ft
 				_head = allocate_node(NULL, NULL, value);
 				_tail = _head;
 				_size += 1;
+				set_up_head_tail();
 				return ;
 			}
 			Node *b;
@@ -109,6 +176,8 @@ namespace ft
 			_tail->_next = b;
 			_tail = b;
 			_size += 1;
+			set_up_head_tail();
+
 		};
 
 		void push_front(T value)
@@ -118,6 +187,7 @@ namespace ft
 				_head = allocate_node(NULL, NULL, value);
 				_tail = _head;
 				_size += 1;
+				set_up_head_tail();
 				return ;
 			}
 			Node *b;
@@ -125,6 +195,7 @@ namespace ft
 			_head->_prev = b;
 			_head = b;
 			_size += 1;
+			set_up_head_tail();
 		};
 
 		void pop_front()
@@ -137,6 +208,7 @@ namespace ft
 			_allocator.deallocate(_head, 1);
 			_head = b;
 			_size -= 1;
+			set_up_head_tail();
 		};
 
 		void pop_back()
@@ -149,8 +221,43 @@ namespace ft
 			_allocator.deallocate(_tail, 1);
 			_tail = b;
 			_size -= 1;
+			set_up_head_tail();
 		};
 
+		/*
+		** Iterations
+		*/
+		Iterator begin()
+		{
+			Iterator it;
+
+			it._node = _head;
+			return (it);
+		}
+
+		Iterator end()
+		{
+			Iterator it;
+
+			it._node = &_past_end; // Null = past the end
+			return (it);
+		}
+
+		Iterator rbegin()
+		{
+			Iterator it;
+
+			it._node = &_past_begin;
+			return (it);
+		}
+
+		Iterator rend()
+		{
+			Iterator it;
+
+			it._node = _tail; // Null = past the end
+			return (it);
+		}
 		/*
 		** ACCESS
 		** Don't forget the const equivalent
@@ -243,6 +350,25 @@ namespace ft
 			List<T> b_list(first, last);
 			*this = b_list;
 		};
+
+		void swap(List& x) // untested
+		{
+			Node *b;
+
+			b = _head;
+			_head = x._head;
+			x._head = b;
+			b = _tail;
+			_tail = x._tail;
+			x._tail = b;
+
+			int size_b;
+			size_b = _size;
+			_size = x._size;
+			x._size = size_b;
+			set_up_head_tail();
+			x.set_up_head_tail();
+		}
 
 		/*
 		** CAPACITY
@@ -416,9 +542,18 @@ namespace ft
 		private:
 		Node		*_head;
 		Node		*_tail;
+		Node		_past_end;
+		Node		_past_begin;
 		size_type	_size;
 		_node_alloc_type _allocator;
 
+		void set_up_head_tail()
+		{
+			_head->_prev = &_past_begin;
+			_tail->_next = &_past_end;
+			_past_begin._next = _head;
+			_past_end._prev = _tail;
+		}
 
 		Node *allocate_node(Node *next, Node *prev)
 		{
@@ -451,6 +586,23 @@ namespace ft
 				_tail = list._tail;
 			}
 			_size += list.size();
+			set_up_head_tail();
+		}
+
+		void push_node(Node *node, Node *next, Node *prev)
+		{
+			if (prev)
+				prev->_next = node;
+			else
+				_head = node;
+			node->_prev = prev;
+			if (next)
+				next->_prev = node;
+			else
+				_tail = prev;
+			node->_next = next;
+			_size += 1;
+			set_up_head_tail();
 		}
 
 		void delete_node(Node *node)
@@ -470,6 +622,7 @@ namespace ft
 			if (node == _tail)
 				_tail = node->_prev;
 			_size -= 1;
+			set_up_head_tail();
 			//deallocate_node(node);
 		}
 

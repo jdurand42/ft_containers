@@ -94,6 +94,15 @@ int main()
 	for (int i = 0; i < list_ordered.size(); i++)
 		std::cout << list_ordered[i] << " ";
 	std::cout << std::endl;
+
+	std::cout << "\nEnters the Iterators\n";
+	ft::List<int>::Iterator begin = list_ordered.begin();
+	ft::List<int>::Iterator end = list_ordered.end();
+	//--end;
+	//std::cout << *end << std::endl;
+	std::cout << *end-- << std::endl;
+	while (begin != end)
+		std::cout << *begin++ << std::endl;
 /*	std::cout << list2[2] << " ";
 	std::cout << list2[0] << " ";
 	std::cout << list2[1] << std::endl;*/
