@@ -40,14 +40,79 @@ namespace ft
 
 		class Iterator
 		{
-			Iterator(): _node(NULL)
+			// Root initialised with BST methods
+			Iterator()
 			{
+				_node = NULL;
 				_root = NULL;
+			}
+
+			Iterator(Node* node, Node *root)
+			{
+				_node = node;
+				_root = root;
+			}
+
+			Iterator(const Iterator& it)
+			{
+				_node = it._node;
+				_root = it._root;
+			}
+
+			void operator = (const Iterator& it)
+			{
+				_node = it._node;
+				_root = it._root;
+			}
+
+			~Iterator()
+			{
+
+			}
+
+			std::pair<Key,T>& operator * ()
+			{
+				return (_node->_pair);
+			}
+
+			std::pair<Key,T>* operator -> ()
+			{
+				return (&_node->_pair);
+			}
+
+			bool operator == (const Iterator& it)
+			{
+				return (_node == it._node);
+			}
+
+			bool operator != (const Iterator& it)
+			{
+				return (!(_node == it._node));
+			}
+
+			Iterator& operator ++ ()
+			{
+
+			}
+
+			Iterator& operator -- ()
+			{
+
+			}
+
+			Iterator operator ++ (int)
+			{
+
+			}
+
+			Iterator operator -- (int)
+			{
+
 			}
 
 			private:
 			Node	*_node;
-//			Node	*_root;
+			Node	*_root;
 		};
 
 		public:
@@ -241,6 +306,61 @@ namespace ft
 		        node->_right = delete_node(b->_pair.first, node->_right);
 		    }
 		    return (node);
+		}
+
+		/*
+		** Iterations
+		*/
+		Iterator begin()
+		{
+
+		}
+
+		Iterator end()
+		{
+
+		}
+
+		Iterator rbegin()
+		{
+
+		}
+
+		Iterator rend()
+		{
+
+		}
+
+		Iterator find(Key key)
+		{
+			Iterator it;
+
+			it._root = _root;
+
+			Node *node = search_node(key);
+			if (node)
+				it._node = node;
+			else
+				it = end();
+			return (it);
+		}
+
+		std::pair<Iterator,Iterator> equal_range()
+		{
+
+		}
+
+		void swap(BST& bst)
+		{
+			Node *b;
+			b = _root;
+			_root = bst._root;
+			bst._root = b;
+
+			size_type size;
+			size = _size;
+			_size = bst._size;
+			bst._size = b;
 		}
 
 		/*
