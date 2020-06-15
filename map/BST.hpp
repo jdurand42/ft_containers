@@ -4,78 +4,152 @@
 #include <iostream>
 #include <string>
 
+/*
+** Recursive stuff
+*/
+
 namespace ft
 {
-	template<class Key, class T>
+	template<class Key, class T, class Compare = std::less<Key>,
+	class Allocator = std::allocator<std::pair<const Key,T> > >
 	class BST
 	{
 		struct Node
 		{
 			public:
-			Node(std::pair<Key,T> pair)
+			Node(std::pair<Key,T> pair, Node *left = NULL, Node *right = NULL,
+			Node *parent = NULL)
 			{
 				_pair = pair;
-				_left = NULL;
-				_right = NULL;
-				_parent = NULL;
+				_left = left;
+				_right = right;
+				_parent = parent;
 			}
 
-			//private:
-			/*Key				key;
-			T			value;*/
 			std::pair<Key,T> 	_pair;
-			size_t				_i;
 			Node				*_left;
 			Node				*_right;
 			Node				*_parent;
+		};
+
+		//typedef Key key_type;
+		//typedef T mapped_type;
+		typedef Compare key_compare;
+		typedef Allocator allocator_type;
+		typedef size_t	size_type;
+
+		class Iterator
+		{
+			Iterator(): _node(NULL)
+			{
+				_root = NULL;
+			}
+
+			private:
+			Node	*_node;
+//			Node	*_root;
 		};
 
 		public:
 		BST()
 		{
 			_root = NULL;
+			_size = 0;
 		}
 
 		BST(const BST& bst)
 		{
 			// la flemme;
+			_root = bst.copy_tree();
+			_size = bst._size;
 		};
 
 		void operator = (const BST& bst)
 		{
 			// la flemme aussi
+			clear();
+			_root = bst.copy_tree();
+			_size = bst._size;
 		};
 
 		~BST()
+		{
+			clear();
+		}
+
+		Node *copy_tree() const
+		{
+			return (copy_tree(_root, NULL));
+		}
+
+		Node *copy_tree(Node *root, Node *parent) const
+		{
+			if (!root)
+				return (NULL);
+			Node *node = new Node(root->_pair, NULL, NULL, parent);
+			node->_left = copy_tree(root->_left, node);
+			node->_right = copy_tree(root->_right, node);
+			return (node);
+		}
+
+		void clear()
 		{
 			while (_root)
 			{
 				delete_key(_root->_pair.first);
 			}
+			_root = NULL;
+		}
+
+		Node* get_node(Key key)
+		{
+			Node *node = search_node(key, _root);
+			return (node);
+			/*if (node)
+				std::cout << "Node found: " << node->_pair.first << " " << node->_pair.second
+				<< std::endl;*/
+		}
+
+		Node *search_node(Key key, Node* node)
+		{
+			if (node == NULL) // insert new key to default value
+			{
+				//insert(std::make_pair(key, T()), _root, NULL);
+				return (NULL);
+			}
+			if (node->_pair.first == key)
+				return (node);
+
+			if (comp(node->_pair.first, key))//node->_pair.first < key)
+				return (search_node(key, node->_right));
+
+			return (search_node(key, node->_left));
 		}
 
 		T& search(Key key)
 		{
-			return (search(key, _root));
+			return (search(key, _root, NULL));
 		}
 
-		T& search(Key key, Node *node)
+		T& search(Key key, Node *node, Node *parent)
 		{
-			if (node == NULL)
-				throw(std::out_of_range("Exception: Key not found"));
+			if (node == NULL) // insert new key to default value
+			{
+				_root = insert(std::make_pair(key, T()), _root, NULL);
+				return (search(key));
+			}
 	    	if (node->_pair.first == key)
 	       		return (node->_pair.second);
 
-	    	if (node->_pair.first < key)
-				return (search(key, node->_right));
+	    	if (comp(node->_pair.first, key))//node->_pair.first < key)
+				return (search(key, node->_right, node));
 
-			return (search(key, node->_left));
+			return (search(key, node->_left, node));
 		};
 
 		void  insert(std::pair<Key,T> pair)
 		{
 			_root = insert(pair, _root, NULL);
-			int i = 0;
 		};
 
 		Node* insert(std::pair<Key,T> pair, Node* node, Node *parent)
@@ -83,23 +157,18 @@ namespace ft
 		    if (node == NULL)
 			{
 				Node *new_node = new Node(pair);
-				new_node._parent = parent;
-				return (new_node;
+				new_node->_parent = parent;
+				_size += 1;
+				return (new_node);
 			}
 
-		    if (pair.first < node->_pair.first)
+		    if (comp(pair.first, node->_pair.first))//pair.first < node->_pair.first)
 		        node->_left  = insert(pair, node->_left, node);
-		    else if (pair.first > node->_pair.first)
+		    else if (!comp(pair.first, node->_pair.first) && pair.first != node->_pair.first)//pair.first > node->_pair.first)
 		        node->_right = insert(pair, node->_right, node);
 
 		    return node;
 		};
-
-		void delete_key(Key key)
-		{
-			_root = delete_node(key, _root);
-			int i = 0;
-		}
 
 		Node *min_value_node(Node* node)
 		{
@@ -110,7 +179,7 @@ namespace ft
 		    return (b);
 		}
 
-		void inorder()
+		void inorder() // Functions utils for testing/printing the tree, to be removed
 		{
 			if (_root)
 				inorder(_root);
@@ -121,9 +190,19 @@ namespace ft
 		    if (node != NULL)
 		    {
 		        inorder(node->_left);
-		        std::cout << node->_pair.first << ": " << node->_pair.second <<std::endl;
+		        std::cout << node->_pair.first << ": " << node->_pair.second;
+				if (node->_parent)
+					std::cout << " |||| Parent: " << node->_parent->_pair.first << " " << node->_parent->_pair.second
+					<< std::endl;
+				else
+					std::cout << " ||| Parent: None\n";
 		        inorder(node->_right);
 		    }
+		}
+
+		void delete_key(Key key)
+		{
+			_root = delete_node(key, _root);
 		}
 
 		Node* delete_node(Key key, Node *node) // put parent in here
@@ -144,12 +223,14 @@ namespace ft
 		        {
 		            Node *b = node->_right;
 		            free(node);
+					_size -= 1;
 		            return (b);
 		        }
 		        else if (node->_right == NULL)
 		        {
 		            Node *b = node->_left;
 		            free(node);
+					_size -= 1;
 		            return (b);
 		        }
 		        Node* b = min_value_node(node->_right);
@@ -162,9 +243,20 @@ namespace ft
 		    return (node);
 		}
 
+		/*
+		** CAPACITY
+		*/
+
+		size_type size() const
+		{
+			return (_size);
+		}
+
 		private:
 		Node *_root;
-
+		size_type _size;
+		key_compare comp;
+		allocator_type _allocator;
 	};
 
 };
