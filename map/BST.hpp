@@ -38,9 +38,11 @@ namespace ft
 		typedef Allocator allocator_type;
 		typedef size_t	size_type;
 
+		public:
 		class Iterator
 		{
 			// Root initialised with BST methods
+			public:
 			Iterator()
 			{
 				_node = NULL;
@@ -92,22 +94,74 @@ namespace ft
 
 			Iterator& operator ++ ()
 			{
+				if (_node && _node->_right)
+				{
+					_node = _node->_right;
+					while (_node->_left)
+						_node = _node->_left;
+				}
+				else if (_node && _node->_parent && _node == _node->_parent->_left)
+				{
+					_node = _node->_parent;
+				}
+				else if (_node && _node->_parent && _node->_parent->_right == _node)
+				{
+					Node *b = _node;
 
-			}
+					while (_node && b != _node->_left)
+					{
+						b = _node;
+						_node = _node->_parent;
+					}
 
-			Iterator& operator -- ()
-			{
-
+				}
+				else
+				{
+					_node = _root;
+					while (_node && _node->_left)
+						_node = _node->_left;
+				}
+				return (*this);
 			}
 
 			Iterator operator ++ (int)
 			{
+				Iterator it = *this;
+				operator++();
+				return (it);
+			}
 
+			Iterator& operator -- ()
+			{
+				if (_node && _node->_left)
+				{
+					_node = _node->_left;
+					while (_node && _node->_right)
+						_node = _node->_right;
+				}
+				else if (_node)
+				{
+					Node *b = _node;
+					while (_node && b != _node->_right)
+					{
+						b = _node;
+						_node = _node->_parent;
+					}
+				}
+				else
+				{
+					_node = _root;
+					while (_node && _node->_right)
+						_node = _node->_right;
+				}
+				return (*this);
 			}
 
 			Iterator operator -- (int)
 			{
-
+				Iterator it = *this;
+				operator--();
+				return (it);
 			}
 
 			private:
@@ -115,7 +169,6 @@ namespace ft
 			Node	*_root;
 		};
 
-		public:
 		BST()
 		{
 			_root = NULL;
@@ -313,41 +366,49 @@ namespace ft
 		*/
 		Iterator begin()
 		{
+			Node *node = _root;
 
+			while (node && node->_left)
+				node = node->_left;
+			return (Iterator(node, _root));
 		}
 
 		Iterator end()
 		{
 
+		//	it._root = _root;
+		//	it._node = NULL;
+			//while (it._node && it._node->_right)
+			//	it._node = it._node._right;
+			// or return (_null)
+			return (Iterator(NULL, _root));
 		}
 
 		Iterator rbegin()
 		{
-
+			return (Iterator(NULL, _root));
 		}
 
 		Iterator rend()
 		{
+			Node *node = _root;
 
+			while (node && node->_right)
+				node = node->right;
+			return (Iterator(node, _root));
 		}
 
 		Iterator find(Key key)
 		{
-			Iterator it;
+//			Iterator it;
 
-			it._root = _root;
+//			it._root = _root;
 
 			Node *node = search_node(key);
 			if (node)
-				it._node = node;
+				return (Iterator(node, _root));
 			else
-				it = end();
-			return (it);
-		}
-
-		std::pair<Iterator,Iterator> equal_range()
-		{
-
+				return (end());
 		}
 
 		void swap(BST& bst)

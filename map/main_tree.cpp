@@ -44,16 +44,16 @@ int main()
 	std::cout << (bst.search(12) = "28") << std::endl;
 	bst.inorder();
 	std::cout << "size: " << bst.size() << std::endl;
-	bst.delete_key(5);
-	bst.delete_key(10);
-	bst.delete_key(2);
-	bst.inorder();
-	std::cout << "size: " << bst.size() << std::endl;
+//	bst.delete_key(5);
+//	bst.delete_key(10);
+//	bst.delete_key(2);
+//	bst.inorder();
+//	std::cout << "size: " << bst.size() << std::endl;
 	/*bst.delete_key(6);
 	bst.delete_key(4);
 	//bst.delete_key(6);*/
 
-	std::cout << "\nici" << std::endl;
+/*	std::cout << "\nici" << std::endl;
 	bst2.search(5) = "lol";
 	bst2.search(10) = "lol";
 	bst2.search(3) = "lol";
@@ -66,8 +66,9 @@ int main()
 	bst.get_node(6);
 	bst.get_node(13);
 	//bst.iterate(0);
+	*/
 
-	std::cout << "ici" << std::endl;
+/*	std::cout << "ici" << std::endl;
 	bst2 = bst;
 	bst2.inorder();
 
@@ -75,9 +76,31 @@ int main()
 	std::cout << "size: " << bst2.size() << std::endl;
 	bst2.inorder();
 	bst2.search(38);
-	//bst2.insert(std::make_pair(35, "lol"));
+	bst2.insert(std::make_pair(35, "lol"));
 	std::cout << "size: " << bst2.size() << std::endl;
 	bst2.inorder();
+*/
+	std::cout << "\n\nEnter Iterations\n\n";
+
+	bst.inorder();
+	ft::BST<int,std::string>::Iterator it = bst.begin();
+	ft::BST<int,std::string>::Iterator end = bst.end();
+	while (it != end)
+	{
+		std::cout << (*it).first << ": " << (*it).second << std::endl;
+		it++;
+	}
+
+	std::cout << "--\n";
+	it = bst.begin();
+	ft::BST<int,std::string>::Iterator end2 = bst.end();
+	--end;
+	std::cout << "End-- ici: " << (*end).first << ": " << (*end).second << std::endl;
+	while (it != end)
+	{
+		--end;
+		std::cout << (*end).first << ": " << (*end).second << std::endl;
+	}
 	/*std::cout << "\n\n";
 	std::map<std::string,int> map;
 	map["bonjour"] = 125;
@@ -85,10 +108,10 @@ int main()
 	std::cout << map["lol"] << std::endl;*/
 	//for (int i = 0; i < 8; i++)
 	//	bst.iterate(i);
-	std::cout << "\nTest on std::less\n";
+/*	std::cout << "\nTest on std::less\n";
 	std::less<int> less;
 	std::cout << less(1, 2) << std::endl;
 	std::cout << less(2, 1) << std::endl;
-	std::cout << less(1, 1) << std::endl;
+	std::cout << less(1, 1) << std::endl; */
 
 }
