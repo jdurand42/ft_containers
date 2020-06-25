@@ -145,5 +145,13 @@ std::cout << std::endl;
 	std::cout << (assign < v1) << std::endl;
 	std::cout << (assign > v1) << std::endl;
 
+	ft::Vector<int>::iterator it50 = assign.begin();
+	//std::cout << "ici " << it50._t << std::endl;
+
+	std::cout << "\n\nTest reverse_iterator\n\n";
+	for (ft::Vector<int>::reverse_iterator it2 = assign.rbegin(),
+	end2 = assign.rend(); it2 != end2; it2++)
+		std::cout << *it2 << std::endl;
+
 	return (0);
 }

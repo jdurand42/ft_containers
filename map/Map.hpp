@@ -100,7 +100,7 @@ namespace ft
 		{
 			while (first != last)
 			{
-				_bst.delete_key(first.first);
+				_bst.delete_key((*first).first);
 				first++;
 			}
 		}
@@ -132,7 +132,7 @@ namespace ft
 		{
 			for (iterator end = _bst.end(), it = _bst.begin(); it != end(); it++)
 			{
-				if (!_comp(*it.first, key))
+				if (!_comp((*it).first, key))
 					return (it);
 			}
 			return (_bst.end());
@@ -142,7 +142,7 @@ namespace ft
 		{
 			for (iterator end = _bst.end(), it = _bst.begin(); it != end(); it++)
 			{
-				if (_comp(key, *it.first))
+				if (_comp(key, (*it).first))
 					return (it);
 			}
 			return (_bst.end());

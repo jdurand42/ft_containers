@@ -7,6 +7,7 @@
 
 /*
 ** Don't forget to do relationnal operators
+** And the other CONSTRUCTORS
 */
 
 namespace ft

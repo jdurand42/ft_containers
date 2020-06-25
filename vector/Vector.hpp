@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include "../Reverse_Iterator.hpp"
 
 /*
 ** everything is implemented
@@ -23,14 +24,25 @@ namespace ft
 	{
 
 		typedef size_t		size_type;
-		typedef ptrdiff_t		difference_type;
+		typedef ptrdiff_t	difference_type;
 		typedef T*			pointer;
 		typedef T&			reference;
 		typedef T			value_type;
+		typedef const T&	const_reference;
+		typedef const T*	const_pointer;
+
 
 		public:
 		struct Iterator // random access iterator
 		{
+			typedef size_t		size_type;
+			typedef ptrdiff_t	difference_type;
+			typedef T*			pointer;
+			typedef T&			reference;
+			typedef T			value_type;
+			typedef const T&	const_reference;
+			typedef const T*	const_pointer;
+
 			Iterator()
 			{
 				_t = NULL;
@@ -46,14 +58,17 @@ namespace ft
 				_t = it._t;
 			};
 
+			Iterator(T* t): _t(t)
+			{}
+
 			~Iterator() {};
 
-			bool operator == (const Iterator& it)
+			bool operator == (const Iterator& it) const
 			{
 				return (it._t == _t);
 			};
 
-			bool operator != (const Iterator& it)
+			bool operator != (const Iterator& it) const
 			{
 				return (it._t != _t);
 			};
@@ -135,28 +150,32 @@ namespace ft
 				return (b);
 			};
 
-			bool operator < (const Iterator& it)
+			bool operator < (const Iterator& it) const
 			{
 				return (_t < it._t);
 			};
 
-			bool operator <= (const Iterator& it)
+			bool operator <= (const Iterator& it) const
 			{
 				return (_t <= it._t);
 			};
 
-			bool operator > (const Iterator& it)
+			bool operator > (const Iterator& it) const
 			{
 				return (_t > it._t);
 			};
 
-			bool operator >= (const Iterator& it)
+			bool operator >= (const Iterator& it) const
 			{
 				return (_t >= it._t);
 			};
 
+			private:
 			T			*_t;
 		};
+
+		typedef Iterator	iterator;
+		typedef Reverse_Iterator<iterator> reverse_iterator;
 
 		Vector()
 		{
@@ -188,7 +207,7 @@ namespace ft
 		{
 			_v = _allocator.allocate(CAPACITY + last - first);
 			_size = last - first;
-			_capacity_size = size + CAPACITY;
+			_capacity_size = _size + CAPACITY;
 
 			while (first != last)
 				push_back(*first++);
@@ -226,35 +245,30 @@ namespace ft
 
 		Iterator begin()
 		{
-			Iterator b;
+			Iterator b(&_v[0]);
 
-			b._t = &_v[0];
+			//b._t = &_v[0];
 			return (b);
 		};
 
 		Iterator end()
 		{
-			Iterator b;
+			Iterator b(&_v[_size]);
 
-			b._t = &_v[_size];
+			//b._t = &_v[_size];
 			return (b);
 		};
 
-		Iterator rbegin()
+		reverse_iterator rbegin()
 		{
-			Iterator b;
-
-			b._t = &_v[-1];
-			return (b);
+			return (reverse_iterator(end()));
 		};
 
-		Iterator rend()
+ 		reverse_iterator rend()
 		{
-			Iterator b;
-
-			b._t = &_v[_size - 1];
-			return (b);
+			return (reverse_iterator(begin() - 1));
 		};
+
 		/*
 		** ACCESS
 		** Don't forget to throw the out of range exception
@@ -276,28 +290,28 @@ namespace ft
 		T& front()
 		{
 			if (empty())
-				throw(std::out_of_range("List empty, operation not permitted"));
+				throw(std::out_of_range("Vector empty, operation not permitted"));
 			return (_v[0]);
 		};
 
 		const T& front() const
 		{
 			if (empty())
-				throw(std::out_of_range("List empty, operation not permitted"));
+				throw(std::out_of_range("Vector empty, operation not permitted"));
 			return (_v[0]);
 		};
 
 		T& back()
 		{
 			if (empty())
-				throw(std::out_of_range("List empty, operation not permitted"));
+				throw(std::out_of_range("Vector empty, operation not permitted"));
 			return (_v[_size - 1]);
 		};
 
 		const T& back() const
 		{
 			if (empty())
-				throw(std::out_of_range("List empty, operation not permitted"));
+				throw(std::out_of_range("Vector empty, operation not permitted"));
 			return (_v[_size - 1]);
 		};
 

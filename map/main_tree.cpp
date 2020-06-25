@@ -114,4 +114,15 @@ int main()
 	std::cout << less(2, 1) << std::endl;
 	std::cout << less(1, 1) << std::endl; */
 
+	std::cout << "here goes nothing\n";
+	ft::Map<int,std::string> map;
+	map[12] = "lol";
+	std::cout << map[12] << std::endl;
+
+	std::map<int,std::string> map_test;
+	std::cout << "Max_size: " << map_test.max_size() << std::endl;
+	std::map<int,int> map_test2;
+	std::cout << "Max_size: " << map_test2.max_size() << std::endl;
+	std::map<std::string,int> map_test3;
+	std::cout << "Max_size: " << map_test3.max_size() << std::endl;
 }
