@@ -5,6 +5,8 @@
 #include <string>
 #include "../Reverse_Iterator.hpp"
 
+#include <cmath>
+
 /*
 ** everything is implemented
 ** Need to check return values, degree of protection agains't bad Iterators
@@ -190,7 +192,7 @@ namespace ft
 			_allocator.deallocate(_v, _capacity_size);
 		};
 
-		Vector(size_type size, T value)
+		Vector(size_type size, T value = T())
 		{
 			//v = new T[size + CAPACITY];
 			_v = _allocator.allocate(CAPACITY + size);
@@ -201,9 +203,17 @@ namespace ft
 				_v[i] = value;
 		};
 
+		/*Vector(size_type size)
+		{
+			//v = new T[size + CAPACITY];
+			_v = _allocator.allocate(CAPACITY + size);
+			_size = size;
+			_capacity_size = size + CAPACITY;
+		};*/
+
 		// NEED TO DO CONSTRUCTORS with an Array
 
-		Vector(T* first, T* last) // not tested yet
+	/*	Vector(T* first, T* last) // not tested yet
 		{
 			_v = _allocator.allocate(CAPACITY + last - first);
 			_size = last - first;
@@ -211,6 +221,16 @@ namespace ft
 
 			while (first != last)
 				push_back(*first++);
+		};*/
+
+		template<typename InputIterator>
+		Vector(InputIterator first, InputIterator last)
+		{
+			_v = _allocator.allocate(CAPACITY + last - first);
+			_size = last - first;
+			_capacity_size = _size + CAPACITY;
+			for (int i = 0; i < _size; i++, first++)
+				_v[i] = *first;
 		};
 
 		/*
@@ -275,15 +295,29 @@ namespace ft
 		*/
 		T& operator [] (size_type i)
 		{
-			if (i < 0 || i >= _size)
-				throw (std::out_of_range("Index is out of range"));
+			//if (i < 0 || i >= _size)
+			//	throw (std::out_of_range("Index is out of range"));
 			return (_v[i]);
 		};
 
 		const T& operator [] (size_type i) const
 		{
+			//if (i < 0 || i >= _size)
+			//	throw (std::out_of_range("Index is out of range"));
+			return (_v[i]);
+		};
+
+		T& at(size_type i)
+		{
 			if (i < 0 || i >= _size)
-				throw (std::out_of_range("Index is out of range"));
+				throw (std::out_of_range(""));
+			return (_v[i]);
+		}
+
+		const T& at (size_type i) const
+		{
+			if (i < 0 || i >= _size)
+				throw (std::out_of_range(""));
 			return (_v[i]);
 		};
 
@@ -315,23 +349,11 @@ namespace ft
 			return (_v[_size - 1]);
 		};
 
-		T& at(size_type i)
-		{
-			if (i < 0 || i >= _size)
-				throw (std::out_of_range("Index is out of range"));
-			return (_v[i]);
-		};
-
-		const T& at(size_t i) const
-		{
-			return (_v[i]);
-		};
-
 		/*
 		** CAPACITY
 		**
 		*/
-		bool	empty()
+		bool	empty() const
 		{
 			return (_size == 0);
 		};
@@ -346,9 +368,55 @@ namespace ft
 			return (_capacity_size);
 		};
 
-		difference_type max_size()
+		size_type max_size()  const
 		{
-			return (std::numeric_limits<difference_type>::max());
+			return ((std::pow(2, 64) / sizeof(T)));
+		};
+
+		void reserve(size_type new_cap)
+		{
+			if (new_cap > max_size())
+				throw(std::length_error(""));
+			if (new_cap <= _capacity_size)
+				return ;
+			T*	b;
+			b = _allocator.allocate(new_cap);
+			for (int i = 0; i < _size; i++)
+				b[i] = _v[i];
+			_allocator.deallocate(_v, _capacity_size);
+			_capacity_size = new_cap;
+			_v = b;
+		};
+
+		void resize(size_type count, T value = T())
+		{
+			T*	b;
+
+			if (_size >= count)
+			{
+				_size = count;
+				return ;
+			}
+
+			if (count <= _capacity_size)
+			{
+				for (int i = _size; i < count; i++)
+					_v[i] = value;
+				_size = count;
+			}
+
+			else
+			{
+				b = _allocator.allocate(count + CAPACITY);
+				for (int i = 0; i < _size; i++)
+					b[i] = _v[i];
+				for (int i = _size; i < count; i++)
+					b[i] = value;
+				_size = count;
+				_allocator.deallocate(_v, _capacity_size);
+				_capacity_size = count + CAPACITY;
+				_v = b;
+			}
 		};
 
 		/*
@@ -384,48 +452,6 @@ namespace ft
 		{
 			if (!empty())
 				_size -= 1;
-		};
-
-		void reserve(size_type new_cap)
-		{
-			if (new_cap <= _capacity_size)
-				return ;
-			T*	b;
-			b = _allocator.allocate(new_cap);
-			for (int i = 0; i < _size; i++)
-				b[i] = _v[i];
-			_allocator.deallocate(_v, _capacity_size);
-			_capacity_size = new_cap;
-			_v = b;
-		};
-
-		void resize(size_type count, T value = T())
-		{
-			T*	b;
-
-			if (_size >= count)
-			{
-				_size = count;
-				return ;
-			}
-			if (count <= _capacity_size)
-			{
-				for (int i = _size; i < count; i++)
-					_v[i] = value;
-				_size = count;
-			}
-			else
-			{
-				b = _allocator.allocate(count + CAPACITY);
-				for (int i = 0; i < _size; i++)
-					b[i] = _v[i];
-				for (int i = _size; i < count; i++)
-					b[i] = value;
-				_size = count;
-				_allocator.deallocate(_v, _capacity_size);
-				_capacity_size = count + CAPACITY;
-				_v = b;
-			}
 		};
 
 		Iterator insert(Iterator pos, const T& value)
