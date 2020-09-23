@@ -268,39 +268,80 @@ namespace ft
 		iterator insert(iterator pos, const value_type& value)
 		{
 			//Node *node = allocate_node((*pos)._next);
-			size_type i = 0;
 			iterator base = begin();
 			Node *node = _head;
 
 			while (base != pos)
 			{
-				i++;
-				std::cout << i << std::endl;
 				base++;
 				node = node->_next;
 			}
 
 			Node *new_node = allocate_node(NULL, NULL, value);
+			new_node->_next = node;
+			new_node->_prev = node->_prev;
 
 			if (node == _head)
 				_head = new_node;
-
-			new_node->_next = node;
-			new_node->_prev = node->_prev;
+			if (node == &_past_end)
+				_tail = new_node;
+			if (node == &_past_begin)
+				_head = new_node;
+			node->_prev->_next = new_node;
 			node->_prev = new_node;
 			_size += 1;
 			set_up_head_tail();
 			return (iterator(new_node));
 		}
 
-/*		void insert(iterator pos, size_type n, const value_type& value)
+		void insert(iterator pos, size_type n, const value_type& value)
 		{
+			while (n)
+			{
+				insert(pos, value);
+				n--;
+			}
 		}
 
 		template<typename input_iterator>
 		iterator insert(iterator pos, input_iterator first, input_iterator last)
 		{
-		}*/
+			iterator ret = pos;
+
+			while (first != last)
+			{
+				ret = insert(pos, *first);
+				first++;
+			}
+			return (ret);
+		}
+
+		iterator erase(iterator pos)
+		{
+			iterator base = begin();
+			Node *node = _head;
+
+			while (base != pos)
+			{
+				base++;
+				node = node->_next;
+			}
+			base = iterator(node->_next);
+			pop_node(node);
+			return (base);
+		}
+
+		iterator erase(iterator first, iterator last)
+		{
+			iterator it = first;
+			while (first != last)
+			{
+				it = first;
+				it = erase(it);
+				first++;
+			}
+			return (it);
+		}
 
 		void swap(List& x) // untested
 		{

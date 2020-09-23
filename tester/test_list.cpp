@@ -25,16 +25,14 @@ static bool check_if_equals(vector v, my_vector mv)
 	std::list<int>::iterator ve = v.end();
 	ft::List<int>::iterator mvi = mv.begin();
 	ft::List<int>::iterator mve = mv.end();
-	std::cout <<"ici\n";
 	if (v.size() != mv.size())
 		return false;
-	std::cout <<"la\n";
 	for (; vi != ve && mvi != mve; vi++, mvi++)
 	{
+		//std::cout << *vi << ": " << *mvi << std::endl;
 		if (*mvi != *vi)
 			return (false);
 	}
-	std::cout <<"la\n";
 	return (true);
 }
 
@@ -193,6 +191,60 @@ static void modifiers()
 	l.insert(++l.begin(), 10);
 	ml.insert(++ml.begin(), (ft::List<int>::value_type)10);
 	ft_print("insert(pos, value): ", check_if_equals(l, ml), true);
+	l.insert(--l.end(), 10);
+	ml.insert(--ml.end(), (ft::List<int>::value_type)10);
+	ft_print("insert(pos, value): ", check_if_equals(l, ml), true);
+	l.insert(l.end(), 10);
+	ml.insert(ml.end(), (ft::List<int>::value_type)10);
+	ft_print("insert(pos, value): ", check_if_equals(l, ml), true);
+
+	l.insert(l.begin(), 15, 58);
+	ml.insert(ml.begin(), (ft::List<int>::size_type)15, (ft::List<int>::value_type)58);
+	ft_print("insert(pos, n, value): ", check_if_equals(l, ml), true);
+	l.insert(++l.begin(), 3, 10);
+	ml.insert(++ml.begin(), (ft::List<int>::size_type)3, (ft::List<int>::value_type)10);
+	ft_print("insert(pos, n, value): ", check_if_equals(l, ml), true);
+	l.insert(--l.end(), 5, 10);
+	ml.insert(--ml.end(), (ft::List<int>::size_type)5, (ft::List<int>::value_type)10);
+	ft_print("insert(pos, n, value): ", check_if_equals(l, ml), true);
+	l.insert(l.end(), 2, 10);
+	ml.insert(ml.end(), (ft::List<int>::size_type)2, (ft::List<int>::value_type)10);
+	ft_print("insert(pos, n, value): ", check_if_equals(l, ml), true);
+
+	std::list<int> l3(10, 25);
+	l3.push_back(12);
+	l3.push_front(389);
+	l.insert(l.begin(), l3.begin(), l3.end());
+	ml.insert(ml.begin(), l3.begin(), l3.end());
+	ft_print("insert(pos, it, end): ", check_if_equals(l, ml), true);
+	l.insert(++l.begin(), l3.begin(), l3.end());
+	ml.insert(++ml.begin(), l3.begin(), l3.end());
+	ft_print("insert(pos, it, end): ", check_if_equals(l, ml), true);
+	l.insert(--l.end(), l3.begin(), l3.end());
+	ml.insert(--ml.end(), l3.begin(), l3.end());
+	ft_print("insert(pos, it, end): ", check_if_equals(l, ml), true);
+	l.insert(l.end(), l3.begin(), l3.end());
+	ml.insert(ml.end(), l3.begin(), l3.end());
+	ft_print("insert(pos, it, end): ", check_if_equals(l, ml), true);
+
+	l.erase(l.begin());
+	ml.erase(ml.begin());
+	ft_print("erase(pos): ", check_if_equals(l, ml), true);
+	l.erase(--l.end());
+	ml.erase(--ml.end());
+	ft_print("erase(pos): ", check_if_equals(l, ml), true);
+	l.erase(++l.begin());
+	ml.erase(++ml.begin());
+	ft_print("erase(pos): ", check_if_equals(l, ml), true);
+	l.erase(++l.begin(), --l.end());
+	ml.erase(++ml.begin(),--ml.end());
+	ft_print("erase(it, end): ", check_if_equals(l, ml), true);
+	l.erase(l.begin(), l.end());
+	ml.erase(ml.begin(), ml.end());
+	ft_print("erase(it, end): ", check_if_equals(l, ml), true);
+
+
+
 
 }
 
