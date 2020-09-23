@@ -3,9 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include "../Reverse_Iterator.hpp"
-
-#include <cmath>
+#include "Reverse_Iterator.hpp"
 
 /*
 ** everything is implemented
@@ -19,13 +17,12 @@
 
 namespace ft
 {
-	#define CAPACITY 5
+	#define CAPACITY 32
 
 	template<typename T, class Allocator = std::allocator<T> >
-	class Vector
+	class vector
 	{
 
-		public:
 		typedef size_t		size_type;
 		typedef ptrdiff_t	difference_type;
 		typedef T*			pointer;
@@ -142,13 +139,15 @@ namespace ft
 
 			void operator -= (difference_type n)
 			{
-				_t -= n;
+				_t += n;
 			};
 
-			T& operator [] (difference_type n)
+			Iterator operator [] (difference_type n)
 			{
-				//_t += n;
-				return (*(_t + n));
+				Iterator b;
+
+				b._t = _t + n;
+				return (b);
 			};
 
 			bool operator < (const Iterator& it) const
@@ -191,7 +190,7 @@ namespace ft
 			_allocator.deallocate(_v, _capacity_size);
 		};
 
-		Vector(size_type size, T value = T())
+		Vector(size_type size, T value)
 		{
 			//v = new T[size + CAPACITY];
 			_v = _allocator.allocate(CAPACITY + size);
@@ -202,17 +201,9 @@ namespace ft
 				_v[i] = value;
 		};
 
-		/*Vector(size_type size)
-		{
-			//v = new T[size + CAPACITY];
-			_v = _allocator.allocate(CAPACITY + size);
-			_size = size;
-			_capacity_size = size + CAPACITY;
-		};*/
-
 		// NEED TO DO CONSTRUCTORS with an Array
 
-	/*	Vector(T* first, T* last) // not tested yet
+		Vector(T* first, T* last) // not tested yet
 		{
 			_v = _allocator.allocate(CAPACITY + last - first);
 			_size = last - first;
@@ -220,16 +211,6 @@ namespace ft
 
 			while (first != last)
 				push_back(*first++);
-		};*/
-
-		template<typename InputIterator>
-		Vector(InputIterator first, InputIterator last)
-		{
-			_v = _allocator.allocate(CAPACITY + last - first);
-			_size = last - first;
-			_capacity_size = _size + CAPACITY;
-			for (int i = 0; i < _size; i++, first++)
-				_v[i] = *first;
 		};
 
 		/*
@@ -280,7 +261,7 @@ namespace ft
 
 		reverse_iterator rbegin()
 		{
-			return (reverse_iterator(end() - 1));
+			return (reverse_iterator(end()));
 		};
 
  		reverse_iterator rend()
@@ -294,29 +275,15 @@ namespace ft
 		*/
 		T& operator [] (size_type i)
 		{
-			//if (i < 0 || i >= _size)
-			//	throw (std::out_of_range("Index is out of range"));
+			if (i < 0 || i >= _size)
+				throw (std::out_of_range("Index is out of range"));
 			return (_v[i]);
 		};
 
 		const T& operator [] (size_type i) const
 		{
-			//if (i < 0 || i >= _size)
-			//	throw (std::out_of_range("Index is out of range"));
-			return (_v[i]);
-		};
-
-		T& at(size_type i)
-		{
 			if (i < 0 || i >= _size)
-				throw (std::out_of_range(""));
-			return (_v[i]);
-		}
-
-		const T& at (size_type i) const
-		{
-			if (i < 0 || i >= _size)
-				throw (std::out_of_range(""));
+				throw (std::out_of_range("Index is out of range"));
 			return (_v[i]);
 		};
 
@@ -348,11 +315,23 @@ namespace ft
 			return (_v[_size - 1]);
 		};
 
+		T& at(size_type i)
+		{
+			if (i < 0 || i >= _size)
+				throw (std::out_of_range("Index is out of range"));
+			return (_v[i]);
+		};
+
+		const T& at(size_t i) const
+		{
+			return (_v[i]);
+		};
+
 		/*
 		** CAPACITY
 		**
 		*/
-		bool	empty() const
+		bool	empty()
 		{
 			return (_size == 0);
 		};
@@ -367,95 +346,14 @@ namespace ft
 			return (_capacity_size);
 		};
 
-		size_type max_size()  const
+		difference_type max_size()
 		{
-			return ((std::pow(2, 64) / sizeof(T)));
-		};
-
-		void reserve(size_type new_cap)
-		{
-			if (new_cap > max_size())
-				throw(std::length_error(""));
-			if (new_cap <= _capacity_size)
-				return ;
-			T*	b;
-			b = _allocator.allocate(new_cap);
-			for (int i = 0; i < _size; i++)
-				b[i] = _v[i];
-			_allocator.deallocate(_v, _capacity_size);
-			_capacity_size = new_cap;
-			_v = b;
-		};
-
-		void resize(size_type count, T value = T())
-		{
-			T*	b;
-
-			if (_size >= count)
-			{
-				_size = count;
-				return ;
-			}
-
-			if (count <= _capacity_size)
-			{
-				for (int i = _size; i < count; i++)
-					_v[i] = value;
-				_size = count;
-			}
-
-			else
-			{
-				b = _allocator.allocate(count + CAPACITY);
-				for (int i = 0; i < _size; i++)
-					b[i] = _v[i];
-				for (int i = _size; i < count; i++)
-					b[i] = value;
-				_size = count;
-				_allocator.deallocate(_v, _capacity_size);
-				_capacity_size = count + CAPACITY;
-				_v = b;
-			}
+			return (std::numeric_limits<difference_type>::max());
 		};
 
 		/*
 		** MODIFIERS
 		*/
-
-		void assign(size_type n, const value_type& value)
-		{
-			if (n <= _capacity_size)
-			{
-				for (int i = 0; i < n; i++)
-					_v[i] = value;
-				_size = n;
-			}
-			else
-			{
-				clear();
-				for (int i = 0; i < n; i++)
-					push_back(value);
-			}
-		};
-
-		template<typename input_iteraror>
-		void assign(input_iteraror first, input_iteraror last)
-		{
-
-			if (last - first <= _capacity_size)
-			{
-				_size = last - first;
-				for (int i = 0; first != last; i++, first++)
-					_v[i] = *first;
-			}
-			else
-			{
-				clear();
-				_size = last - first;
-				for (; first != last; first++)
-					push_back(*first);
-			}
-		};
 
 		void clear() // not sure
 		{
@@ -488,10 +386,53 @@ namespace ft
 				_size -= 1;
 		};
 
+		void reserve(size_type new_cap)
+		{
+			if (new_cap <= _capacity_size)
+				return ;
+			T*	b;
+			b = _allocator.allocate(new_cap);
+			for (int i = 0; i < _size; i++)
+				b[i] = _v[i];
+			_allocator.deallocate(_v, _capacity_size);
+			_capacity_size = new_cap;
+			_v = b;
+		};
+
+		void resize(size_type count, T value = T())
+		{
+			T*	b;
+
+			if (_size >= count)
+			{
+				_size = count;
+				return ;
+			}
+			if (count <= _capacity_size)
+			{
+				for (int i = _size; i < count; i++)
+					_v[i] = value;
+				_size = count;
+			}
+			else
+			{
+				b = _allocator.allocate(count + CAPACITY);
+				for (int i = 0; i < _size; i++)
+					b[i] = _v[i];
+				for (int i = _size; i < count; i++)
+					b[i] = value;
+				_size = count;
+				_allocator.deallocate(_v, _capacity_size);
+				_capacity_size = count + CAPACITY;
+				_v = b;
+			}
+		};
+
 		Iterator insert(Iterator pos, const T& value)
 		{
 			T* vb = new T[end() - pos];
 
+			std::cout << "ici " << end() - pos << std::endl;
 			for (int i = 0; i < end() - pos; i++)
 				vb[i] = _v[pos - begin() + i];
 
@@ -514,7 +455,7 @@ namespace ft
 			return (pos);
 		};
 
-		void insert(Iterator pos, size_type n, const T& value)
+		Iterator insert(Iterator pos, size_type n, const T& value)
 		{
 			T* vb = new T[end() - pos];
 
@@ -539,36 +480,15 @@ namespace ft
 					push_back(vb[i]);
 			}
 			delete[] vb;
+			return (pos);
 		};
 
-		template<class InputIterator> // probleme dans l'overload -> try catch?
-		void insert(Iterator pos, InputIterator first, InputIterator last)
+	/*	template<class InputIterator> // probleme dans l'overload -> try catch?
+		Iterator insert(Iterator pos, InputIterator first, InputIterator last)
 		{
-			T* vb = new T[end() - pos];
-
-
-			for (int i = 0; i < end() - pos; i++)
-				vb[i] = _v[pos - begin() + i];
-
-			if (_size + last - first <= _capacity_size)
-			{
-				for (int i = pos - begin(); first != last; i++, first++)
-					_v[i] = *first;
-				_size += last - first;
-				for (int i = pos - begin() + last - first, j = 0; i < _size; i++, j++)
-					_v[i] = vb[j];
-			}
-			else
-			{
-				size_type vb_size = end() - pos;
-				_size = pos - begin();
-				for (; first != last ; first++)
-					push_back(*first);
-				for (int i = 0; i < vb_size; i++)
-					push_back(vb[i]);
-			}
-			delete[] vb;
-		};
+						std::cout << "lollllll\n";
+			return (pos);
+		};*/
 
 		Iterator 	erase(Iterator pos)
 		{
@@ -594,24 +514,6 @@ namespace ft
 			return (begin() + diff + 1);
 		};
 
-		void swap(Vector& x)
-		{
-			pointer b;
-			size_type b2;
-
-			b = x._v;
-			x._v = _v;
-			_v = b;
-
-			b2 = x._size;
-			x._size = _size;
-			_size = b2;
-
-			b2 = x._capacity_size;
-			x._capacity_size = _capacity_size;
-			_capacity_size = b2;
-		}
-
 		/*
 		** FRIENDS
 		*/
@@ -625,7 +527,7 @@ namespace ft
 
 		private:
 		T*				_v;
-		size_type 		_size;
+		size_type 			_size;
 		size_type		_capacity_size;
 		Allocator 		_allocator;
 	};
@@ -633,7 +535,9 @@ namespace ft
 	template<typename T, class Allocator>
 	void swap(Vector<T, Allocator>& x, Vector<T, Allocator>& y) // friend
 	{
-		x.swap(y);
+		Vector<T,Allocator> b = x;
+		x = y;
+		y = b;
 	};
 }
 

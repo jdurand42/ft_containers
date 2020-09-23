@@ -9,6 +9,8 @@
 #include <map>
 #include <queue>
 #include <stack>
+#include <ctime>
+#include <unistd.h>
 
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
@@ -27,6 +29,8 @@
 #define BOLDMAGENTA "\033[1m\033[35m"      /* Bold Magenta */
 #define BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
 #define BOLDWHITE   "\033[1m\033[37m"
+
+#define TIME 10000
 
 class Generic
 {
@@ -55,6 +59,7 @@ class Generic
 template<typename T>
 void ft_print(std::string method, T container, T my_container)
 {
+	usleep(TIME);
 	std::cout << "---- Test on " << method << std::endl;
 	if (container == my_container)
 		std::cout << GREEN << "OK -> ";

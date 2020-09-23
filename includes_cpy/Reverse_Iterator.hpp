@@ -2,7 +2,7 @@
 #include <string>
 
 template<typename iterator>
-struct Reverse_Iterator
+struct Reverse_Iterator: public iterator
 {
 	typedef Reverse_Iterator<iterator> reverse_iterator;
 	typedef typename 	iterator::difference_type difference_type;
@@ -84,7 +84,7 @@ struct Reverse_Iterator
 	{
 		Reverse_Iterator b;
 
-		b._base = _base - n;
+		b._base = _base + n;
 		return (b);
 	};
 
@@ -92,18 +92,18 @@ struct Reverse_Iterator
 	{
 		Reverse_Iterator b;
 
-		b._base = _base + n;
+		b._base = _base - n;
 		return (b);
 	};
 
 	difference_type operator - (Reverse_Iterator it)
 	{
-		return (it._base - _base);
+		return (_base - it._base);
 	};
 
 	void operator += (difference_type n)
 	{
-		_base -= n;
+		_base += n;
 	};
 
 	void operator -= (difference_type n)
@@ -111,29 +111,32 @@ struct Reverse_Iterator
 		_base += n;
 	};
 
-	value_type& operator [] (difference_type n)
+	Reverse_Iterator operator [] (difference_type n)
 	{
-		return (_base[n]);
+		Reverse_Iterator b;
+
+		b._base = _base + n;
+		return (b);
 	};
 
 	bool operator < (const Reverse_Iterator& it) const
 	{
-		return (_base > it._base);
+		return (_base < it._base);
 	};
 
 	bool operator <= (const Reverse_Iterator& it) const
 	{
-		return (_base >= it._base);
+		return (_base <= it._base);
 	};
 
 	bool operator > (const Reverse_Iterator& it) const
 	{
-		return (_base < it._base);
+		return (_base > it._base);
 	};
 
 	bool operator >= (const Reverse_Iterator& it) const
 	{
-		return (_base <= it._base);
+		return (_base >= it._base);
 	};
 
 	private:
