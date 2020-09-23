@@ -30,7 +30,7 @@
 #define BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
 #define BOLDWHITE   "\033[1m\033[37m"
 
-#define TIME 10000
+#define TIME 0
 
 class Generic
 {

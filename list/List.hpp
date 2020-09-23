@@ -5,6 +5,8 @@
 #include <exception>
 #include <string>
 
+#include "../Reverse_Iterator.hpp"
+
 
 namespace ft
 {
@@ -28,13 +30,30 @@ namespace ft
 		typedef ptrdiff_t	difference_type;
 		typedef T*			pointer;
 		typedef T&			reference;
+		typedef const T&	const_reference;
+		typedef const T*	const_pointer;
 		typedef T			value_type;
+		typedef Allocator	allocator_type;
 
 		struct Iterator // bi_directionnal iterator
 		{
+
+			typedef size_t		size_type;
+			typedef ptrdiff_t	difference_type;
+			typedef T*			pointer;
+			typedef T&			reference;
+			typedef T			value_type;
+			typedef const T&	const_reference;
+			typedef const T*	const_pointer;
+
 			Iterator()
 			{
 				_node = NULL;
+			};
+
+			Iterator(Node *node)
+			{
+				_node = node;
 			};
 
 			Iterator(const Iterator& it)
@@ -49,12 +68,12 @@ namespace ft
 
 			~Iterator() {};
 
-			bool operator == (const Iterator& it)
+			bool operator == (const Iterator& it) const
 			{
 				return (it._node == _node);
 			};
 
-			bool operator != (const Iterator& it)
+			bool operator != (const Iterator& it) const
 			{
 				return (it._node != _node);
 			};
@@ -97,8 +116,12 @@ namespace ft
 				return (b);
 			};
 
+		private:
 			Node			*_node;
 		};
+
+		typedef Iterator iterator;
+		typedef Reverse_Iterator<Iterator> reverse_iterator;
 		/*
 		**CONSTRUCTORS
 		*/
@@ -151,20 +174,21 @@ namespace ft
 				push_back(value);
 		};
 
-		List(T* first, T*last)
+		template<typename input_iterator>
+		List(input_iterator first, input_iterator last)
 		{
 			_head = NULL;
 			_tail = NULL;
 			_size = 0;
 			while (first != last)
-				push_back(*first++);
+				push_back(*(first++));
 		}
 
 		/*
 		** pushing MODIFIERS
 		*/
 
-		void push_back(T value)
+		void push_back(const T& value)
 		{
 			if (_size == 0)
 			{
@@ -183,7 +207,7 @@ namespace ft
 
 		};
 
-		void push_front(T value)
+		void push_front(const T& value)
 		{
 			if (_size == 0)
 			{
@@ -227,38 +251,103 @@ namespace ft
 			set_up_head_tail();
 		};
 
+
+		void assign(size_type n, const T& value) // missing the input iterator part and maybe with a T array
+		{
+			List<T> b_list(n, value);
+			*this = b_list;
+		};
+
+		template<typename input_iterator>
+		void assign(input_iterator first, input_iterator last) // missing the input iterator part and maybe with a T array
+		{
+			List<T> b_list(first, last);
+			*this = b_list;
+		};
+
+		iterator insert(iterator pos, const value_type& value)
+		{
+			//Node *node = allocate_node((*pos)._next);
+			size_type i = 0;
+			iterator base = begin();
+			Node *node = _head;
+
+			while (base != pos)
+			{
+				i++;
+				std::cout << i << std::endl;
+				base++;
+				node = node->_next;
+			}
+
+			Node *new_node = allocate_node(NULL, NULL, value);
+
+			if (node == _head)
+				_head = new_node;
+
+			new_node->_next = node;
+			new_node->_prev = node->_prev;
+			node->_prev = new_node;
+			_size += 1;
+			set_up_head_tail();
+			return (iterator(new_node));
+		}
+
+/*		void insert(iterator pos, size_type n, const value_type& value)
+		{
+		}
+
+		template<typename input_iterator>
+		iterator insert(iterator pos, input_iterator first, input_iterator last)
+		{
+		}*/
+
+		void swap(List& x) // untested
+		{
+			Node *b;
+
+			b = _head;
+			_head = x._head;
+			x._head = b;
+			b = _tail;
+			_tail = x._tail;
+			x._tail = b;
+
+			int size_b;
+			size_b = _size;
+			_size = x._size;
+			x._size = size_b;
+			set_up_head_tail();
+			x.set_up_head_tail();
+		}
+
 		/*
 		** Iterations
 		*/
 		Iterator begin()
 		{
-			Iterator it;
-
-			it._node = _head;
+			Iterator it(_head);
 			return (it);
 		}
 
 		Iterator end()
 		{
-			Iterator it;
+			Iterator it(&_past_end);
 
-			it._node = &_past_end; // Null = past the end
 			return (it);
 		}
 
 		Iterator rbegin()
 		{
-			Iterator it;
+			Iterator it(_tail);
 
-			it._node = &_past_begin;
 			return (it);
 		}
 
 		Iterator rend()
 		{
-			Iterator it;
+			Iterator it(&_past_begin);
 
-			it._node = _tail; // Null = past the end
 			return (it);
 		}
 		/*
@@ -337,41 +426,6 @@ namespace ft
 				b = b->_next;
 			return (b->_data);
 		};
-
-		/*
-		** MODIFIERS
-		*/
-
-		void assign(size_type n, const T& value) // missing the input iterator part and maybe with a T array
-		{
-			List<T> b_list(n, value);
-			*this = b_list;
-		};
-
-		void assign(T* first, T* last) // missing the input iterator part and maybe with a T array
-		{
-			List<T> b_list(first, last);
-			*this = b_list;
-		};
-
-		void swap(List& x) // untested
-		{
-			Node *b;
-
-			b = _head;
-			_head = x._head;
-			x._head = b;
-			b = _tail;
-			_tail = x._tail;
-			x._tail = b;
-
-			int size_b;
-			size_b = _size;
-			_size = x._size;
-			x._size = size_b;
-			set_up_head_tail();
-			x.set_up_head_tail();
-		}
 
 		/*
 		** CAPACITY
@@ -543,12 +597,12 @@ namespace ft
 		}
 
 		private:
-		Node		*_head;
-		Node		*_tail;
-		Node		_past_end;
-		Node		_past_begin;
-		size_type	_size;
-		_node_alloc_type _allocator;
+		Node				*_head;
+		Node				*_tail;
+		Node				_past_end;
+		Node				_past_begin;
+		size_type			_size;
+		_node_alloc_type 	_allocator;
 
 		void set_up_head_tail()
 		{
@@ -566,7 +620,7 @@ namespace ft
 			return (b);
 		}
 
-		Node *allocate_node(Node *next, Node *prev, T value)
+		Node *allocate_node(Node *next, Node *prev, const T& value)
 		{
 			Node *b = allocate_node(next, prev);
 			b->_data = value;
