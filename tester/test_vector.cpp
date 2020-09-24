@@ -78,8 +78,8 @@ static void capacity_tests()
 	ft_print("capacity: ", v.capacity(), mv.capacity());
 	std::cout << std::endl;
 
-	v.resize(25);
-	mv.resize(25);
+	v.resize(28);
+	mv.resize(28);
 	ft_print("Resize: ", v.size(), mv.size());
 	ft_print("Value: ", v[24], mv[24]);
 	v.resize(100, "lol");

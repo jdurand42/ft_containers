@@ -391,17 +391,19 @@ namespace ft
 		{
 			T*	b;
 
-			if (_size >= count)
+			if (_size > count)
 			{
+
 				_size = count;
 				return ;
 			}
 
-			if (count <= _capacity_size)
+			if (count < _capacity_size)
 			{
 				for (int i = _size; i < count; i++)
 					_v[i] = value;
 				_size = count;
+
 			}
 
 			else

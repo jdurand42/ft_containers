@@ -13,34 +13,34 @@
 namespace ft
 {
 	template <class T, class Container = List<T> >
-	class queue
+	class Queue
 	{
 		public:
 		typedef T value_type;
 		typedef Container container_type;
 		typedef size_t size_type;
 
-		queue()
+		Queue()
 		{
 
 		};
 
-		queue(const queue& queue) // not sure about that
-		{
-			_queue = queue._queue;
-		};
-
-		void operator = (const queue& queue)
+		Queue(const Queue& queue) // not sure about that
 		{
 			_queue = queue._queue;
 		};
 
-		queue(const container_type& container)
+		void operator = (const Queue& queue)
+		{
+			_queue = queue._queue;
+		};
+
+		Queue(const container_type& container)
 		{
 			_queue = container;
 		};
 
-		~queue()
+		~Queue()
 		{
 
 		};
