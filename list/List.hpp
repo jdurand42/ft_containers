@@ -647,23 +647,83 @@ namespace ft
 
 		void splice(iterator pos, List& x)
 		{
-			insert_in_place(pos, x.begin(), x.end());
+
+			if (x.empty())
+				return ;
+			Node *node = get_node(pos);
+
+	//		if (node == _head)
+	//			_head = x._head;
+			if (node == &_past_end)
+			{
+				_tail->_next = x._head;
+				x._head->_prev = _tail;
+				_tail = x._tail;
+				_size += x.size();
+			}
+			else if (node == &_past_begin)
+			{
+				_head->_prev = x._tail;
+				x._tail->_next = _head;
+				_head = x._head;
+				_size += x.size();
+			}
+			else
+			{
+				node->_prev->_next = x._head;
+				x._head->_prev = node->_prev;
+				x._tail->_next = node;
+				node->_prev = x._tail;
+				_size += x.size();
+			}
+			set_up_head_tail();
+
 			x._size = 0;
 		}
 
 		void splice(iterator pos, List& x, iterator i)
 		{
-			insert_in_place(pos, i);
-			x.pop_node(x.get_node(i));
+			if (x.empty())
+				return ;
+			Node *node = get_node(pos);
+			Node *new_node = x.get_node(i);
+			x.pop_node(new_node);
+
+			if (node == &_past_end)
+			{
+				new_node->_prev = _tail;
+				_tail->_next = new_node;
+				_tail = new_node;
+				_size += 1;
+			}
+			else if (node == &_past_begin)
+			{
+				new_node->_next = _head;
+				_head->_prev = new_node;
+				_head = new_node;
+				_size += 1;
+			}
+			else
+			{
+				node->_prev->_next = new_node;
+				new_node->_prev = node->_prev;
+				new_node->_next = node;
+				node->_prev = new_node;
+				_size += 1;
+			}
+			if (node == _head)
+				_head = new_node;
+			set_up_head_tail();
 		}
 
 		void splice(iterator pos, List& x, iterator first, iterator last)
 		{
-			insert_in_place(pos, first, last);
+			iterator b;
 			while (first != last)
 			{
-				x.pop_node(x.get_node(first));
+				b = first;
 				first++;
+				splice(pos, x, b);
 			}
 		}
 
@@ -741,6 +801,8 @@ namespace ft
 
 		void pop_node(Node* node)
 		{
+			if (node == &_past_end || node == &_past_begin)
+				return ;
 			if (node->_next)
 				node->_next->_prev = node->_prev;
 			if (node->_prev)
@@ -760,21 +822,15 @@ namespace ft
 			_allocator.deallocate(node, 1);
 		}
 
-		void insert_in_place(iterator pos, Node *new_node)
+		iterator insert_in_place(iterator pos, Node *new_node)
 		{
-			iterator base = begin();
-			Node *node = _head;
-
-			while (base != pos)
-			{
-				base++;
-				node = node->_next;
-			}
+			std::cout << "lol\n";
+			Node* node = get_node(pos);
 
 			//Node *new_node = allocate_node(NULL, NULL, value);
 			new_node->_next = node;
 			new_node->_prev = node->_prev;
-
+			std::cout << "lol\n";
 			if (node == _head)
 				_head = new_node;
 			if (node == &_past_end)
@@ -784,28 +840,30 @@ namespace ft
 			node->_prev->_next = new_node;
 			node->_prev = new_node;
 			_size += 1;
+			std::cout << "lol1\n";
 			set_up_head_tail();
+			std::cout << "lol2\n";
 			return (iterator(new_node));
 		}
 
-		template<typename input_iterator>
-		iterator insert_in_place(iterator pos, input_iterator first, input_iterator last)
+		/*template<typename input_iterator>
+		void insert_in_place(iterator pos, input_iterator first, input_iterator last)
 		{
-			iterator ret = pos;
-
 			while (first != last)
 			{
-				ret = insert_in_place(pos, *first);
+				insert_in_place(pos, get_node(first));
 				first++;
 			}
-			return (ret);
-		}
+		}*/
 
 		Node* get_node(iterator it)
 		{
 			iterator base = begin();
+
 			Node *node = _head;
 
+			if (it == --begin())
+				return (&_past_begin);
 			while (base != it)
 			{
 				base++;

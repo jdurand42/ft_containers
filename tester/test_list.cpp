@@ -318,6 +318,35 @@ void operations()
 	ml.merge(ml2, compare);
 	ft_print("merge(x, compare): ", check_if_equals(l, ml), true);
 
+	std::list<int> l3(l);
+	ft::List<int> ml3(ml);
+	ft_print("splice(pos, list): ", l.size(), ml.size());
+	l.splice(++l.begin(), l3);
+	ml.splice(++ml.begin(), ml3);
+	ft_print("splice(pos, list): ", check_if_equals(l, ml), true);
+	ft_print("splice(pos, list): ", l.size(), ml.size());
+	std::list<int> l4(l);
+	ft::List<int> ml4(ml);
+	l.splice(++l.begin(), l4, l4.begin());
+	ml.splice(++ml.begin(), ml4, ml4.begin());
+	ft_print("splice(pos, list, i): ", check_if_equals(l, ml), true);
+	l.splice(l.begin(), l4, l4.begin());
+	ml.splice(ml.begin(), ml4, ml4.begin());
+	ft_print("splice(pos, list, i): ", check_if_equals(l, ml), true);
+	l.splice(l.end(), l4, l4.begin());
+	ml.splice(ml.end(), ml4, ml4.begin());
+	ft_print("splice(pos, list, i): ", check_if_equals(l, ml), true);
+	l.splice(--l.end(), l4, l4.begin());
+	ml.splice(--ml.end(), ml4, ml4.begin());
+	ft_print("splice(pos, list, i): ", check_if_equals(l, ml), true);
+
+	l.splice(++l.begin(), l4, l4.begin(), ++l4.begin());
+	ml.splice(++ml.begin(), ml4, ml4.begin(), ++ml4.begin());
+	ft_print("splice(pos, list, i): ", check_if_equals(l, ml), true);
+
+	l.unique();
+	ml.unique();
+	ft_print("unique(): ", check_if_equals(l, ml), true);
 
 
 }
