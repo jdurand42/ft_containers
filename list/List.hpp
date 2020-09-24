@@ -908,15 +908,11 @@ namespace ft
 template <class T, class Allocator>
 bool operator == (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
 {
-	typename ft::List<T,Allocator>::const_iterator it(x.begin());
-	typename ft::List<T,Allocator>::const_iterator end = x.end();
-	typename ft::List<T,Allocator>::const_iterator it2 = y.begin();
-
 	if (x.size() == y.size())
 	{
-		for ( ; it != end; it++, it2++)
+		for (int i = 0; i < x.size(); i++)
 		{
-			if (it != it2)
+			if (x[i] != y[i])
 				return (false);
 		}
 		return (true);

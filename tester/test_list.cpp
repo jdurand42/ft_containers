@@ -387,6 +387,19 @@ static void external()
 	swap(v, v2);
 	ft_print("external swap: ", check_if_equals(v, mv), true);
 	ft_print("external swap: ", check_if_equals(v2, mv2), true);
+
+	std::list<std::string> l(12, "lol");
+	std::list<std::string> l2(12, "lol");
+	ft::List<std::string> ml(12, "lol");
+	ft::List<std::string> ml2(12, "lol");
+	ft_print("v == v",  l2 == l, ml == ml2);
+	ft_print("v != v", l != l2, ml != ml2);
+	ft_print("v < v", l < l2, ml < ml2);
+	ft_print("v <= v", l <= l2, ml <= ml2);
+	ft_print("v > v", l > l2, ml > ml2);
+	ft_print("v >= v", l >= l2, ml >= ml2);
+
+	std::cout >> ml[0] << std::endl;
 }
 
 void test_list()
