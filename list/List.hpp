@@ -645,6 +645,28 @@ namespace ft
 			}
 		}
 
+		void splice(iterator pos, List& x)
+		{
+			insert_in_place(pos, x.begin(), x.end());
+			x._size = 0;
+		}
+
+		void splice(iterator pos, List& x, iterator i)
+		{
+			insert_in_place(pos, i);
+			x.pop_node(x.get_node(i));
+		}
+
+		void splice(iterator pos, List& x, iterator first, iterator last)
+		{
+			insert_in_place(pos, first, last);
+			while (first != last)
+			{
+				x.pop_node(x.get_node(first));
+				first++;
+			}
+		}
+
 		private:
 		Node				*_head;
 		Node				*_tail;
@@ -737,6 +759,61 @@ namespace ft
 			// call the destructor with destroy ?
 			_allocator.deallocate(node, 1);
 		}
+
+		void insert_in_place(iterator pos, Node *new_node)
+		{
+			iterator base = begin();
+			Node *node = _head;
+
+			while (base != pos)
+			{
+				base++;
+				node = node->_next;
+			}
+
+			//Node *new_node = allocate_node(NULL, NULL, value);
+			new_node->_next = node;
+			new_node->_prev = node->_prev;
+
+			if (node == _head)
+				_head = new_node;
+			if (node == &_past_end)
+				_tail = new_node;
+			if (node == &_past_begin)
+				_head = new_node;
+			node->_prev->_next = new_node;
+			node->_prev = new_node;
+			_size += 1;
+			set_up_head_tail();
+			return (iterator(new_node));
+		}
+
+		template<typename input_iterator>
+		iterator insert_in_place(iterator pos, input_iterator first, input_iterator last)
+		{
+			iterator ret = pos;
+
+			while (first != last)
+			{
+				ret = insert_in_place(pos, *first);
+				first++;
+			}
+			return (ret);
+		}
+
+		Node* get_node(iterator it)
+		{
+			iterator base = begin();
+			Node *node = _head;
+
+			while (base != it)
+			{
+				base++;
+				node = node->_next;
+			}
+			return (node);
+		}
+
 	};
 }
 
