@@ -612,21 +612,25 @@ namespace ft
 
 		void merge(List& x)
 		{
-			if (*this == &x)
+			if (this == &x)
 				return ;
+	//		sort();
+	//		x.sort();
 			push_list(x);
 			x._size = 0;
-			sort();
+
 		}
 
 		template<class Compare>
 		void merge(List& x, Compare comp)
 		{
-			if (*this == &x)
+			if (this == &x)
 				return ;
+	//		sort(comp);
+	//		x.sort(comp);
 			push_list(x);
 			x._size = 0;
-			sort(comp);
+		//	sort(comp);
 		}
 
 		void reverse()

@@ -29,7 +29,7 @@ static bool check_if_equals(vector v, my_vector mv)
 		return false;
 	for (; vi != ve && mvi != mve; vi++, mvi++)
 	{
-		//std::cout << *vi << ": " << *mvi << std::endl;
+	//	std::cout << *vi << ": " << *mvi << std::endl;
 		if (*mvi != *vi)
 			return (false);
 	}
@@ -243,6 +243,80 @@ static void modifiers()
 	ml.erase(ml.begin(), ml.end());
 	ft_print("erase(it, end): ", check_if_equals(l, ml), true);
 
+	std::list<int> l2(10, 100);
+	std::list<int> l4(8, 2);
+	ft::List<int> ml2((ft::List<int>::size_type)10, (ft::List<int>::value_type)100);
+	ft::List<int> ml4((ft::List<int>::size_type)8, (ft::List<int>::value_type)2);
+	l2.swap(l4);
+	ml2.swap(ml4);
+	ft_print("swap(): ", check_if_equals(l2, ml2), true);
+	ft_print("swap(): ", check_if_equals(l4, ml4), true);
+
+	l4.resize(15);
+	ml4.resize(15);
+	ft_print("resize(size): ", check_if_equals(l4, ml4), true);
+	l4.resize(2, 42);
+	ml4.resize(2, 42);
+	ft_print("resize(size, value): ", check_if_equals(l4, ml4), true);
+
+	l.clear();
+	ml.clear();
+	ft_print("clear(): ", l.empty(), ml.empty());
+}
+
+static bool compare(int a, int b)
+{
+	if (a < b)
+		return (true);
+	return (false);
+}
+
+void operations()
+{
+	std::cout << BOLDYELLOW << " ---- OPERATIONS ----\n" << RESET;
+	std::list<int> l;
+	for (int i = 0; i < 30; i++)
+		l.push_front(i);
+	l.push_back(12);
+	l.push_back(12);
+	ft::List<int> ml(l.begin(), l.end());
+
+	l.remove(12);
+	ml.remove(12);
+	ft_print("remove(value): ", check_if_equals(l, ml), true);
+	l.remove(58);
+	ml.remove(58);
+	ft_print("remove(value): ", check_if_equals(l, ml), true);
+	l.remove(29);
+	ml.remove(29);
+	ft_print("remove(value): ", check_if_equals(l, ml), true);
+
+	l.sort();
+	ml.sort();
+	ft_print("sort(): ", check_if_equals(l, ml), true);
+	l.sort(compare);
+	ml.sort(compare);
+	ft_print("sort(Compare): ", check_if_equals(l, ml), true);
+
+	l.reverse();
+	ml.reverse();
+	ft_print("reverse(): ", check_if_equals(l, ml), true);
+
+	std::list<int> l1(l);
+	ft::List<int> ml1(ml);
+	l.merge(l);
+	ml.merge(ml);
+	ft_print("merge(): ", check_if_equals(l, ml), true);
+	l.merge(l1);
+	ml.merge(ml1);
+	ft_print("merge(): ", check_if_equals(l, ml), true);
+	std::list<int> l2(l);
+	ft::List<int> ml2(ml);
+//	l2.reverse();
+//	ml2.reverse();
+	l.merge(l2, compare);
+	ml.merge(ml2, compare);
+	ft_print("merge(x, compare): ", check_if_equals(l, ml), true);
 
 
 
@@ -257,4 +331,5 @@ void test_list()
 	iterators();
 	reverse_iterator();
 	modifiers();
+	operations();
 }
