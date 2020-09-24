@@ -154,12 +154,13 @@ namespace ft
 		~List()
 		{
 			// normal deallocations
-			for (int i = 0; i < _size; i++)
+			/*for (int i = 0; i < _size; i++)
 			{
 				Node *b = _head->_next;
 				_allocator.deallocate(_head, 1);
 				_head = b;
-			}
+			}*/
+			clear();
 		};
 
 		List(size_type size, T value = T())
@@ -254,6 +255,7 @@ namespace ft
 
 		void assign(size_type n, const T& value) // missing the input iterator part and maybe with a T array
 		{
+			clear();
 			List<T> b_list(n, value);
 			*this = b_list;
 		};
@@ -261,6 +263,7 @@ namespace ft
 		template<typename input_iterator>
 		void assign(input_iterator first, input_iterator last) // missing the input iterator part and maybe with a T array
 		{
+			clear();
 			List<T> b_list(first, last);
 			*this = b_list;
 		};
@@ -327,7 +330,7 @@ namespace ft
 				node = node->_next;
 			}
 			base = iterator(node->_next);
-			pop_node(node);
+			delete_node(node);
 			return (base);
 		}
 
