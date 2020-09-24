@@ -44,12 +44,12 @@ namespace ft
 
 		};
 
-		bool empty()
+		bool empty() const
 		{
 			return (_stack.empty());
 		}
 
-		size_type size()
+		size_type size() const
 		{
 			return (_stack.size());
 		}
@@ -77,6 +77,65 @@ namespace ft
 		private:
 		Container _stack;
 	};
-}
+};
+
+
+template <class T, class Container>
+bool operator == (const ft::Stack<T,Container&> x, const ft::Stack<T,Container&> y)
+{
+	if (x.size() == y.size())
+	{
+		for (int i = 0; i < x.size(); i++)
+		{
+			if (x[i] != y[i])
+				return (false);
+		}
+		return (true);
+	}
+	return (false);
+};
+
+template <class T, class Container>
+bool operator != (const ft::Stack<T,Container>& x, const ft::Stack<T,Container>& y)
+{
+	return (!(x == y));
+};
+
+template <class T, class Container>
+bool operator < (const ft::Stack<T,Container>& x, const ft::Stack<T,Container>& y)
+{
+	// check comportement on empty containers
+	for (int i = 0, j = 0; i < x.size() && j < y.size(); i++, j++)
+	{
+		if (!(x[i] < y[i]))
+			return (false);
+	}
+	return (true);
+};
+
+template <class T, class Container>
+bool operator <= (const ft::Stack<T,Container>& x, const ft::Stack<T,Container>& y)
+{
+	// check comportement on empty containers
+	for (int i = 0, j = 0; i < x.size() && j < y.size(); i++, j++)
+	{
+		if (!(x[i] <= y[i]))
+			return (false);
+	}
+	return (true);
+};
+
+template <class T, class Container>
+bool operator > (const ft::Stack<T,Container>& x, const ft::Stack<T,Container>& y)
+{
+	// check comportement on empty containers
+	return (!(x < y));
+};
+template <class T, class Container>
+bool operator >= (const ft::Stack<T,Container>& x, const ft::Stack<T,Container>& y)
+{
+	// check comportement on empty Container<T>s
+	return (!(x <= y));
+};
 
 #endif

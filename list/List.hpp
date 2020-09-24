@@ -120,8 +120,16 @@ namespace ft
 			Node			*_node;
 		};
 
+		struct Const_Iterator: public Iterator
+		{
+			Const_Iterator(): Iterator(){};
+			//Const_Iterator(const Const_Iterator& i): Iterator()
+			Const_Iterator(Node *node): Iterator(node){};
+		};
+
 		typedef Iterator iterator;
 		typedef Reverse_Iterator<Iterator> reverse_iterator;
+		typedef Const_Iterator const_iterator;
 		/*
 		**CONSTRUCTORS
 		*/
@@ -377,6 +385,19 @@ namespace ft
 		Iterator end()
 		{
 			Iterator it(&_past_end);
+
+			return (it);
+		}
+
+		const_iterator begin() const
+		{
+			const_iterator it(_head);
+			return (it);
+		}
+
+		const_iterator end() const
+		{
+			const_iterator it(&_past_end);
 
 			return (it);
 		}
@@ -883,14 +904,19 @@ namespace ft
 		x.swap(y);
 	};
 }
+
 template <class T, class Allocator>
 bool operator == (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
 {
+	typename ft::List<T,Allocator>::const_iterator it(x.begin());
+	typename ft::List<T,Allocator>::const_iterator end = x.end();
+	typename ft::List<T,Allocator>::const_iterator it2 = y.begin();
+
 	if (x.size() == y.size())
 	{
-		for (int i = 0; i < x.size(); i++)
+		for ( ; it != end; it++, it2++)
 		{
-			if (x[i] != y[i])
+			if (it != it2)
 				return (false);
 		}
 		return (true);
