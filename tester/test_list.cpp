@@ -351,6 +351,44 @@ void operations()
 
 }
 
+static void external()
+{
+	std::cout << BOLDYELLOW << "\n------ RELATIONAL OPERATORS -------\n\n" << RESET;
+	std::list<int> v;
+	ft::List<int> mv;
+	std::list<int> v2;
+	ft::List<int> mv2;
+	for (int i = 0; i < 10; i++)
+	{
+		v.push_back(i);
+		mv.push_back(i);
+		v2.push_back(-i);
+		mv2.push_back(-i);
+	}
+
+	ft_print("v == v", v == v2, mv == mv2);
+	ft_print("v != v", v != v2, mv != mv2);
+	ft_print("v < v", v < v2, mv < mv2);
+	ft_print("v <= v", v <= v2, mv <= mv2);
+	ft_print("v > v", v > v2, mv > mv2);
+	ft_print("v >= v", v >= v2, mv >= mv2);
+
+	v2.push_back(42);
+	mv2.push_back(42);
+
+	ft_print("v == v", v == v2, mv == mv2);
+	ft_print("v != v", v != v2, mv != mv2);
+	ft_print("v < v", v < v2, mv < mv2);
+	ft_print("v <= v", v <= v2, mv <= mv2);
+	ft_print("v > v", v > v2, mv > mv2);
+	ft_print("v >= v", v >= v2, mv >= mv2);
+
+	ft::swap(mv, mv2);
+	swap(v, v2);
+	ft_print("external swap: ", check_if_equals(v, mv), true);
+	ft_print("external swap: ", check_if_equals(v2, mv2), true);
+}
+
 void test_list()
 {
 	std::cout << BOLDMAGENTA << "\n------ TEST ON LIST -------\n\n" << RESET;
@@ -361,4 +399,5 @@ void test_list()
 	reverse_iterator();
 	modifiers();
 	operations();
+	external();
 }

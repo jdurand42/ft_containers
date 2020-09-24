@@ -472,12 +472,12 @@ namespace ft
 		** CAPACITY
 		*/
 
-		size_type size()
+		size_type size() const
 		{
 			return (_size);
 		}
 
-		bool empty()
+		bool empty() const
 		{
 			return (_size == 0);
 		}
@@ -871,8 +871,71 @@ namespace ft
 			}
 			return (node);
 		}
+	friend void swap(List<T, Allocator>& x, List<T, Allocator>& y);
 
 	};
+	template<typename T, class Allocator>
+	void swap(List<T, Allocator>& x, List<T, Allocator>& y) // friend
+	{
+		x.swap(y);
+	};
 }
+template <class T, class Allocator>
+bool operator == (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
+{
+	if (x.size() == y.size())
+	{
+		for (int i = 0; i < x.size(); i++)
+		{
+			if (x[i] != y[i])
+				return (false);
+		}
+		return (true);
+	}
+	return (false);
+};
+
+template <class T, class Allocator>
+bool operator != (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
+{
+	return (!(x == y));
+};
+
+template <class T, class Allocator>
+bool operator < (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
+{
+	// check comportement on empty containers
+	for (int i = 0, j = 0; i < x.size() && j < y.size(); i++, j++)
+	{
+		if (!(x[i] < y[i]))
+			return (false);
+	}
+	return (true);
+};
+
+template <class T, class Allocator>
+bool operator <= (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
+{
+	// check comportement on empty containers
+	for (int i = 0, j = 0; i < x.size() && j < y.size(); i++, j++)
+	{
+		if (!(x[i] <= y[i]))
+			return (false);
+	}
+	return (true);
+};
+
+template <class T, class Allocator>
+bool operator > (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
+{
+	// check comportement on empty containers
+	return (!(x < y));
+};
+template <class T, class Allocator>
+bool operator >= (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
+{
+	// check comportement on empty containers
+	return (!(x <= y));
+};
 
 #endif
