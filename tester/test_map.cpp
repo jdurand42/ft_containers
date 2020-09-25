@@ -18,6 +18,14 @@ static bool check_if_equals(vector v, my_vector mv)
 	return (true);
 }
 
+template<typename it>
+static bool check_it(it i, it i2)
+{
+	if (i == i2)
+		return (true);
+	return (false);
+}
+
 static void constructors()
 {
 	std::cout << BOLDMAGENTA << "------CONSTRUCTORS----------\n" << RESET;
@@ -81,9 +89,33 @@ static void capacity()
 	ft_print("size(): ", m.size(), mm.size());
 }
 
-static void find()
+static void operations()
 {
-	
+	std::cout << BOLDMAGENTA << "------FIND----------\n" << RESET;
+	std::map<std::string, std::string> m;
+	m["xavier"] = "niel";
+	m["niel"] = "free";
+	m["lol"] = "42";
+	ft::Map<std::string, std::string> mm(m.begin(), m.end());
+
+	ft_print("find(key) ", m.find("xavier")->second, mm.find("xavier")->second);
+	ft_print("find(key) ", m.find("niel")->second, mm.find("niel")->second);
+	ft_print("find(key) ", m.find("lol")->second, mm.find("lol")->second);
+	//std::cout << m.find("niel1")->second;
+	//ft_print("find(key non existing) ", m.find("niel1"), mm.find("niel1")->second);
+	//ft_print("find(key) ", *(m.find("niel")), *(mm.find("niel")));
+	//ft_print("find(key) ", *(m.find("lol")), *(mm.find("lol"))); // problem
+	ft_print("find(key non existing) ", check_it(mm.end(), mm.find("niel1")), true);
+	m.find("xavier")->second = "424242";
+	mm.find("xavier")->second = "424242";
+	ft_print("find(key after modification) ", m.find("xavier")->second, mm.find("xavier")->second);
+
+	ft_print("count(key) ", m.count("lol"), mm.count("lol"));
+	ft_print("count(key) ", m.count(""), mm.count(""));
+	ft_print("count(key) ", m.count("   "), mm.count("   "));
+
+	ft_print("lower_bound(key) ", m.lower_bound("lol"), mm.lower_bound("lol"));
+
 }
 
 void test_map()
@@ -92,4 +124,5 @@ void test_map()
 	constructors();
 	elements_access();
 	capacity();
+	operations();
 }

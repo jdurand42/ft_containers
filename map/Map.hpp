@@ -19,6 +19,7 @@ namespace ft
 		public:
 		typedef Key key_type;
 		typedef typename BST<Key,T,Compare,Allocator>::Iterator iterator;
+		typedef typename BST<Key,T,Compare,Allocator>::const_iterator const_iterator;
 		typedef Compare key_compare;
 		typedef Allocator allocator_type;
 		typedef size_t	size_type;
@@ -133,9 +134,14 @@ namespace ft
 			return (_bst.find(key));
 		}
 
-		size_type count(const key_type& key)
+		const_iterator find(const key_type& key) const
 		{
-			if (_bst.search_node(key))
+			return (_bst.find(key));
+		}
+
+		size_type count(const key_type& key) const
+		{
+			if (_bst.find(key) != _bst.end())
 				return (1);
 			else
 				return (0);
@@ -190,7 +196,17 @@ namespace ft
 			return (_bst.begin());
 		}
 
+		const_iterator begin() const
+		{
+			return (_bst.begin());
+		}
+
 		iterator end()
+		{
+			return (_bst.end());
+		}
+
+		const_iterator end() const
 		{
 			return (_bst.end());
 		}

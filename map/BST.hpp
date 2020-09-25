@@ -171,6 +171,9 @@ namespace ft
 			Node	*_root;
 		};
 
+		typedef Iterator iterator;
+		typedef iterator const_iterator;
+
 		BST()
 		{
 			_root = NULL;
@@ -375,7 +378,27 @@ namespace ft
 			return (Iterator(node, _root));
 		}
 
+		const_iterator begin() const
+		{
+			Node *node = _root;
+
+			while (node && node->_left)
+				node = node->_left;
+			return (Iterator(node, _root));
+		}
+
 		Iterator end()
+		{
+
+		//	it._root = _root;
+		//	it._node = NULL;
+			//while (it._node && it._node->_right)
+			//	it._node = it._node._right;
+			// or return (_null)
+			return (Iterator(NULL, _root));
+		}
+
+		const_iterator end() const
 		{
 
 		//	it._root = _root;
@@ -406,7 +429,7 @@ namespace ft
 
 //			it._root = _root;
 
-			Node *node = search_node(key);
+			Node *node = search_node(key, _root);
 			if (node)
 				return (Iterator(node, _root));
 			else
