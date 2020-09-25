@@ -7,6 +7,7 @@
 ** Needto do the iterate stuffs
 ** maybe unspecialised BST that take a pair
 ** see std::less for testing equality
+** Value comp, key comp
 */
 
 namespace ft
@@ -15,6 +16,7 @@ namespace ft
 	class Allocator = std::allocator<std::pair<const Key,T> > >
 	class Map
 	{
+		public:
 		typedef Key key_type;
 		typedef typename BST<Key,T,Compare,Allocator>::Iterator iterator;
 		typedef Compare key_compare;
@@ -28,9 +30,19 @@ namespace ft
 		{
 		}
 
+		template<typename input_iteraror>
+		Map(input_iteraror first, input_iteraror last)
+		{
+			while (first != last)
+			{
+				_bst.insert(*first);
+				first++;
+			}
+		}
+
 		Map(const Map& map)
 		{
-			_bst = map._bst.copy_tree();
+			_bst = map._bst;
 		}
 
 		void operator = (const Map& map)
@@ -52,21 +64,22 @@ namespace ft
 			return (_bst.size() == 0);
 		}
 
-		size_type size()
+		size_type size() const
 		{
 			return (_bst.size());
 		}
 
-		size_type max_size()
+		size_type max_size() const
 		{
 			// to implement
+			return (42);
 		}
 
 		/*
 		** Access
 		*/
 
-		T& operator [] (key_type key)
+		T& operator [] (const key_type& key)
 		{
 			return (_bst.search(key));
 		}

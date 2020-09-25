@@ -399,7 +399,6 @@ static void external()
 	ft_print("v > v", l > l2, ml > ml2);
 	ft_print("v >= v", l >= l2, ml >= ml2);
 
-	std::cout >> ml[0] << std::endl;
 }
 
 void test_list()

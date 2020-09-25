@@ -120,16 +120,9 @@ namespace ft
 			Node			*_node;
 		};
 
-		struct Const_Iterator: public Iterator
-		{
-			Const_Iterator(): Iterator(){};
-			//Const_Iterator(const Const_Iterator& i): Iterator()
-			Const_Iterator(Node *node): Iterator(node){};
-		};
-
 		typedef Iterator iterator;
 		typedef Reverse_Iterator<Iterator> reverse_iterator;
-		typedef Const_Iterator const_iterator;
+		typedef Iterator const_iterator;
 		/*
 		**CONSTRUCTORS
 		*/
@@ -138,6 +131,7 @@ namespace ft
 		{
 			_past_end._prev = _head;
 			_past_begin._next = _tail;
+			set_up_head_tail();
 		};
 
 		List(const List& list): _head(NULL), _tail(NULL), _size(0)
@@ -147,6 +141,7 @@ namespace ft
 			{
 				push_back(list[i]);
 			}
+			set_up_head_tail();
 		};
 
 		void operator = (const List& list)
@@ -157,6 +152,7 @@ namespace ft
 			{
 				push_back(list[i]);
 			}
+			set_up_head_tail();
 		};
 
 		~List()
@@ -177,10 +173,12 @@ namespace ft
 			_tail = NULL;
 			_size = 0;
 
+			set_up_head_tail();
 			if (size <= 0)
 				return ;
 			for (int i = 0; i < size; i++)
 				push_back(value);
+			set_up_head_tail();
 		};
 
 		template<typename input_iterator>
@@ -191,6 +189,7 @@ namespace ft
 			_size = 0;
 			while (first != last)
 				push_back(*(first++));
+			set_up_head_tail();
 		}
 
 		/*
@@ -348,8 +347,8 @@ namespace ft
 			while (first != last)
 			{
 				it = first;
-				it = erase(it);
 				first++;
+				erase(it);
 			}
 			return (it);
 		}
@@ -397,24 +396,26 @@ namespace ft
 
 		const_iterator end() const
 		{
-			const_iterator it(&_past_end);
-
+			const_iterator it(_tail);
+			if (_tail)
+				it++;
 			return (it);
 		}
 
-		Iterator rbegin()
+		reverse_iterator rbegin()
 		{
-			Iterator it(_tail);
+			reverse_iterator it(_tail);
 
 			return (it);
 		}
 
-		Iterator rend()
+		reverse_iterator rend()
 		{
-			Iterator it(&_past_begin);
+			reverse_iterator it(&_past_begin);
 
 			return (it);
 		}
+
 		/*
 		** ACCESS
 		** Don't forget the const equivalent
@@ -422,52 +423,22 @@ namespace ft
 
 		T& front()
 		{
-			if (empty())
-				throw(std::out_of_range("List empty, operation not permitted"));
 			return (_head->_data);
 		};
 
 		T& back()
 		{
-			if (empty())
-				throw(std::out_of_range("List empty, operation not permitted"));
 			return (_tail->_data);
 		};
 
 		const T& front() const
 		{
-			if (empty())
-				throw(std::out_of_range("List empty, operation not permitted"));
 			return (_head->_data);
 		};
 
 		const T& back() const
 		{
-			if (empty())
-				throw(std::out_of_range("List empty, operation not permitted"));
 			return (_tail->_data);
-		};
-
-		T& operator [] (size_type idx)
-		{
-			if (idx < 0 || idx >= _size)
-				throw (std::out_of_range("Index is out of range"));
-			Node *b;
-			b = _head;
-			for (int i = 0; i != idx; i++)
-				b = b->_next;
-			return (b->_data);
-		};
-
-		const T& operator [] (size_type idx) const
-		{
-			if (idx < 0 || idx >= _size)
-				throw (std::out_of_range("Index is out of range"));
-			Node *b;
-			b = _head;
-			for (int i = 0; i != idx; i++)
-				b = b->_next;
-			return (b->_data);
 		};
 
 		T& at(size_type idx)
@@ -761,8 +732,10 @@ namespace ft
 
 		void set_up_head_tail()
 		{
-			_head->_prev = &_past_begin;
-			_tail->_next = &_past_end;
+			if (_head)
+				_head->_prev = &_past_begin;
+			if (_tail)
+				_tail->_next = &_past_end;
 			_past_begin._next = _head;
 			_past_end._prev = _tail;
 		}
@@ -895,9 +868,33 @@ namespace ft
 			}
 			return (node);
 		}
-	friend void swap(List<T, Allocator>& x, List<T, Allocator>& y);
 
-	};
+		//private to search
+		T& operator [] (size_type idx)
+		{
+			if (idx < 0 || idx >= _size)
+				throw (std::out_of_range("Index is out of range"));
+			Node *b;
+			b = _head;
+			for (int i = 0; i != idx; i++)
+				b = b->_next;
+			return (b->_data);
+		};
+
+		const T& operator [] (size_type idx) const
+		{
+			if (idx < 0 || idx >= _size)
+				throw (std::out_of_range("Index is out of range"));
+			Node *b;
+			b = _head;
+			for (int i = 0; i != idx; i++)
+				b = b->_next;
+			return (b->_data);
+		};
+
+		friend void swap(List<T, Allocator>& x, List<T, Allocator>& y);
+
+		};
 	template<typename T, class Allocator>
 	void swap(List<T, Allocator>& x, List<T, Allocator>& y) // friend
 	{
@@ -910,9 +907,12 @@ bool operator == (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y
 {
 	if (x.size() == y.size())
 	{
-		for (int i = 0; i < x.size(); i++)
+		typename ft::List<T,Allocator>::iterator it = x.begin();
+		typename ft::List<T,Allocator>::iterator it2 = y.begin();
+		typename ft::List<T,Allocator>::iterator end = x.end();
+		for (; it != end; it++, it2++)
 		{
-			if (x[i] != y[i])
+			if (*it != *it2)
 				return (false);
 		}
 		return (true);
@@ -930,9 +930,12 @@ template <class T, class Allocator>
 bool operator < (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
 {
 	// check comportement on empty containers
-	for (int i = 0, j = 0; i < x.size() && j < y.size(); i++, j++)
+	typename ft::List<T,Allocator>::iterator it = x.begin();
+	typename ft::List<T,Allocator>::iterator it2 = y.begin();
+	typename ft::List<T,Allocator>::iterator end = x.end();
+	for (; it != end; it++, it2++)
 	{
-		if (!(x[i] < y[i]))
+		if (!(*it < *it2))
 			return (false);
 	}
 	return (true);
@@ -942,9 +945,12 @@ template <class T, class Allocator>
 bool operator <= (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
 {
 	// check comportement on empty containers
-	for (int i = 0, j = 0; i < x.size() && j < y.size(); i++, j++)
+	typename ft::List<T,Allocator>::iterator it = x.begin();
+	typename ft::List<T,Allocator>::iterator it2 = y.begin();
+	typename ft::List<T,Allocator>::iterator end = x.end();
+	for (; it != end; it++, it2++)
 	{
-		if (!(x[i] <= y[i]))
+		if (!(*it <= *it2))
 			return (false);
 	}
 	return (true);
@@ -956,11 +962,26 @@ bool operator > (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
 	// check comportement on empty containers
 	return (!(x < y));
 };
+
 template <class T, class Allocator>
 bool operator >= (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
 {
 	// check comportement on empty containers
 	return (!(x <= y));
 };
+
+/*
+template <class InputIterator1, class InputIterator2>
+  bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
+                                InputIterator2 first2, InputIterator2 last2)
+{
+  while (first1!=last1)
+  {
+    if (first2==last2 || *first2<*first1) return false;
+    else if (*first1<*first2) return true;
+    ++first1; ++first2;
+  }
+  return (first2!=last2);
+}*/
 
 #endif

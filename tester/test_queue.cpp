@@ -38,8 +38,63 @@ static void constructors()
 
 }
 
+static void operators()
+{	std::cout << BOLDYELLOW << "\n------ RELATIONAL OPERATORS -------\n\n" << RESET;
+	std::queue<int> v;
+	ft::Queue<int> mv;
+	std::queue<int> v2;
+	ft::Queue<int> mv2;
+	for (int i = 0; i < 10; i++)
+	{
+		v.push(i);
+		mv.push(i);
+		v2.push(-i);
+		mv2.push(-i);
+	}
+
+	ft_print("v == v", v == v2, mv == mv2);
+	ft_print("v != v", v != v2, mv != mv2);
+	ft_print("v < v", v < v2, mv < mv2);
+	ft_print("v <= v", v <= v2, mv <= mv2);
+	ft_print("v > v", v > v2, mv > mv2);
+	ft_print("v >= v", v >= v2, mv >= mv2);
+
+	v2.push(42);
+	mv2.push(42);
+
+	ft_print("v == v", v == v2, mv == mv2);
+	ft_print("v != v", v != v2, mv != mv2);
+	ft_print("v < v", v < v2, mv < mv2);
+	ft_print("v <= v", v <= v2, mv <= mv2);
+	ft_print("v > v", v > v2, mv > mv2);
+	ft_print("v >= v", v >= v2, mv >= mv2);
+
+	v2.push(18);
+	mv2.push(35);
+	swap(v, v2);
+	ft::swap(mv, mv2);
+	ft_print("Swap ", v.size(), mv.size());
+	ft_print("Swap ", v2.size(), mv2.size());
+
+	std::queue<std::string> v3;
+	ft::Queue<std::string> mv3;
+	std::queue<std::string> v4;
+	ft::Queue<std::string> mv4;
+
+	ft_print("v == v", v3 == v4, mv3 == mv4);
+	ft_print("v != v", v3 != v4, mv3 != mv4);
+	ft_print("v < v", v3 < v4, mv3 < mv4);
+	ft_print("v <= v", v3 <= v4, mv3 <= mv4);
+	ft_print("v > v", v3 > v4, mv3 > mv4);
+	ft_print("v >= v", v3 >= v4, mv3 >= mv4);
+
+
+}
+
+
 void test_queue()
 {
 	std::cout << "\n------TEST QUEUE----------\n\n";
 	constructors();
+	operators();
 }

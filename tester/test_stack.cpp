@@ -37,8 +37,7 @@ static void constructors()
 }
 
 static void operators()
-{
-/*	std::cout << BOLDYELLOW << "\n------ RELATIONAL OPERATORS -------\n\n" << RESET;
+{	std::cout << BOLDYELLOW << "\n------ RELATIONAL OPERATORS -------\n\n" << RESET;
 	std::stack<int> v;
 	ft::Stack<int> mv;
 	std::stack<int> v2;
@@ -67,7 +66,15 @@ static void operators()
 	ft_print("v <= v", v <= v2, mv <= mv2);
 	ft_print("v > v", v > v2, mv > mv2);
 	ft_print("v >= v", v >= v2, mv >= mv2);
-	*/
+
+	v2.push(18);
+	mv2.push(35);
+	swap(v, v2);
+	ft::swap(mv, mv2);
+	ft_print("Swap ", v.size(), mv.size());
+	ft_print("Swap ", v2.size(), mv2.size());
+
+
 }
 
 void test_stack()
@@ -75,5 +82,5 @@ void test_stack()
 	std::cout << "\n------TEST STACK----------\n\n";
 
 	constructors();
-//	operators();
+	operators();
 }

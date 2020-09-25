@@ -76,66 +76,54 @@ namespace ft
 
 		private:
 		Container _stack;
-	};
-};
 
-
-template <class T, class Container>
-bool operator == (const ft::Stack<T,Container&> x, const ft::Stack<T,Container&> y)
-{
-	if (x.size() == y.size())
-	{
-		for (int i = 0; i < x.size(); i++)
+		public:
+		template <class Type, class Cont>
+		friend bool operator == (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
 		{
-			if (x[i] != y[i])
-				return (false);
-		}
-		return (true);
-	}
-	return (false);
-};
+			return (x._stack == y._stack);
+		};
 
-template <class T, class Container>
-bool operator != (const ft::Stack<T,Container>& x, const ft::Stack<T,Container>& y)
-{
-	return (!(x == y));
-};
+		template <class Type, class Cont>
+		friend bool operator != (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
+		{
+			return (!(x == y));
+		};
 
-template <class T, class Container>
-bool operator < (const ft::Stack<T,Container>& x, const ft::Stack<T,Container>& y)
-{
-	// check comportement on empty containers
-	for (int i = 0, j = 0; i < x.size() && j < y.size(); i++, j++)
+		template <class Type, class Cont>
+		friend bool operator < (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
+		{
+			return (x._stack < y._stack);
+		};
+
+		template <class Type, class Cont>
+		friend bool operator <= (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
+		{
+			return (x._stack <= y._stack);
+		};
+
+		template <class Type, class Cont>
+		friend bool operator > (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
+		{
+			return (x._stack > y._stack);
+		};
+
+		template <class Type, class Cont>
+		friend bool operator >= (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
+		{
+			return (x._stack >= y._stack);
+		};
+
+		template <class Type, class Cont>
+		friend void swap(ft::Stack<Type,Cont>& x, ft::Stack<Type,Cont>& y);
+	};
+
+	template <class Type, class Cont>
+	void swap(ft::Stack<Type,Cont>& x, ft::Stack<Type,Cont>& y)
 	{
-		if (!(x[i] < y[i]))
-			return (false);
-	}
-	return (true);
-};
+		return (x._stack.swap(y._stack));
+	};
 
-template <class T, class Container>
-bool operator <= (const ft::Stack<T,Container>& x, const ft::Stack<T,Container>& y)
-{
-	// check comportement on empty containers
-	for (int i = 0, j = 0; i < x.size() && j < y.size(); i++, j++)
-	{
-		if (!(x[i] <= y[i]))
-			return (false);
-	}
-	return (true);
-};
 
-template <class T, class Container>
-bool operator > (const ft::Stack<T,Container>& x, const ft::Stack<T,Container>& y)
-{
-	// check comportement on empty containers
-	return (!(x < y));
 };
-template <class T, class Container>
-bool operator >= (const ft::Stack<T,Container>& x, const ft::Stack<T,Container>& y)
-{
-	// check comportement on empty Container<T>s
-	return (!(x <= y));
-};
-
 #endif
