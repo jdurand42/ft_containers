@@ -20,6 +20,7 @@ namespace ft
 		typedef Key key_type;
 		typedef typename BST<Key,T,Compare,Allocator>::Iterator iterator;
 		typedef typename BST<Key,T,Compare,Allocator>::const_iterator const_iterator;
+		typedef typename BST<Key,T,Compare,Allocator>::reverse_iterator reverse_iterator;
 		typedef Compare key_compare;
 		typedef Allocator allocator_type;
 		typedef size_t	size_type;
@@ -257,12 +258,12 @@ namespace ft
 			return (_bst.end());
 		}
 
-		iterator rbegin()
+		reverse_iterator rbegin()
 		{
 			return (_bst.rbegin());
 		}
 
-		iterator rend()
+		reverse_iterator rend()
 		{
 			return (_bst.rend());
 		}

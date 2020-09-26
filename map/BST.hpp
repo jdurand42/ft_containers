@@ -46,6 +46,14 @@ namespace ft
 		{
 			// Root initialised with BST methods
 			public:
+			typedef size_t		size_type;
+			typedef ptrdiff_t	difference_type;
+			typedef std::pair<const Key,T>*			pointer;
+			typedef std::pair<const Key,T>&			reference;
+			typedef std::pair<const Key,T> value_type;
+			typedef const std::pair<const Key,T>&	const_reference;
+			typedef const std::pair<const Key,T>*	const_pointer;
+
 			Iterator()
 			{
 				_node = NULL;
@@ -85,12 +93,12 @@ namespace ft
 				return (&_node->_pair);
 			}
 
-			bool operator == (const Iterator& it)
+			bool operator == (const Iterator& it) const
 			{
 				return (_node == it._node);
 			}
 
-			bool operator != (const Iterator& it)
+			bool operator != (const Iterator& it) const
 			{
 				return (!(_node == it._node));
 			}
@@ -173,6 +181,7 @@ namespace ft
 		};
 
 		typedef Iterator iterator;
+		typedef Reverse_Iterator<Iterator> reverse_iterator;
 		typedef iterator const_iterator;
 
 		BST()
@@ -413,18 +422,18 @@ namespace ft
 			return (Iterator(NULL, _root));
 		}
 
-		Iterator rbegin()
+		reverse_iterator rbegin()
 		{
-			return (Iterator(NULL, _root));
+			return (reverse_iterator(Iterator(--end())));
 		}
 
-		Iterator rend()
+		reverse_iterator rend()
 		{
 			Node *node = _root;
 
 			while (node && node->_right)
-				node = node->right;
-			return (Iterator(node, _root));
+				node = node->_right;
+			return (reverse_iterator(Iterator(--begin())));
 		}
 
 		Iterator find(const Key& key) const
