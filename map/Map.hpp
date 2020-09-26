@@ -24,7 +24,7 @@ namespace ft
 		typedef Allocator allocator_type;
 		typedef size_t	size_type;
 		typedef ptrdiff_t difference_type;
-		typedef std::pair<Key,T> value_type;
+		typedef std::pair<const Key,T> value_type;
 
 		public:
 		Map()
@@ -97,6 +97,23 @@ namespace ft
 			return (std::make_pair(_bst.find(val.first), (size < _bst.size())));
 		} // two more inserts to do
 
+		iterator insert(iterator pos, const value_type& val)
+		{
+			(void)pos; // just a hint that i ignore right now
+			_bst.insert(val);
+			return (_bst.find(val.first));
+		}
+
+		template<typename input_iterator>
+		void insert(input_iterator first, input_iterator last)
+		{
+			while (first != last)
+			{
+				insert(*first);
+				first++;
+			}
+		}
+
 		size_type erase(const key_type& key)
 		{
 			size_type size = _bst.size();
@@ -107,7 +124,7 @@ namespace ft
 		void erase(iterator pos)
 		{
 			// ignoring the iterator for now
-			_bst.delete_key(pos.first);
+			_bst.delete_key(pos->first);
 		}
 
 		void erase(iterator first, iterator last)
@@ -149,7 +166,17 @@ namespace ft
 
 		iterator lower_bound(const key_type& key)
 		{
-			for (iterator end = _bst.end(), it = _bst.begin(); it != end(); it++)
+			for (iterator end = _bst.end(), it = _bst.begin(); it != end; it++)
+			{
+				if (!_comp((*it).first, key))
+					return (it);
+			}
+			return (_bst.end());
+		}
+
+		const_iterator lower_bound(const key_type& key) const
+		{
+			for (iterator end = _bst.end(), it = _bst.begin(); it != end; it++)
 			{
 				if (!_comp((*it).first, key))
 					return (it);
@@ -159,7 +186,17 @@ namespace ft
 
 		iterator upper_bound(const key_type& key)
 		{
-			for (iterator end = _bst.end(), it = _bst.begin(); it != end(); it++)
+			for (iterator end = _bst.end(), it = _bst.begin(); it != _bst.end(); it++)
+			{
+				if (_comp(key, (*it).first))
+					return (it);
+			}
+			return (_bst.end());
+		}
+
+		const_iterator upper_bound(const key_type& key) const
+		{
+			for (iterator end = _bst.end(), it = _bst.begin(); it != _bst.end(); it++)
 			{
 				if (_comp(key, (*it).first))
 					return (it);
@@ -171,6 +208,12 @@ namespace ft
 		{
 			return (std::make_pair(lower_bound(key), upper_bound(key)));
 		}
+
+		std::pair<const_iterator,const_iterator> equal_range(const key_type& key) const
+		{
+			return (std::make_pair(lower_bound(key), upper_bound(key)));
+		}
+
 
 		/*
 		** Members stuff

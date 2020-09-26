@@ -18,6 +18,35 @@ static bool check_if_equals(vector v, my_vector mv)
 	return (true);
 }
 
+template<typename vector, typename my_vector>
+static bool check_if_equals2(vector v, my_vector mv)
+{
+	std::map<std::string, std::string>::iterator vi = v.begin();
+	std::map<std::string, std::string>::iterator ve = v.end();
+	ft::Map<std::string, std::string>::iterator mvi = mv.begin();
+	ft::Map<std::string, std::string>::iterator mve = mv.end();
+	if (v.size() != mv.size())
+		return false;
+	for (; vi != ve && mvi != mve; vi++, mvi++)
+	{
+	//	std::cout << *vi << ": " << *mvi << std::endl;
+		if ((*mvi).first != (*vi).first || (*mvi).second != (*vi).second)
+			return (false);
+	}
+	return (true);
+}
+
+template<typename it1, typename it2>
+static bool check_range(it1 first1, it1 end1, it2 first2, it2 end2)
+{
+	for (; first1 != end1 && first2 != end2; first1++, first2++)
+	{
+		if ((*first1).first != (*first2).first || (*first1).second != (*first2).second)
+			return (false);
+	}
+	return (true);
+}
+
 template<typename it>
 static bool check_it(it i, it i2)
 {
@@ -91,11 +120,15 @@ static void capacity()
 
 static void operations()
 {
-	std::cout << BOLDMAGENTA << "------FIND----------\n" << RESET;
+	std::cout << BOLDMAGENTA << "------OPERATIONS----------\n" << RESET;
 	std::map<std::string, std::string> m;
 	m["xavier"] = "niel";
 	m["niel"] = "free";
 	m["lol"] = "42";
+	m["lollol"] = "420";
+	m["tamere"] = "lol";
+	m["richard"] = "henri";
+	m["henri"] = "richard";
 	ft::Map<std::string, std::string> mm(m.begin(), m.end());
 
 	ft_print("find(key) ", m.find("xavier")->second, mm.find("xavier")->second);
@@ -114,7 +147,75 @@ static void operations()
 	ft_print("count(key) ", m.count(""), mm.count(""));
 	ft_print("count(key) ", m.count("   "), mm.count("   "));
 
-	ft_print("lower_bound(key) ", m.lower_bound("lol"), mm.lower_bound("lol"));
+	ft_print("lower_bound(key) ", *(m.lower_bound("lol")) == *(mm.lower_bound("lol")), true);
+	ft_print("lower_bound(key) ", *(m.lower_bound("niel")) == *(mm.lower_bound("niel")), true);
+	ft_print("lower_bound(key non existing) ", *(m.lower_bound("niel1")) == *(mm.lower_bound("niel1")), true);
+
+	ft_print("upper_bound(key) ", *(m.upper_bound("lol")) == *(mm.upper_bound("lol")), true);
+	ft_print("upper_bound(key) ", *(m.upper_bound("henri")) == *(mm.upper_bound("henri")), true);
+	ft_print("upper_bound(key non existing) ", *(m.upper_bound("niel1")) == *(mm.upper_bound("niel1")), true);
+
+	ft_print("equal_range(key) ", check_range(m.equal_range("lol").first, m.equal_range("lol").second, mm.equal_range("lol").first, mm.equal_range("lol").second), true);
+	ft_print("equal_range(key) ", check_range(m.equal_range("henri").first, m.equal_range("henri").second, mm.equal_range("henri").first, mm.equal_range("henri").second), true);
+	ft_print("equal_range(key non existing) ", check_range(m.equal_range("jean-michel").first, m.equal_range("jean-michel").second, mm.equal_range("jean-michel").first, mm.equal_range("jean-michel").second), true);
+}
+
+static void obeservers()
+{
+	std::map<std::string, std::string> m;
+	ft::Map<std::string, std::string> map;
+	// plus tard
+}
+
+static void modifiers()
+{
+	std::cout << BOLDMAGENTA << "------- MODIFIERS----------\n" << RESET;
+	std::map<std::string, std::string> m;
+	m["xavier"] = "niel";
+	m["niel"] = "free";
+	m["lol"] = "42";
+	m["lollol"] = "420";
+	m["tamere"] = "lol";
+	m["richard"] = "henri";
+	m["henri"] = "richard";
+	ft::Map<std::string, std::string> mm(m.begin(), m.end());
+
+	ft_print("Insert (value): ", m.insert(std::make_pair("cobaye", "michel")).second == true, mm.insert(std::make_pair("cobaye", "michel")).second == true);
+	ft_print("Insert (value): ", m.insert(std::make_pair("cobaye", "michel")).first->second, mm.insert(std::make_pair("cobaye", "michel")).first->second);
+	ft_print("Insert (value): ", m.insert(std::make_pair("cobaye", "michel")).second == false, mm.insert(std::make_pair("cobaye", "michel")).second == false);
+
+	ft_print("Insert(pos, value): ", m.insert(m.begin(), std::make_pair("1", "1"))->second, mm.insert(mm.begin(), std::make_pair("1", "1"))->second);
+	ft_print("Insert(pos, value): ", m.insert(m.begin(), std::make_pair("lol", "1"))->second, mm.insert(mm.begin(), std::make_pair("lol", "1"))->second);
+
+	std::pair<const std::string, std::string> p1 = std::make_pair("bonjour", "aurevoir");
+	std::pair<const std::string, std::string> p2 = std::make_pair("niel", "free2");
+	std::pair<const std::string, std::string> p3 = std::make_pair("miel", "bon");
+	std::pair<const std::string, std::string> p4 = std::make_pair("hey", "marcarena");
+	std::vector<std::pair<const std::string, std::string> > v;
+	v.push_back(p1);
+	v.push_back(p2);
+	v.push_back(p3);
+	v.push_back(p4);
+
+	m.insert(v.begin(), v.end());
+	mm.insert(v.begin(), v.end());
+
+	ft_print("Insert (first, last): ", m["hey"], mm["hey"]);
+	ft_print("Insert (first, last): ", m["miel"], mm["miel"]);
+	ft_print("Insert (first, last): ", m["bonjour"], mm["bonjour"]);
+	ft_print("Insert (first, last): ", m["niel"], mm["niel"]);
+
+	ft_print("Erase (key): ", m.erase("miel"), mm.erase("miel"));
+	ft_print("Erase (key non existing): ", m.erase("prout"), mm.erase("prout"));
+	m.erase(m.find("henri"));
+	mm.erase(mm.find("henri"));
+
+	ft_print("Erase (pos): ", check_if_equals2(m, mm), true);
+	ft_print("Erase (pos): ", m.size(), mm.size());
+	m.erase(m.find("hey"));
+	mm.erase(mm.find("hey"));
+	ft_print("Erase (pos): ", check_if_equals2(m, mm), true);
+
 
 }
 
@@ -125,4 +226,5 @@ void test_map()
 	elements_access();
 	capacity();
 	operations();
+	modifiers();
 }

@@ -16,19 +16,20 @@ namespace ft
 	{
 
 		// class input_iterator Iterator;
+
 		struct Node
 		{
 			public:
-			Node(std::pair<Key,T> pair, Node *left = NULL, Node *right = NULL,
-			Node *parent = NULL)
+			Node(std::pair<const Key,T> pair, Node *left = NULL, Node *right = NULL,
+			Node *parent = NULL): _pair(pair)
 			{
-				_pair = pair;
+				//_pair = pair;
 				_left = left;
 				_right = right;
 				_parent = parent;
 			}
 
-			std::pair<Key,T> 	_pair;
+			std::pair<const Key,T> 	_pair;
 			Node				*_left;
 			Node				*_right;
 			Node				*_parent;
@@ -74,12 +75,12 @@ namespace ft
 
 			}
 
-			std::pair<Key,T>& operator * ()
+			std::pair<const Key,T>& operator * ()
 			{
 				return (_node->_pair);
 			}
 
-			std::pair<Key,T>* operator -> ()
+			std::pair<const Key,T>* operator -> ()
 			{
 				return (&_node->_pair);
 			}
@@ -233,7 +234,7 @@ namespace ft
 				<< std::endl;*/
 		}
 
-		Node *search_node(Key key, Node* node)
+		Node *search_node(Key key, Node* node) const
 		{
 			if (node == NULL) // insert new key to default value
 			{
@@ -270,12 +271,12 @@ namespace ft
 			return (search(key, node->_left, node));
 		};
 
-		void  insert(std::pair<Key,T> pair)
+		void  insert(std::pair<const Key,T> pair)
 		{
 			_root = insert(pair, _root, NULL);
 		};
 
-		Node* insert(std::pair<Key,T> pair, Node* node, Node *parent)
+		Node* insert(std::pair<const Key,T> pair, Node* node, Node *parent)
 		{
 		    if (node == NULL)
 			{
@@ -356,12 +357,15 @@ namespace ft
 					_size -= 1;
 		            return (b);
 		        }
-		        Node* b = min_value_node(node->_right);
-
-		        node->_pair.first = b->_pair.first;
-				node->_pair.second = b->_pair.second;
-
-		        node->_right = delete_node(b->_pair.first, node->_right);
+		      Node* b = min_value_node(node->_right);
+			  Node *right = node->_right;
+			  Node *left = node->_left;
+			  Node *parent = node->_parent;
+			  free(node);
+			  node = new Node(std::make_pair(b->_pair.first, b->_pair.second), left, right, parent);
+			  //node->_pair.first = b->_pair.first;
+			  //node->_pair.second = b->_pair.second;
+			  node->_right = delete_node(b->_pair.first, node->_right);
 		    }
 		    return (node);
 		}
@@ -423,7 +427,7 @@ namespace ft
 			return (Iterator(node, _root));
 		}
 
-		Iterator find(Key key)
+		Iterator find(const Key& key) const
 		{
 //			Iterator it;
 
