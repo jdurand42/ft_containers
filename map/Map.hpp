@@ -129,10 +129,13 @@ namespace ft
 
 		void erase(iterator first, iterator last)
 		{
+			iterator b;
 			while (first != last)
 			{
+				b = first;
+				b++;
 				_bst.delete_key((*first).first);
-				first++;
+				first = b;
 			}
 		}
 

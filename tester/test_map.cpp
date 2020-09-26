@@ -216,7 +216,27 @@ static void modifiers()
 	mm.erase(mm.find("hey"));
 	ft_print("Erase (pos): ", check_if_equals2(m, mm), true);
 
+	std::cout << m.size() << " " << mm.size() << std::endl;
+	m.erase(m.find("bonjour"), m.find("niel"));
+	mm.erase(mm.find("bonjour"), mm.find("niel"));
+	ft_print("Erase (first, last): ", m.size(), mm.size());
+	//m.erase(m.find("henri"));
+	//mm.erase(mm.find("henri"));
+	//ft_print("Erase (pos): ", check_if_equals2(m, mm), true);
 
+	std::map<std::string, std::string> m2;
+	m2["xavier"] = "niel";
+	m2["niel"] = "free";
+	m2["lol"] = "42";
+	ft::Map<std::string, std::string> mm2(m2.begin(), m2.end());
+	m.swap(m2);
+	mm.swap(mm2);
+	ft_print("swap : ", m.size(), mm.size());
+	ft_print("swap : ", m2.size(), mm2.size());
+
+	m.clear();
+	mm.clear();
+	ft_print("clear(): ", m.size(), mm.size());
 }
 
 void test_map()

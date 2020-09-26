@@ -450,7 +450,7 @@ namespace ft
 			size_type size;
 			size = _size;
 			_size = bst._size;
-			bst._size = b;
+			bst._size = size;
 		}
 
 		/*
