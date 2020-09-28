@@ -116,13 +116,69 @@ namespace ft
 				return (b);
 			};
 
-		private:
+		protected:
 			Node			*_node;
+		};
+
+		class Const_Iterator: public Iterator
+		{
+			public:
+			Const_Iterator(): Iterator()
+			{
+			}
+
+			Const_Iterator(const Const_Iterator& i): Iterator(i)
+			{}
+
+			Const_Iterator(const Iterator& i): Iterator(i)
+			{}
+
+			void operator = (const Const_Iterator& i)
+			{
+				Iterator::_node = i._node;
+			}
+
+			virtual ~Const_Iterator() {};
+
+			Const_Iterator(T* t): Iterator(t)
+			{}
+
+			const T& operator * ()
+			{
+				//std::cout << "bonjour";
+				return (Iterator::_node->_data);
+			};
+
+
+		};
+
+		class Const_Reverse_Iterator: public Reverse_Iterator<Iterator>
+		{
+			public:
+			Const_Reverse_Iterator() {};
+			Const_Reverse_Iterator(const Iterator& i): Reverse_Iterator<Iterator>(i)
+			{};
+			Const_Reverse_Iterator(const Const_Reverse_Iterator& i): Reverse_Iterator<Iterator>(i)
+			{};
+			Const_Reverse_Iterator(const Reverse_Iterator<Iterator>& i): Reverse_Iterator<Iterator>(i)
+			{};
+			void operator = (const Reverse_Iterator<Iterator>& i)
+			{
+				Reverse_Iterator<Iterator>::_base = i._base;
+			}
+
+			const_reference operator * () const
+			{
+				const_iterator a = Reverse_Iterator<Iterator>::_base;
+				return (*a);
+			//	return (*_base);
+			};
 		};
 
 		typedef Iterator iterator;
 		typedef Reverse_Iterator<Iterator> reverse_iterator;
-		typedef Iterator const_iterator;
+		typedef Const_Iterator const_iterator;
+		typedef Const_Reverse_Iterator const_reverse_iterator;
 		/*
 		**CONSTRUCTORS
 		*/
@@ -415,6 +471,21 @@ namespace ft
 
 			return (it);
 		}
+
+		const_reverse_iterator rbegin() const
+		{
+			const_reverse_iterator it(_tail);
+
+			return (it);
+		}
+
+		const_reverse_iterator rend() const
+		{
+			const_reverse_iterator it(&_past_begin);
+
+			return (it);
+		}
+
 
 		/*
 		** ACCESS

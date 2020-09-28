@@ -36,8 +36,9 @@ namespace ft
 
 
 		public:
-		struct Iterator // random access iterator
+		class Iterator // random access iterator
 		{
+			public:
 			typedef size_t		size_type;
 			typedef ptrdiff_t	difference_type;
 			typedef T*			pointer;
@@ -171,12 +172,84 @@ namespace ft
 				return (_t >= it._t);
 			};
 
-			private:
+			protected:
 			T			*_t;
+		};
+
+		class Const_Iterator: public Iterator
+		{
+			public:
+			Const_Iterator(): Iterator()
+			{
+			}
+
+			Const_Iterator(const Const_Iterator& i): Iterator(i)
+			{}
+
+			Const_Iterator(const Iterator& i): Iterator(i)
+			{}
+
+			void operator = (const Const_Iterator& i)
+			{
+				//*this = i;
+				Iterator::_t = i._t;
+			}
+
+			virtual ~Const_Iterator() {};
+
+			Const_Iterator(T* t): Iterator(t)
+			{}
+
+			const T& operator [] (difference_type n)
+			{
+				//_t += n;
+				return (*(Iterator::_t + n));
+			};
+
+			const T& operator * ()
+			{
+				//std::cout << "bonjour";
+				return (*(Iterator::_t));
+			};
+
+
+		};
+
+		class Const_Reverse_Iterator: public Reverse_Iterator<Iterator>
+		{
+			public:
+			Const_Reverse_Iterator() {};
+			Const_Reverse_Iterator(const Iterator& i): Reverse_Iterator<Iterator>(i)
+			{};
+			Const_Reverse_Iterator(const Const_Reverse_Iterator& i): Reverse_Iterator<Iterator>(i)
+			{};
+			Const_Reverse_Iterator(const Reverse_Iterator<Iterator>& i): Reverse_Iterator<Iterator>(i)
+			{};
+			void operator = (const Reverse_Iterator<Iterator>& i)
+			{
+				//*this = i;
+				Reverse_Iterator<Iterator>::_base = i._base;
+			}
+
+			const_reference operator * () const
+			{
+				const_iterator a = Reverse_Iterator<Iterator>::_base;
+				return (*a);
+			//	return (*_base);
+			};
+
+			const_reference operator [] (difference_type n) const
+			{
+				//_t += n;
+				const_iterator a = Reverse_Iterator<Iterator>::_base + n;
+				return (*a);
+			};
 		};
 
 		typedef Iterator	iterator;
 		typedef Reverse_Iterator<iterator> reverse_iterator;
+		typedef Const_Iterator const_iterator;
+		typedef Const_Reverse_Iterator const_reverse_iterator;
 
 		Vector()
 		{
@@ -201,26 +274,6 @@ namespace ft
 			for (size_t i = 0; i < _size; i++)
 				_v[i] = value;
 		};
-
-		/*Vector(size_type size)
-		{
-			//v = new T[size + CAPACITY];
-			_v = _allocator.allocate(CAPACITY + size);
-			_size = size;
-			_capacity_size = size + CAPACITY;
-		};*/
-
-		// NEED TO DO CONSTRUCTORS with an Array
-
-	/*	Vector(T* first, T* last) // not tested yet
-		{
-			_v = _allocator.allocate(CAPACITY + last - first);
-			_size = last - first;
-			_capacity_size = _size + CAPACITY;
-
-			while (first != last)
-				push_back(*first++);
-		};*/
 
 		template<typename InputIterator>
 		Vector(InputIterator first, InputIterator last)
@@ -278,14 +331,45 @@ namespace ft
 			return (b);
 		};
 
+		const_iterator begin() const
+		{
+			Iterator a(&_v[0]);
+			Const_Iterator b(a);
+
+			//b._t = &_v[0];
+			return (b);
+		};
+
+		const_iterator end() const
+		{
+			Iterator a(&_v[_size]);
+			Const_Iterator b(a);
+
+			//b._t = &_v[_size];
+			return (b);
+		};
+
 		reverse_iterator rbegin()
 		{
-			return (reverse_iterator(end() - 1));
+			iterator a(end() - 1);
+			return (reverse_iterator(a));
 		};
+
+		const_reverse_iterator rbegin() const
+		{
+			iterator a(end() - 1);
+			return (const_reverse_iterator(a));
+		}
 
  		reverse_iterator rend()
 		{
 			return (reverse_iterator(begin() - 1));
+		};
+
+		const_reverse_iterator rend() const
+		{
+			iterator a(begin() - 1);
+			return (const_reverse_iterator(a));
 		};
 
 		/*

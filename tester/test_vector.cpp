@@ -304,6 +304,52 @@ static void operators()
 	ft_print("external swap: ", check_if_equals(v2, mv2), true);
 }
 
+static void const_iterator()
+{
+	std::cout << BOLDYELLOW << "\n----- test on Const_Iterator ----- \n" << RESET;
+	std::vector<int> v(10);
+	ft::Vector<int> mv(10);
+	for (int i = 0; i < 10; i++)
+	{
+		v[i] = i;
+		mv[i] = i;
+	}
+	std::vector<int>::const_iterator vit = v.begin();
+	ft::Vector<int>::const_iterator mvit = mv.begin();
+	std::vector<int>::const_iterator vet = v.end();
+	ft::Vector<int>::const_iterator mvet = mv.end();
+
+	ft_print("Begin: ", *vit, *mvit);
+	ft_print("End ( end - begin)", vet - vit, mvet - mvit);
+	ft_print("Post incrementqtion", *(vit++), *(mvit++));
+	ft_print("Post incrementqtion", *vit, *mvit);
+	ft_print("Pre-incrementation", *(++vit), *(++mvit));
+	ft_print("Pre-decrementation", *(--vit), *(--mvit));
+	ft_print("Post-decrementation", *(vit--), *(mvit--));
+	ft_print("Post decrementqtion", *vit, *mvit);
+	vit += 2;
+	mvit += 2;
+	ft_print("it += int ", *vit , *mvit);
+	vit -= 2;
+	mvit -= 2;
+	ft_print("it -= int ", *vit, *mvit);
+//	vit[3] = 123;
+//	mvit[3] = 123;
+	ft_print("it + int", *(vit + 2), *(mvit + 2));
+	ft_print("it - int", *(vit + 4 - 3 ), *(mvit + 4 - 3));
+	ft_print("it[3] ", vit[3], mvit[3]);
+	ft_print("operator <", vit < vet, mvit < mvet);
+	ft_print("operator <=", vit <= vet, mvit <= mvet);
+	ft_print("operator >=", vit >= vet, mvit >= mvet);
+	ft_print("operator !=", vit != vet, mvit != mvet);
+	ft_print("operator ==", vit == vet, mvit == mvet);
+
+	ft::Vector<int>::const_reverse_iterator cri  = mv.rbegin();
+	std::cout << "ICICICI: " << *cri << std::endl;
+	//*cri = 12;
+	ft::Vector<int>::const_reverse_iterator cre = mv.rend();
+}
+
 void test_vector()
 {
 	std::cout << BOLDMAGENTA << "\n----------TEST VECTOR---------\n\n" << RESET;
@@ -312,6 +358,7 @@ void test_vector()
 	capacity_tests();
 	elements_access();
 	iterators();
+	const_iterator();
 	modifiers();
 	operators();
 	//while (1);

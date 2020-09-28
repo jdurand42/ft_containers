@@ -40,6 +40,11 @@ namespace ft
 		typedef Compare key_compare;
 		typedef Allocator allocator_type;
 		typedef size_t	size_type;
+		typedef Key key_type;
+		typedef ptrdiff_t difference_type;
+		typedef std::pair<const Key, T> value_type;
+		typedef value_type& reference;
+		typedef const std::pair<const Key, T>& const_reference;
 
 		public:
 		class Iterator
@@ -53,6 +58,7 @@ namespace ft
 			typedef std::pair<const Key,T> value_type;
 			typedef const std::pair<const Key,T>&	const_reference;
 			typedef const std::pair<const Key,T>*	const_pointer;
+
 
 			Iterator()
 			{
@@ -175,14 +181,74 @@ namespace ft
 				return (it);
 			}
 
-			private:
+			protected:
 			Node	*_node;
 			Node	*_root;
 		};
 
+		class Const_Iterator: public Iterator
+		{
+			public:
+			Const_Iterator(): Iterator()
+			{
+			}
+
+			Const_Iterator(const Const_Iterator& i): Iterator(i)
+			{}
+
+			Const_Iterator(const Iterator& i): Iterator(i)
+			{}
+
+			Const_Iterator(Node *node, Node *root): Iterator(node, root)
+			{};
+
+			void operator = (const Const_Iterator& i)
+			{
+				Iterator::_node = i._node;
+				Iterator::_root = i._root;
+			}
+
+			virtual ~Const_Iterator() {};
+
+			Const_Iterator(T* t): Iterator(t)
+			{}
+
+			const_reference operator * ()
+			{
+				//std::cout << "bonjour";
+				return (Iterator::_node->_pair);
+			};
+
+
+		};
+
+		class Const_Reverse_Iterator: public Reverse_Iterator<Iterator>
+		{
+			public:
+			Const_Reverse_Iterator() {};
+			Const_Reverse_Iterator(const Iterator& i): Reverse_Iterator<Iterator>(i)
+			{};
+			Const_Reverse_Iterator(const Const_Reverse_Iterator& i): Reverse_Iterator<Iterator>(i)
+			{};
+			Const_Reverse_Iterator(const Reverse_Iterator<Iterator>& i): Reverse_Iterator<Iterator>(i)
+			{};
+			void operator = (const Reverse_Iterator<Iterator>& i)
+			{
+				Reverse_Iterator<Iterator>::_base = i._base;
+			}
+
+			const_reference operator * () const
+			{
+				const_iterator a = Reverse_Iterator<Iterator>::_base;
+				return (*a);
+			//	return (*_base);
+			};
+		};
+
 		typedef Iterator iterator;
 		typedef Reverse_Iterator<Iterator> reverse_iterator;
-		typedef iterator const_iterator;
+		typedef Const_Iterator const_iterator;
+		typedef Const_Reverse_Iterator const_reverse_iterator;
 
 		BST()
 		{
@@ -397,7 +463,7 @@ namespace ft
 
 			while (node && node->_left)
 				node = node->_left;
-			return (Iterator(node, _root));
+			return (const_iterator(node, _root));
 		}
 
 		Iterator end()
@@ -419,7 +485,7 @@ namespace ft
 			//while (it._node && it._node->_right)
 			//	it._node = it._node._right;
 			// or return (_null)
-			return (Iterator(NULL, _root));
+			return (const_iterator(NULL, _root));
 		}
 
 		reverse_iterator rbegin()
@@ -435,6 +501,21 @@ namespace ft
 				node = node->_right;
 			return (reverse_iterator(Iterator(--begin())));
 		}
+
+		const_reverse_iterator rbegin() const
+		{
+			return (const_reverse_iterator(Iterator(--end())));
+		}
+
+		const_reverse_iterator rend() const
+		{
+			Node *node = _root;
+
+			while (node && node->_right)
+				node = node->_right;
+			return (const_reverse_iterator(Iterator(--begin())));
+		}
+
 
 		Iterator find(const Key& key) const
 		{

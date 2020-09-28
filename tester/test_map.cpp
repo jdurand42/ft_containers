@@ -289,6 +289,56 @@ static void reverse_iterators()
 	ft_print(" it != it: ", vit != l.rbegin(), mvit != ml.rbegin());
 }
 
+static void const_iterators()
+{
+	std::cout << BOLDYELLOW << " ---- const iterators ----\n" << RESET;
+	std::map<int, int> l;
+	for (int i = 0; i < 10; i++)
+		l[i] = i;
+	ft::Map<int, int> ml(l.begin(), l.end());
+
+	std::map<int, int>::const_iterator vit = l.begin();
+	std::map<int, int>::const_iterator vet = l.end();
+	ft::Map<int, int>::const_iterator mvit = ml.begin();
+	ft::Map<int, int>::const_iterator mvet = ml.end();
+
+	ft_print("Begin: ", vit->second, mvit->second);
+	ft_print("--end", (--vet)->second, (--mvet)->second);
+	ft_print("Post incrementqtion", (vit++)->second, (mvit++)->second);
+	ft_print("Post incrementqtion", vit->second, mvit->second);
+	ft_print("Pre-incrementation", (++vit)->second, (++mvit)->second);
+	ft_print("Pre-decrementation", (--vit)->second, (--mvit)->second);
+	ft_print("Post-decrementation", (vit--)->second, (mvit--)->second);
+	ft_print("Post decrementqtion", vit->second, mvit->second);
+	ft_print(" it == it: ", vit == l.begin(), mvit == ml.begin());
+	ft_print(" it != it: ", vit != l.begin(), mvit != ml.begin());
+}
+
+static void const_reverse_iterators()
+{
+	std::cout << BOLDYELLOW << " ---- Reverse iterators ----\n" << RESET;
+	std::map<int, int> l;
+	for (int i = 0; i < 10; i++)
+		l[i] = i;
+	ft::Map<int, int> ml(l.begin(), l.end());
+
+	std::map<int, int>::const_reverse_iterator vit = l.rbegin();
+	std::map<int, int>::const_reverse_iterator vet = l.rend();
+	ft::Map<int, int>::const_reverse_iterator mvit = ml.rbegin();
+	ft::Map<int, int>::const_reverse_iterator mvet = ml.rend();
+
+	ft_print("Begin: ", vit->second, mvit->second);
+	ft_print("--end", (--vet)->second, (--mvet)->second);
+	ft_print("Post incrementqtion", (vit++)->second, (mvit++)->second);
+	ft_print("Post incrementqtion", vit->second, mvit->second);
+	ft_print("Pre-incrementation", (++vit)->second, (++mvit)->second);
+	ft_print("Pre-decrementation", (--vit)->second, (--mvit)->second);
+	ft_print("Post-decrementation", (vit--)->second, (mvit--)->second);
+	ft_print("Post decrementqtion", vit->second, mvit->second);
+	ft_print(" it == it: ", vit == l.rbegin(), mvit == ml.rbegin());
+	ft_print(" it != it: ", vit != l.rbegin(), mvit != ml.rbegin());
+}
+
 void test_map()
 {
 	std::cout << BOLDYELLOW << "\n------TEST MAP----------\n\n" << RESET;
@@ -299,4 +349,6 @@ void test_map()
 	modifiers();
 	iterators();
 	reverse_iterators();
+	const_iterators();
+	const_reverse_iterators();
 }

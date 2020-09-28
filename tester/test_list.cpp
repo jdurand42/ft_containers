@@ -401,6 +401,58 @@ static void external()
 
 }
 
+static void const_iterator()
+{
+	std::cout << BOLDYELLOW << " ---- const_iterators ----\n" << RESET;
+	std::list<int> l;
+	for (int i = 0; i < 10; i++)
+		l.push_back(i);
+	ft::List<int> ml(l.begin(), l.end());
+
+	std::list<int>::const_iterator vit = l.begin();
+	std::list<int>::const_iterator vet = l.end();
+	ft::List<int>::const_iterator mvit = ml.begin();
+	ft::List<int>::const_iterator mvet = ml.end();
+
+	//*mvit = 12;
+	ft_print("Begin: ", *vit, *mvit);
+	ft_print("--end", *(--vet), *(--mvet));
+	ft_print("Post incrementqtion", *(vit++), *(mvit++));
+	ft_print("Post incrementqtion", *vit, *mvit);
+	ft_print("Pre-incrementation", *(++vit), *(++mvit));
+	ft_print("Pre-decrementation", *(--vit), *(--mvit));
+	ft_print("Post-decrementation", *(vit--), *(mvit--));
+	ft_print("Post decrementqtion", *vit, *mvit);
+	ft_print(" it == it: ", vit == l.begin(), mvit == ml.begin());
+	ft_print(" it != it: ", vit != l.begin(), mvit != ml.begin());
+}
+
+static void const_reverse_iterator()
+{
+	std::cout << BOLDYELLOW << " ---- const_reverse_iterators ----\n" << RESET;
+	std::list<int> l;
+	for (int i = 0; i < 10; i++)
+		l.push_back(i);
+	ft::List<int> ml(l.begin(), l.end());
+
+	std::list<int>::const_reverse_iterator vit = l.rbegin();
+	std::list<int>::const_reverse_iterator vet = l.rend();
+	ft::List<int>::const_reverse_iterator mvit = ml.rbegin();
+	ft::List<int>::const_reverse_iterator mvet = ml.rend();
+
+	//*mvit = 12;
+	ft_print("Begin: ", *vit, *mvit);
+	ft_print("--end", *(--vet), *(--mvet));
+	ft_print("Post incrementqtion", *(vit++), *(mvit++));
+	ft_print("Post incrementqtion", *vit, *mvit);
+	ft_print("Pre-incrementation", *(++vit), *(++mvit));
+	ft_print("Pre-decrementation", *(--vit), *(--mvit));
+	ft_print("Post-decrementation", *(vit--), *(mvit--));
+	ft_print("Post decrementqtion", *vit, *mvit);
+	ft_print(" it == it: ", vit == l.rbegin(), mvit == ml.rbegin());
+	ft_print(" it != it: ", vit != l.rbegin(), mvit != ml.rbegin());
+}
+
 void test_list()
 {
 	std::cout << BOLDMAGENTA << "\n------ TEST ON LIST -------\n\n" << RESET;
@@ -412,6 +464,8 @@ void test_list()
 	modifiers();
 	operations();
 	external();
+	const_iterator();
+	const_reverse_iterator();
 
 	//while (1);
 }

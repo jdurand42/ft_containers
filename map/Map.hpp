@@ -21,11 +21,16 @@ namespace ft
 		typedef typename BST<Key,T,Compare,Allocator>::Iterator iterator;
 		typedef typename BST<Key,T,Compare,Allocator>::const_iterator const_iterator;
 		typedef typename BST<Key,T,Compare,Allocator>::reverse_iterator reverse_iterator;
+		typedef typename BST<Key,T,Compare,Allocator>::const_reverse_iterator const_reverse_iterator;
 		typedef Compare key_compare;
 		typedef Allocator allocator_type;
 		typedef size_t	size_type;
 		typedef ptrdiff_t difference_type;
 		typedef std::pair<const Key,T> value_type;
+		typedef value_type& reference;
+		typedef const std::pair<const Key, T>& const_reference;
+		typedef value_type* pointer;
+		typedef const value_type* const_pointer;
 
 		public:
 		Map()
@@ -264,6 +269,16 @@ namespace ft
 		}
 
 		reverse_iterator rend()
+		{
+			return (_bst.rend());
+		}
+
+		const_reverse_iterator rbegin() const
+		{
+			return (_bst.rbegin());
+		}
+
+		const_reverse_iterator rend() const
 		{
 			return (_bst.rend());
 		}

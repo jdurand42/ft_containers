@@ -33,5 +33,6 @@ int main(int ac, char** av)
 	}
 	else
 		test_all();
+	//while (1);
 	return (0);
 }

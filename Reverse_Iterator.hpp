@@ -6,8 +6,9 @@
 namespace ft
 {
 	template<typename iterator>
-	struct Reverse_Iterator
+	class Reverse_Iterator
 	{
+		public:
 		typedef Reverse_Iterator<iterator> reverse_iterator;
 		typedef typename 	iterator::difference_type difference_type;
 		typedef typename 	iterator::size_type		size_type;
@@ -32,7 +33,7 @@ namespace ft
 		};
 
 		Reverse_Iterator(iterator base): _base(base)
-		{}
+		{};
 
 			~Reverse_Iterator() {};
 
@@ -82,7 +83,7 @@ namespace ft
 
 			_base++;
 			return (b);
-		};
+			};
 
 		Reverse_Iterator operator + (difference_type n)
 		{
@@ -140,9 +141,10 @@ namespace ft
 			return (_base <= it._base);
 		};
 
-		private:
+		protected:
 			iterator _base;
-		};
+	};
 };
+
 
 #endif
