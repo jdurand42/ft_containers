@@ -2,6 +2,8 @@
 #define MAP_HPP
 
 #include "BST.hpp"
+#include "../Reverse_Iterator.hpp"
+#include "../Utils.hpp"
 
 /*
 ** Needto do the iterate stuffs
@@ -12,8 +14,8 @@
 
 namespace ft
 {
-	template<class Key, class T, class Compare = std::less<Key>,
-	class Allocator = std::allocator<std::pair<const Key,T> > >
+	template<class Key, class T, class Compare = Less<Key>,
+	class Allocator = Allocator<Pair<const Key,T> > >
 	class Map
 	{
 		public:
@@ -26,9 +28,9 @@ namespace ft
 		typedef Allocator allocator_type;
 		typedef size_t	size_type;
 		typedef ptrdiff_t difference_type;
-		typedef std::pair<const Key,T> value_type;
+		typedef Pair<const Key,T> value_type;
 		typedef value_type& reference;
-		typedef const std::pair<const Key, T>& const_reference;
+		typedef const Pair<const Key, T>& const_reference;
 		typedef value_type* pointer;
 		typedef const value_type* const_pointer;
 
@@ -98,7 +100,7 @@ namespace ft
 		** Untested yet
 		*/
 
-		std::pair<iterator,bool> insert(const value_type& val)
+		Pair<iterator,bool> insert(const value_type& val)
 		{
 			size_type size = _bst.size();
 			_bst.insert(val);
@@ -215,12 +217,12 @@ namespace ft
 			return (_bst.end());
 		}
 
-		std::pair<iterator,iterator> equal_range(const key_type& key)
+		Pair<iterator,iterator> equal_range(const key_type& key)
 		{
 			return (std::make_pair(lower_bound(key), upper_bound(key)));
 		}
 
-		std::pair<const_iterator,const_iterator> equal_range(const key_type& key) const
+		Pair<const_iterator,const_iterator> equal_range(const key_type& key) const
 		{
 			return (std::make_pair(lower_bound(key), upper_bound(key)));
 		}

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "../Reverse_Iterator.hpp"
+#include "../Utils.hpp"
 
 #include <cmath>
 
@@ -21,7 +22,7 @@ namespace ft
 {
 	#define CAPACITY 5
 
-	template<typename T, class Allocator = std::allocator<T> >
+	template<typename T, class Allocator = Allocator<T> >
 	class Vector
 	{
 

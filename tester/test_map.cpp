@@ -147,13 +147,13 @@ static void operations()
 	ft_print("count(key) ", m.count(""), mm.count(""));
 	ft_print("count(key) ", m.count("   "), mm.count("   "));
 
-	ft_print("lower_bound(key) ", *(m.lower_bound("lol")) == *(mm.lower_bound("lol")), true);
-	ft_print("lower_bound(key) ", *(m.lower_bound("niel")) == *(mm.lower_bound("niel")), true);
-	ft_print("lower_bound(key non existing) ", *(m.lower_bound("niel1")) == *(mm.lower_bound("niel1")), true);
+	ft_print("lower_bound(key) ", m.lower_bound("lol")->first == mm.lower_bound("lol")->first, true);
+	ft_print("lower_bound(key) ", m.lower_bound("niel")->first == mm.lower_bound("niel")->first, true);
+	ft_print("lower_bound(key non existing) ", m.lower_bound("niel1")->second == mm.lower_bound("niel1")->second, true);
 
-	ft_print("upper_bound(key) ", *(m.upper_bound("lol")) == *(mm.upper_bound("lol")), true);
-	ft_print("upper_bound(key) ", *(m.upper_bound("henri")) == *(mm.upper_bound("henri")), true);
-	ft_print("upper_bound(key non existing) ", *(m.upper_bound("niel1")) == *(mm.upper_bound("niel1")), true);
+	ft_print("upper_bound(key) ", m.upper_bound("lol")->first == mm.upper_bound("lol")->first, true);
+	ft_print("upper_bound(key) ", m.upper_bound("henri")->first == mm.upper_bound("henri")->first, true);
+	ft_print("upper_bound(key non existing) ", m.upper_bound("niel1")->second == mm.upper_bound("niel1")->second, true);
 
 	ft_print("equal_range(key) ", check_range(m.equal_range("lol").first, m.equal_range("lol").second, mm.equal_range("lol").first, mm.equal_range("lol").second), true);
 	ft_print("equal_range(key) ", check_range(m.equal_range("henri").first, m.equal_range("henri").second, mm.equal_range("henri").first, mm.equal_range("henri").second), true);
@@ -173,12 +173,12 @@ static void modifiers()
 	m["henri"] = "richard";
 	ft::Map<std::string, std::string> mm(m.begin(), m.end());
 
-	ft_print("Insert (value): ", m.insert(std::make_pair("cobaye", "michel")).second == true, mm.insert(std::make_pair("cobaye", "michel")).second == true);
-	ft_print("Insert (value): ", m.insert(std::make_pair("cobaye", "michel")).first->second, mm.insert(std::make_pair("cobaye", "michel")).first->second);
-	ft_print("Insert (value): ", m.insert(std::make_pair("cobaye", "michel")).second == false, mm.insert(std::make_pair("cobaye", "michel")).second == false);
+	ft_print("Insert (value): ", m.insert(std::make_pair("cobaye", "michel")).second == true, mm.insert(ft::Pair<const std::string, std::string>("cobaye", "michel")).second == true);
+	ft_print("Insert (value): ", m.insert(std::make_pair("cobaye", "michel")).first->second, mm.insert(ft::Pair<const std::string, std::string>("cobaye", "michel")).first->second);
+	ft_print("Insert (value): ", m.insert(std::make_pair("cobaye", "michel")).second == false, mm.insert(ft::Pair<const std::string, std::string>("cobaye", "michel")).second == false);
 
-	ft_print("Insert(pos, value): ", m.insert(m.begin(), std::make_pair("1", "1"))->second, mm.insert(mm.begin(), std::make_pair("1", "1"))->second);
-	ft_print("Insert(pos, value): ", m.insert(m.begin(), std::make_pair("lol", "1"))->second, mm.insert(mm.begin(), std::make_pair("lol", "1"))->second);
+	ft_print("Insert(pos, value): ", m.insert(m.begin(), std::make_pair("1", "1"))->second, mm.insert(mm.begin(), ft::Pair<const std::string, std::string>("1", "1"))->second);
+	ft_print("Insert(pos, value): ", m.insert(m.begin(), std::make_pair("lol", "1"))->second, mm.insert(mm.begin(), ft::Pair<const std::string, std::string>("lol", "1"))->second);
 
 	std::pair<const std::string, std::string> p1 = std::make_pair("bonjour", "aurevoir");
 	std::pair<const std::string, std::string> p2 = std::make_pair("niel", "free2");
@@ -191,28 +191,27 @@ static void modifiers()
 	v.push_back(p4);
 
 	m.insert(v.begin(), v.end());
-	mm.insert(v.begin(), v.end());
+	ft::Map<std::string, std::string> mm2(m.begin(), m.end());
 
-	ft_print("Insert (first, last): ", m["hey"], mm["hey"]);
-	ft_print("Insert (first, last): ", m["miel"], mm["miel"]);
-	ft_print("Insert (first, last): ", m["bonjour"], mm["bonjour"]);
-	ft_print("Insert (first, last): ", m["niel"], mm["niel"]);
+	ft_print("Insert (first, last): ", m["hey"], mm2["hey"]);
+	ft_print("Insert (first, last): ", m["miel"], mm2["miel"]);
+	ft_print("Insert (first, last): ", m["bonjour"], mm2["bonjour"]);
+	ft_print("Insert (first, last): ", m["niel"], mm2["niel"]);
 
-	ft_print("Erase (key): ", m.erase("miel"), mm.erase("miel"));
-	ft_print("Erase (key non existing): ", m.erase("prout"), mm.erase("prout"));
+	ft_print("Erase (key): ", m.erase("miel"), mm2.erase("miel"));
+	ft_print("Erase (key non existing): ", m.erase("prout"), mm2.erase("prout"));
 	m.erase(m.find("henri"));
-	mm.erase(mm.find("henri"));
+	mm.erase(mm2.find("henri"));
 
-	ft_print("Erase (pos): ", check_if_equals2(m, mm), true);
-	ft_print("Erase (pos): ", m.size(), mm.size());
+	ft_print("Erase (pos): ", check_if_equals2(m, mm2), true);
+	ft_print("Erase (pos): ", m.size(), mm2.size());
 	m.erase(m.find("hey"));
-	mm.erase(mm.find("hey"));
-	ft_print("Erase (pos): ", check_if_equals2(m, mm), true);
+	mm.erase(mm2.find("hey"));
+	ft_print("Erase (pos): ", check_if_equals2(m, mm2), true);
 
-	std::cout << m.size() << " " << mm.size() << std::endl;
 	m.erase(m.find("bonjour"), m.find("niel"));
-	mm.erase(mm.find("bonjour"), mm.find("niel"));
-	ft_print("Erase (first, last): ", m.size(), mm.size());
+	mm.erase(mm2.find("bonjour"), mm2.find("niel"));
+	ft_print("Erase (first, last): ", m.size(), mm2.size());
 	//m.erase(m.find("henri"));
 	//mm.erase(mm.find("henri"));
 	//ft_print("Erase (pos): ", check_if_equals2(m, mm), true);
@@ -221,11 +220,11 @@ static void modifiers()
 	m2["xavier"] = "niel";
 	m2["niel"] = "free";
 	m2["lol"] = "42";
-	ft::Map<std::string, std::string> mm2(m2.begin(), m2.end());
+	ft::Map<std::string, std::string> mm3(m2.begin(), m2.end());
 	m.swap(m2);
-	mm.swap(mm2);
+	mm.swap(mm3);
 	ft_print("swap : ", m.size(), mm.size());
-	ft_print("swap : ", m2.size(), mm2.size());
+	ft_print("swap : ", m2.size(), mm3.size());
 
 	m.clear();
 	mm.clear();

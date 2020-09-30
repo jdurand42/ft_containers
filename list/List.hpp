@@ -4,13 +4,14 @@
 #include <iostream>
 #include <exception>
 #include <string>
+#include "../Utils.hpp"
 
 #include "../Reverse_Iterator.hpp"
 
 
 namespace ft
 {
-	template<typename T, class Allocator = std::allocator<T> >
+	template<typename T, class Allocator = Allocator<T> >
 	class List
 	{
 		class Node
@@ -628,8 +629,8 @@ namespace ft
 		{
 			Node *b = _head;
 			Node *next;
-			size_type size = _size;
-			for (size_type  i = 0; i < size; i++)
+
+			while (b != &_past_end)
 			{
 				next = b->_next;
 				if (b->_data == value)
@@ -647,8 +648,8 @@ namespace ft
 		{
 			Node *b = _head;
 			Node *next;
-			size_type size = _size;
-			for (size_type i = 0; i < size; i++)
+
+			while (b != &_past_end)
 			{
 				next = b->_next;
 				if (pred(b->_data) == true)
@@ -663,19 +664,42 @@ namespace ft
 
 		void unique()
 		{
-			Node *b = _head;
-			Node *next;
-			size_type size = _size;
-			for (size_type  i = 0; i < size; i++)
+			Node *node = _head->_next;
+			Node *next = node->_next;
+
+			if (size() <= 1)
+				return ;
+			while (next != &_past_end)
 			{
-				next = b->_next;
-				if (b->_prev && b->_prev->_data == b->_data)
+				next = node->_next;
+				if (node->_data == node->_prev->_data)
 				{
-					delete_node(b);
-					b = next;
+					delete_node(node);
+					node = next;
 				}
 				else
-					b = b->_next;
+					node = node->_next;
+			}
+		}
+
+		template<class Predicate>
+		void unique(Predicate pred)
+		{
+			Node *node = _head->_next;
+			Node *next = node->_next;
+
+			if (size() <= 1)
+				return ;
+			while (next != &_past_end)
+			{
+				next = node->_next;
+				if (pred(node->_data, node->_prev->_data))
+				{
+					delete_node(node);
+					node = next;
+				}
+				else
+					node = node->_next;
 			}
 		}
 
@@ -740,22 +764,20 @@ namespace ft
 			iterator first2 = x.begin();
 			iterator last2 = x.end();
 			iterator b;
-			iterator b2;
 
 			while (first2 != last2 && first != last)
 			{
-				if (*first < *first2)
+				if (*first2 >= *first)
 					first++;
 				else
 				{
-					//b = first2;
 					splice(first, x, first2);
 					first2 = x.begin();
 				}
 			}
 			if (first2 != last2)
 			{
-				splice(end(), x, first2);
+				splice(end(), x);
 			}
 			x._size = 0;
 
@@ -786,7 +808,7 @@ namespace ft
 
 				while (first2 != last2 && first != last)
 				{
-					if (comp(*first, *first2))
+					if (!comp(*first2, *first))
 						first++;
 					else
 					{
@@ -797,7 +819,7 @@ namespace ft
 				}
 				if (first2 != last2)
 				{
-					splice(end(), x, first2);
+					splice(end(), x);
 				}
 				x._size = 0;
 		}

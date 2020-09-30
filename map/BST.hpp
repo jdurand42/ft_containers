@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <string>
+#include "../Reverse_Iterator.hpp"
+#include "../Utils.hpp"
 
 /*
 ** Recursive stuff
@@ -10,12 +12,22 @@
 
 namespace ft
 {
-	template<class Key, class T, class Compare = std::less<Key>,
-	class Allocator = std::allocator<std::pair<const Key,T> > >
+	template<class Key, class T, class Compare = Less<Key>,
+	class Allocator = Allocator<Pair<const Key,T> > >
 	class BST
 	{
 
 		// class input_iterator Iterator;
+		typedef Compare key_compare;
+		typedef Allocator allocator_type;
+		typedef size_t	size_type;
+		typedef Key key_type;
+		typedef ptrdiff_t difference_type;
+		typedef Pair<const Key, T> value_type;
+		typedef value_type& reference;
+		typedef const Pair<const Key, T>& const_reference;
+		typedef const Pair<const Key,T>*	const_pointer;
+		typedef Pair<const Key,T>* pointer;
 
 		struct Node
 		{
@@ -42,7 +54,7 @@ namespace ft
 				_pair = node._pair;
 			}
 
-			Node(std::pair<const Key,T> pair, Node *left = NULL, Node *right = NULL,
+			Node(value_type pair, Node *left = NULL, Node *right = NULL,
 			Node *parent = NULL): _pair(pair)
 			{
 				//_pair = pair;
@@ -51,24 +63,11 @@ namespace ft
 				_parent = parent;
 			}
 
-			std::pair<const Key,T> 	_pair;
+ 			value_type 			_pair;
 			Node				*_left;
 			Node				*_right;
 			Node				*_parent;
 		};
-
-		//typedef Key key_type;
-		//typedef T mapped_type;
-		typedef Compare key_compare;
-		typedef Allocator allocator_type;
-		typedef size_t	size_type;
-		typedef Key key_type;
-		typedef ptrdiff_t difference_type;
-		typedef std::pair<const Key, T> value_type;
-		typedef value_type& reference;
-		typedef const std::pair<const Key, T>& const_reference;
-		typedef const std::pair<const Key,T>*	const_pointer;
-		typedef std::pair<const Key,T>* pointer;
 
 		typedef typename Allocator::template rebind<Node>::other _node_allocator_type;
 
@@ -79,11 +78,11 @@ namespace ft
 			public:
 			typedef size_t		size_type;
 			typedef ptrdiff_t	difference_type;
-			typedef std::pair<const Key,T>*			pointer;
-			typedef std::pair<const Key,T>&			reference;
-			typedef std::pair<const Key,T> value_type;
-			typedef const std::pair<const Key,T>&	const_reference;
-			typedef const std::pair<const Key,T>*	const_pointer;
+			typedef Pair<const Key,T>*			pointer;
+			typedef Pair<const Key,T>&			reference;
+			typedef Pair<const Key,T> value_type;
+			typedef const Pair<const Key,T>&	const_reference;
+			typedef const Pair<const Key,T>*	const_pointer;
 
 
 			Iterator()
@@ -115,12 +114,12 @@ namespace ft
 
 			}
 
-			std::pair<const Key,T>& operator * ()
+			Pair<const Key,T>& operator * ()
 			{
 				return (_node->_pair);
 			}
 
-			std::pair<const Key,T>* operator -> ()
+			Pair<const Key,T>* operator -> ()
 			{
 				return (&_node->_pair);
 			}
@@ -390,12 +389,12 @@ namespace ft
 			return (search(key, node->_left, node));
 		};
 
-		void  insert(std::pair<const Key,T> pair)
+		void  insert(Pair<const Key,T> pair)
 		{
 			_root = insert(pair, _root, NULL);
 		};
 
-		Node* insert(std::pair<const Key,T> pair, Node* node, Node *parent)
+		Node* insert(Pair<const Key,T> pair, Node* node, Node *parent)
 		{
 		    if (node == NULL)
 			{

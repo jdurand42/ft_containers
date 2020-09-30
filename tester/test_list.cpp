@@ -273,6 +273,20 @@ static bool compare(int a, int b)
 	return (false);
 }
 
+static bool pred2(int a, int b)
+{
+	if (a == b)
+		return (true);
+	return (false);
+}
+
+static bool pred1(int a)
+{
+	if (a == 42)
+		return (true);
+	return (false);
+}
+
 void operations()
 {
 	std::cout << BOLDYELLOW << " ---- OPERATIONS ----\n" << RESET;
@@ -292,6 +306,14 @@ void operations()
 	l.remove(29);
 	ml.remove(29);
 	ft_print("remove(value): ", check_if_equals(l, ml), true);
+
+	l.remove_if(pred1);
+	ml.remove_if(pred1);
+	ft_print("remove(pred1): ", check_if_equals(l, ml), true);
+
+	l.push_back(42);
+	ml.push_back(42);
+	ft_print("remove_if(pred1): ", check_if_equals(l, ml), true);
 
 	l.sort();
 	ml.sort();
@@ -317,6 +339,17 @@ void operations()
 	l2.reverse();
 	ml2.reverse();
 
+	l2.sort();
+	ml2.sort();
+	l.merge(l2, compare);
+	ml.merge(ml2, compare);
+	/*ft::List<int>::iterator mit = ml.begin();
+	ft::List<int>::iterator mend = ml.end();
+	std::list<int>::iterator lit = l.begin();
+	std::list<int>::iterator lend = l.end();
+	for (; mit != mend && lit != lend; lit++, mit++)
+		std::cout << *lit << ": " << *mit << std::endl;*/
+	ft_print("merge(x, compare): ", check_if_equals(l, ml), true);
 	ft_print("merge(x, compare): ", l.size(), ml.size());
 
 	std::list<int> l3(l);
@@ -345,8 +378,22 @@ void operations()
 	ml.splice(++ml.begin(), ml4, ml4.begin(), ++ml4.begin());
 	ft_print("splice(pos, list, i): ", check_if_equals(l, ml), true);
 
-	l.unique();
-	ml.unique();
+	/*ft::List<int>::iterator mit = ml.begin();
+	ft::List<int>::iterator mend = ml.end();
+	std::list<int>::iterator lit = l.begin();
+	std::list<int>::iterator lend = l.end();
+	for (; mit != mend && lit != lend; lit++, mit++)
+		std::cout << *lit << ": " << *mit << std::endl;*/
+
+	l.unique(pred2);
+	ml.unique(pred2);
+
+	/*ft::List<int>::iterator mit = ml.begin();
+	ft::List<int>::iterator mend = ml.end();
+	std::list<int>::iterator lit = l.begin();
+	std::list<int>::iterator lend = l.end();
+	for (; mit != mend && lit != lend; lit++, mit++)
+		std::cout << *lit << ": " << *mit << std::endl;*/
 	ft_print("unique(): ", check_if_equals(l, ml), true);
 
 
