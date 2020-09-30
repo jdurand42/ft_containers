@@ -64,7 +64,17 @@ static void constructors()
 	m["xavier"] = 42;
 	m["niel"] = 420;
 	m["lol"] = 101;
-	ft::Map<std::string, int> mm1(m.begin(), m.end());
+	ft::Map<std::string, int> mm4;
+	mm4["xavier"] = 42;
+	mm4["niel"] = 420;
+	mm4["lol"] = 101;
+	std::cout << "lol\n";
+	ft::Map<std::string, int>::iterator i = mm4.begin();
+	ft::Map<std::string, int>::iterator e = mm4.end();
+	for (; i != e; i++)
+		std::cout << "LOOP\n";
+	ft::Map<std::string, int> mm1(mm4.begin(), mm4.end());
+	std::cout << "lol\n";
 	ft_print("map(it, it) ", check_if_equals(m, mm1), true);
 	ft::Map<std::string, int> mm2(mm1);
 	ft_print("map(map) ", check_if_equals(m, mm2), true);
@@ -85,7 +95,11 @@ static void elements_access()
 	m["xavier"] = "niel";
 	m["niel"] = "free";
 	m["lol"] = "42";
-	ft::Map<std::string, std::string> mm(m.begin(), m.end());
+	ft::Map<std::string, std::string> mm;
+	mm["xavier"] = "niel";
+	mm["niel"] = "free";
+	mm["lol"] = "42";
+
 	ft_print("operator []: ", m["xavier"], mm["xavier"]);
 	ft_print("operator []: ", m["lol"], mm["lol"]);
 	ft_print("operator []: ", m["niel"], mm["niel"]);
@@ -129,7 +143,14 @@ static void operations()
 	m["tamere"] = "lol";
 	m["richard"] = "henri";
 	m["henri"] = "richard";
-	ft::Map<std::string, std::string> mm(m.begin(), m.end());
+	ft::Map<std::string, std::string> mm;
+	mm["xavier"] = "niel";
+	mm["niel"] = "free";
+	mm["lol"] = "42";
+	mm["lollol"] = "420";
+	mm["tamere"] = "lol";
+	mm["richard"] = "henri";
+	mm["henri"] = "richard";
 
 	ft_print("find(key) ", m.find("xavier")->second, mm.find("xavier")->second);
 	ft_print("find(key) ", m.find("niel")->second, mm.find("niel")->second);
@@ -171,7 +192,15 @@ static void modifiers()
 	m["tamere"] = "lol";
 	m["richard"] = "henri";
 	m["henri"] = "richard";
-	ft::Map<std::string, std::string> mm(m.begin(), m.end());
+	ft::Map<std::string, std::string> mm;
+	mm["xavier"] = "niel";
+	mm["niel"] = "free";
+	mm["lol"] = "42";
+	mm["lollol"] = "420";
+	mm["tamere"] = "lol";
+	mm["richard"] = "henri";
+	mm["henri"] = "richard";
+
 
 	ft_print("Insert (value): ", m.insert(std::make_pair("cobaye", "michel")).second == true, mm.insert(ft::Pair<const std::string, std::string>("cobaye", "michel")).second == true);
 	ft_print("Insert (value): ", m.insert(std::make_pair("cobaye", "michel")).first->second, mm.insert(ft::Pair<const std::string, std::string>("cobaye", "michel")).first->second);
@@ -183,7 +212,7 @@ static void modifiers()
 	std::pair<const std::string, std::string> p1 = std::make_pair("bonjour", "aurevoir");
 	std::pair<const std::string, std::string> p2 = std::make_pair("niel", "free2");
 	std::pair<const std::string, std::string> p3 = std::make_pair("miel", "bon");
-	std::pair<const std::string, std::string> p4 = std::make_pair("hey", "marcarena");
+	std::pair<const std::string, std::string> p4 = std::make_pair("hey", "macarena");
 	std::vector<std::pair<const std::string, std::string> > v;
 	v.push_back(p1);
 	v.push_back(p2);
@@ -191,27 +220,35 @@ static void modifiers()
 	v.push_back(p4);
 
 	m.insert(v.begin(), v.end());
-	ft::Map<std::string, std::string> mm2(m.begin(), m.end());
+	ft::Map<std::string, std::string> mm2;
+	mm2["bonjour"] = "aurevoir";
+	mm2["niel"] = "free2";
+	mm2["miel"] = "bon";
+	mm2["hey"] = "macarena";
+	mm.insert(mm2.begin(), mm2.end());
 
-	ft_print("Insert (first, last): ", m["hey"], mm2["hey"]);
-	ft_print("Insert (first, last): ", m["miel"], mm2["miel"]);
-	ft_print("Insert (first, last): ", m["bonjour"], mm2["bonjour"]);
-	ft_print("Insert (first, last): ", m["niel"], mm2["niel"]);
 
-	ft_print("Erase (key): ", m.erase("miel"), mm2.erase("miel"));
-	ft_print("Erase (key non existing): ", m.erase("prout"), mm2.erase("prout"));
+	ft_print("Insert (first, last): ", m["hey"], mm["hey"]);
+	ft_print("Insert (first, last): ", m["miel"], mm["miel"]);
+	ft_print("Insert (first, last): ", m["bonjour"], mm["bonjour"]);
+	ft_print("Insert (first, last): ", m["niel"], mm["niel"]);
+
+	ft_print("Erase (key): ", m.erase("miel"), mm.erase("miel"));
+	ft_print("Erase (key non existing): ", m.erase("prout"), mm.erase("prout"));
 	m.erase(m.find("henri"));
-	mm.erase(mm2.find("henri"));
+	mm.erase(mm.find("henri"));
 
-	ft_print("Erase (pos): ", check_if_equals2(m, mm2), true);
-	ft_print("Erase (pos): ", m.size(), mm2.size());
+	ft_print("Erase (pos): ", check_if_equals2(m, mm), true);
+	ft_print("Erase (pos): ", m.size(), mm.size());
 	m.erase(m.find("hey"));
-	mm.erase(mm2.find("hey"));
-	ft_print("Erase (pos): ", check_if_equals2(m, mm2), true);
+	mm.erase(mm.find("hey"));
+	ft_print("Erase (pos): ", check_if_equals2(m, mm), true);
 
-	m.erase(m.find("bonjour"), m.find("niel"));
-	mm.erase(mm2.find("bonjour"), mm2.find("niel"));
-	ft_print("Erase (first, last): ", m.size(), mm2.size());
+	std::cout << "ici\n";
+	m.erase(m.find("bonjour"), ++m.find("bonjour"));
+	mm.erase(mm.find("bonjour"), ++mm.find("bonjour"));
+	std::cout << "ici\n";
+	ft_print("Erase (first, last): ", m.size(), mm.size());
 	//m.erase(m.find("henri"));
 	//mm.erase(mm.find("henri"));
 	//ft_print("Erase (pos): ", check_if_equals2(m, mm), true);
@@ -220,7 +257,10 @@ static void modifiers()
 	m2["xavier"] = "niel";
 	m2["niel"] = "free";
 	m2["lol"] = "42";
-	ft::Map<std::string, std::string> mm3(m2.begin(), m2.end());
+	ft::Map<std::string, std::string> mm3;
+	mm3["xavier"] = "niel";
+	mm3["niel"] = "free";
+	mm3["lol"] = "42";
 	m.swap(m2);
 	mm.swap(mm3);
 	ft_print("swap : ", m.size(), mm.size());
@@ -237,7 +277,9 @@ static void iterators()
 	std::map<int, int> l;
 	for (int i = 0; i < 10; i++)
 		l[i] = i;
-	ft::Map<int, int> ml(l.begin(), l.end());
+	ft::Map<int, int> ml;
+	for (int i = 0; i < 10; i++)
+		ml[i] = i;
 
 	std::map<int, int>::iterator vit = l.begin();
 	std::map<int, int>::iterator vet = l.end();
@@ -262,7 +304,9 @@ static void reverse_iterators()
 	std::map<int, int> l;
 	for (int i = 0; i < 10; i++)
 		l[i] = i;
-	ft::Map<int, int> ml(l.begin(), l.end());
+	ft::Map<int, int> ml;
+	for (int i = 0; i < 10; i++)
+		ml[i] = i;
 
 	std::map<int, int>::reverse_iterator vit = l.rbegin();
 	std::map<int, int>::reverse_iterator vet = l.rend();
@@ -287,7 +331,9 @@ static void const_iterators()
 	std::map<int, int> l;
 	for (int i = 0; i < 10; i++)
 		l[i] = i;
-	ft::Map<int, int> ml(l.begin(), l.end());
+	ft::Map<int, int> ml;
+	for (int i = 0; i < 10; i++)
+		ml[i] = i;
 
 	std::map<int, int>::const_iterator vit = l.begin();
 	std::map<int, int>::const_iterator vet = l.end();
@@ -312,7 +358,9 @@ static void const_reverse_iterators()
 	std::map<int, int> l;
 	for (int i = 0; i < 10; i++)
 		l[i] = i;
-	ft::Map<int, int> ml(l.begin(), l.end());
+	ft::Map<int, int> ml;
+	for (int i = 0; i < 10; i++)
+		ml[i] = i;
 
 	std::map<int, int>::const_reverse_iterator vit = l.rbegin();
 	std::map<int, int>::const_reverse_iterator vet = l.rend();

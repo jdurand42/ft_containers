@@ -159,6 +159,33 @@ namespace ft
 				}
 				else
 				{
+					Node *b1 = _node;
+					Node *b2 = _node;
+
+					if (_node && !_node->_right)
+					{
+						if (!_node->_parent)
+						{
+
+							_node = NULL;
+							return (*this);
+						}
+						else
+						{
+							b1 = _node;
+							b2 = _node->_parent;
+							while (b2->_right == b1)
+							{
+								b1 = b2;
+								b2 = b1->_parent;
+								if (b2 == NULL)
+								{
+									_node = NULL;
+									return (*this);
+								}
+							}
+						}
+					}
 					_node = _root;
 					while (_node && _node->_left)
 						_node = _node->_left;
@@ -192,6 +219,34 @@ namespace ft
 				}
 				else
 				{
+					Node *b1 = _node;
+					Node *b2 = _node;
+
+					if (_node && !_node->_left)
+					{
+						if (!_node->_parent)
+						{
+
+							_node = NULL;
+							return (*this);
+						}
+						else
+						{
+							b1 = _node;
+							b2 = _node->_parent;
+							while (b2->_left == b1)
+							{
+								b1 = b2;
+								b2 = b1->_parent;
+								if (b2 == NULL)
+								{
+									_node = NULL;
+									return (*this);
+								}
+							}
+						}
+					}
+
 					_node = _root;
 					while (_node && _node->_right)
 						_node = _node->_right;
@@ -249,10 +304,10 @@ namespace ft
 				return (&Iterator::_node->_pair);
 			};
 
-			pointer get_addr() // trés moche
-			{
-				return (&Iterator::_node->_pair);
-			};
+	//		pointer get_addr() // trés moche
+	//		{
+	//			return (&Iterator::_node->_pair);
+	//		};
 		};
 
 		class Const_Reverse_Iterator: public Reverse_Iterator<Iterator>
@@ -389,12 +444,12 @@ namespace ft
 			return (search(key, node->_left, node));
 		};
 
-		void  insert(Pair<const Key,T> pair)
+		void  insert(value_type pair)
 		{
 			_root = insert(pair, _root, NULL);
 		};
 
-		Node* insert(Pair<const Key,T> pair, Node* node, Node *parent)
+		Node* insert(value_type pair, Node* node, Node *parent)
 		{
 		    if (node == NULL)
 			{

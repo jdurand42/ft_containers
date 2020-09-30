@@ -45,7 +45,9 @@ namespace ft
 			while (first != last)
 			{
 				_bst.insert(*first);
-				first++;
+				std::cout << first->first << "  " << first->second << std::endl;
+			//	std::cout << last->first << std::endl;
+				++first;
 			}
 		}
 
@@ -104,7 +106,7 @@ namespace ft
 		{
 			size_type size = _bst.size();
 			_bst.insert(val);
-			return (std::make_pair(_bst.find(val.first), (size < _bst.size())));
+			return (Pair<iterator,bool>(_bst.find(val.first), (size < _bst.size())));
 		} // two more inserts to do
 
 		iterator insert(iterator pos, const value_type& val)
@@ -140,12 +142,16 @@ namespace ft
 		void erase(iterator first, iterator last)
 		{
 			iterator b;
+
 			while (first != last)
 			{
+				std::cout << "la\n";
 				b = first;
 				b++;
 				_bst.delete_key((*first).first);
 				first = b;
+				if (first == end())
+					return ;
 			}
 		}
 
@@ -219,12 +225,12 @@ namespace ft
 
 		Pair<iterator,iterator> equal_range(const key_type& key)
 		{
-			return (std::make_pair(lower_bound(key), upper_bound(key)));
+			return (Pair<iterator, iterator>(lower_bound(key), upper_bound(key)));
 		}
 
 		Pair<const_iterator,const_iterator> equal_range(const key_type& key) const
 		{
-			return (std::make_pair(lower_bound(key), upper_bound(key)));
+			return (Pair<iterator, iterator>(lower_bound(key), upper_bound(key)));
 		}
 
 
