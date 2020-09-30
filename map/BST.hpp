@@ -20,6 +20,28 @@ namespace ft
 		struct Node
 		{
 			public:
+			Node()
+			{
+				_left = NULL;
+				_parent = NULL;
+				_right = NULL;
+			}
+
+			Node(const Node& node): _pair(node._pair)
+			{
+				_left = node._left;
+				_right = node._right;
+				_parent = node._parent;
+			}
+
+			void operator = (const Node& node)
+			{
+				_left = node._left;
+				_right = node._right;
+				_parent = node._parent;
+				_pair = node._pair;
+			}
+
 			Node(std::pair<const Key,T> pair, Node *left = NULL, Node *right = NULL,
 			Node *parent = NULL): _pair(pair)
 			{
@@ -45,6 +67,10 @@ namespace ft
 		typedef std::pair<const Key, T> value_type;
 		typedef value_type& reference;
 		typedef const std::pair<const Key, T>& const_reference;
+		typedef const std::pair<const Key,T>*	const_pointer;
+		typedef std::pair<const Key,T>* pointer;
+
+		typedef typename Allocator::template rebind<Node>::other _node_allocator_type;
 
 		public:
 		class Iterator
@@ -219,7 +245,15 @@ namespace ft
 				return (Iterator::_node->_pair);
 			};
 
+			const_pointer operator -> ()
+			{
+				return (&Iterator::_node->_pair);
+			};
 
+			pointer get_addr() // trés moche
+			{
+				return (&Iterator::_node->_pair);
+			};
 		};
 
 		class Const_Reverse_Iterator: public Reverse_Iterator<Iterator>
@@ -242,6 +276,13 @@ namespace ft
 				const_iterator a = Reverse_Iterator<Iterator>::_base;
 				return (*a);
 			//	return (*_base);
+			};
+
+			const_pointer operator -> () const
+			{
+				const_iterator a = Reverse_Iterator<Iterator>::_base;
+				const_pointer cp = a.operator->();
+				return (cp);
 			};
 		};
 
@@ -285,6 +326,8 @@ namespace ft
 		{
 			if (!root)
 				return (NULL);
+			//Node *node = _allocator.allocate(1);
+			//_allocator.construct(node, Node(root->_pair, NULL, NULL, parent));
 			Node *node = new Node(root->_pair, NULL, NULL, parent);
 			node->_left = copy_tree(root->_left, node);
 			node->_right = copy_tree(root->_right, node);
@@ -332,9 +375,10 @@ namespace ft
 
 		T& search(Key key, Node *node, Node *parent)
 		{
+			(void)parent;
 			if (node == NULL) // insert new key to default value
 			{
-				_root = insert(std::make_pair(key, T()), _root, NULL);
+				_root = insert(value_type(key, T()), _root, NULL);
 				return (search(key));
 			}
 	    	if (node->_pair.first == key)
@@ -437,7 +481,7 @@ namespace ft
 			  Node *left = node->_left;
 			  Node *parent = node->_parent;
 			  free(node);
-			  node = new Node(std::make_pair(b->_pair.first, b->_pair.second), left, right, parent);
+			  node = new Node(value_type(b->_pair.first, b->_pair.second), left, right, parent);
 			  //node->_pair.first = b->_pair.first;
 			  //node->_pair.second = b->_pair.second;
 			  node->_right = delete_node(b->_pair.first, node->_right);
@@ -556,7 +600,7 @@ namespace ft
 		Node *_root;
 		size_type _size;
 		key_compare comp;
-		allocator_type _allocator;
+		_node_allocator_type _allocator;
 	};
 
 };

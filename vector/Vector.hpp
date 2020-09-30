@@ -212,6 +212,11 @@ namespace ft
 				return (*(Iterator::_t));
 			};
 
+			const T* operator -> ()
+			{
+				return (Iterator::_t);
+			};
+
 
 		};
 
@@ -241,8 +246,15 @@ namespace ft
 			const_reference operator [] (difference_type n) const
 			{
 				//_t += n;
-				const_iterator a = Reverse_Iterator<Iterator>::_base + n;
-				return (*a);
+				iterator a(Reverse_Iterator<Iterator>::_base);
+				const_iterator b(a - n);
+				return (*b);
+			};
+
+			const_pointer operator -> () const
+			{
+				const_iterator a = Reverse_Iterator<Iterator>::_base;
+				return (Reverse_Iterator<Iterator>::_base::_t);
 			};
 		};
 
@@ -254,35 +266,47 @@ namespace ft
 		Vector()
 		{
 			//v = new T[CAPACITY];
-			_v = _allocator.allocate(CAPACITY);
+		//	_v = _allocator.allocate(CAPACITY);
+			//_allocator.construct(_v);
 			_size = 0;
-			_capacity_size = CAPACITY;
+			_capacity_size = 0;
 		};
 
 		~Vector()
 		{
+			if (_capacity_size == 0)
+				return ;
+			for (size_type i = 0; i < _capacity_size; i++)
+				_allocator.destroy(&_v[i]);
 			_allocator.deallocate(_v, _capacity_size);
 		};
 
 		Vector(size_type size, T value = T())
 		{
 			//v = new T[size + CAPACITY];
-			_v = _allocator.allocate(CAPACITY + size);
+			_v = _allocator.allocate(size);
+			//_allocator.construct(_v, value);
 			_size = size;
-			_capacity_size = size + CAPACITY;
+			_capacity_size = size;
 
 			for (size_t i = 0; i < _size; i++)
-				_v[i] = value;
+			{
+			//	_v[i] = value;
+				_allocator.construct(&_v[i], value);
+			}
 		};
 
 		template<typename InputIterator>
 		Vector(InputIterator first, InputIterator last)
 		{
-			_v = _allocator.allocate(CAPACITY + last - first);
+			_v = _allocator.allocate(last - first);
 			_size = last - first;
-			_capacity_size = _size + CAPACITY;
-			for (int i = 0; i < _size; i++, first++)
-				_v[i] = *first;
+			_capacity_size = _size;
+			for (size_type i = 0; i < _size; i++, first++)
+			{
+			//	_v[i] = *first;
+				_allocator.construct(&_v[i], *first);
+			}
 		};
 
 		/*
@@ -296,19 +320,27 @@ namespace ft
 			_capacity_size = v._capacity_size;
 
 			for (size_t i = 0; i < _size; i++)
-				_v[i] = v._v[i];
+				_allocator.construct(&_v[i], v._v[i]);
+				//_v[i] = v._v[i];
 		};
 
 		void operator = (const Vector& v)
 		{
-			_allocator.deallocate(_v, _capacity_size);
-
+			if (_capacity_size > 0)
+			{
+				for (size_type i = 0; i < _capacity_size; i++)
+					_allocator.destroy(&_v[i]);
+				_allocator.deallocate(_v, _capacity_size);
+			}
 			_v = _allocator.allocate(v._capacity_size);
 			_size = v._size;
 			_capacity_size = v._capacity_size;
 
 			for (size_t i = 0; i < _size; i++)
-				_v[i] = v._v[i];
+			{
+				_allocator.construct(&_v[i], v._v[i]);
+				//_v[i] = v._v[i];
+			}
 		};
 
 		/*
@@ -453,7 +485,8 @@ namespace ft
 
 		size_type max_size()  const
 		{
-			return ((std::pow(2, 64) / sizeof(T)));
+			//return ((std::pow(2, 64) / sizeof(T)));
+			return (std::numeric_limits<size_type>::max() / sizeof(T));
 		};
 
 		void reserve(size_type new_cap)
@@ -464,9 +497,15 @@ namespace ft
 				return ;
 			T*	b;
 			b = _allocator.allocate(new_cap);
-			for (int i = 0; i < _size; i++)
-				b[i] = _v[i];
-			_allocator.deallocate(_v, _capacity_size);
+			for (size_type i = 0; i < _size; i++)
+				_allocator.construct(&b[i], _v[i]);
+				//b[i] = _v[i];
+			if (_capacity_size > 0)
+			{
+				for (size_type i = 0; i < _capacity_size; i++)
+					_allocator.destroy(&_v[i]);
+				_allocator.deallocate(_v, _capacity_size);
+			}
 			_capacity_size = new_cap;
 			_v = b;
 		};
@@ -477,14 +516,13 @@ namespace ft
 
 			if (_size > count)
 			{
-
 				_size = count;
 				return ;
 			}
 
 			if (count < _capacity_size)
 			{
-				for (int i = _size; i < count; i++)
+				for (size_type i = _size; i < count; i++)
 					_v[i] = value;
 				_size = count;
 
@@ -492,13 +530,20 @@ namespace ft
 
 			else
 			{
-				b = _allocator.allocate(count + CAPACITY);
-				for (int i = 0; i < _size; i++)
-					b[i] = _v[i];
-				for (int i = _size; i < count; i++)
-					b[i] = value;
+				b = _allocator.allocate(count);
+				for (size_type i = 0; i < _size; i++)
+					_allocator.construct(&b[i], _v[i]);
+					//b[i] = _v[i];
+				for (size_type i = _size; i < count; i++)
+					_allocator.construct(&b[i], value);
+					//b[i] = value;
 				_size = count;
-				_allocator.deallocate(_v, _capacity_size);
+				if (_capacity_size > 0)
+				{
+					for (size_type i = 0; i < _capacity_size; i++)
+						_allocator.destroy(&_v[i]);
+					_allocator.deallocate(_v, _capacity_size);
+				}
 				_capacity_size = count + CAPACITY;
 				_v = b;
 			}
@@ -512,14 +557,14 @@ namespace ft
 		{
 			if (n <= _capacity_size)
 			{
-				for (int i = 0; i < n; i++)
+				for (size_type i = 0; i < n; i++)
 					_v[i] = value;
 				_size = n;
 			}
 			else
 			{
 				clear();
-				for (int i = 0; i < n; i++)
+				for (size_type i = 0; i < n; i++)
 					push_back(value);
 			}
 		};
@@ -528,7 +573,7 @@ namespace ft
 		void assign(input_iteraror first, input_iteraror last)
 		{
 
-			if (last - first <= _capacity_size)
+			if ((size_type)(last - first) <= _capacity_size)
 			{
 				_size = last - first;
 				for (int i = 0; first != last; i++, first++)
@@ -557,13 +602,22 @@ namespace ft
 				return ;
 			}
 			T* b;
-			_capacity_size = _size + CAPACITY;
-			b =_allocator.allocate(_capacity_size);
+			size_type capacity = _size + CAPACITY;;
+			//_capacity_size = _size + CAPACITY;
+			b =_allocator.allocate(capacity);
 
 			for (size_type i = 0; i < _size; i++)
-				b[i] = _v[i];
-			b[_size] = t;
-			_allocator.deallocate(_v, _size);
+				_allocator.construct(&b[i], _v[i]);
+				//b[i] = _v[i];
+			_allocator.construct(&b[_size], t);
+			//b[_size] = t;
+			if (_capacity_size > 0)
+			{
+				for (size_type i = 0; i < _capacity_size; i++)
+					_allocator.destroy(&_v[i]);
+				_allocator.deallocate(_v, _capacity_size);
+			}
+			_capacity_size = _size + CAPACITY;
 			_v = b;
 			_size += 1;
 		};
@@ -578,14 +632,14 @@ namespace ft
 		{
 			T* vb = new T[end() - pos];
 
-			for (int i = 0; i < end() - pos; i++)
+			for (difference_type i = 0; i < end() - pos; i++)
 				vb[i] = _v[pos - begin() + i];
 
 			if (_size + 1 <= _capacity_size)
 			{
 				_v[pos - begin()] = value;
 				_size += 1;
-				for (int i = pos - begin() + 1, j = 0; i < _size; i++, j++)
+				for (size_type i = pos - begin() + 1, j = 0; i < _size; i++, j++)
 					_v[i] = vb[j];
 			}
 			else
@@ -593,7 +647,7 @@ namespace ft
 				size_type vb_size = end() - pos;
 				_size = pos - begin();
 				push_back(value);
-				for (int i = 0; i < vb_size; i++)
+				for (size_type i = 0; i < vb_size; i++)
 					push_back(vb[i]);
 			}
 			delete[] vb;
@@ -604,24 +658,24 @@ namespace ft
 		{
 			T* vb = new T[end() - pos];
 
-			for (int i = 0; i < end() - pos; i++)
+			for (difference_type i = 0; i < end() - pos; i++)
 				vb[i] = _v[pos - begin() + i];
 
 			if (_size + n <= _capacity_size)
 			{
-				for (int i = pos - begin(), j = 0; j < n; i++, j++)
+				for (size_type i = pos - begin(), j = 0; j < n; i++, j++)
 					_v[i] = value;
 				_size += n;
-				for (int i = pos - begin() + n, j = 0; i < _size; i++, j++)
+				for (size_type i = pos - begin() + n, j = 0; i < _size; i++, j++)
 					_v[i] = vb[j];
 			}
 			else
 			{
 				size_type vb_size = end() - pos;
 				_size = pos - begin();
-				for (int i = 0; i < n; i++)
+				for (size_type i = 0; i < n; i++)
 					push_back(value);
-				for (int i = 0; i < vb_size; i++)
+				for (size_type i = 0; i < vb_size; i++)
 					push_back(vb[i]);
 			}
 			delete[] vb;
@@ -633,15 +687,15 @@ namespace ft
 			T* vb = new T[end() - pos];
 
 
-			for (int i = 0; i < end() - pos; i++)
+			for (difference_type i = 0; i < end() - pos; i++)
 				vb[i] = _v[pos - begin() + i];
 
-			if (_size + last - first <= _capacity_size)
+			if ((size_type)(_size + last - first) <= _capacity_size)
 			{
-				for (int i = pos - begin(); first != last; i++, first++)
+				for (size_type i = pos - begin(); first != last; i++, first++)
 					_v[i] = *first;
 				_size += last - first;
-				for (int i = pos - begin() + last - first, j = 0; i < _size; i++, j++)
+				for (size_type i = pos - begin() + last - first, j = 0; i < _size; i++, j++)
 					_v[i] = vb[j];
 			}
 			else
@@ -650,7 +704,7 @@ namespace ft
 				_size = pos - begin();
 				for (; first != last ; first++)
 					push_back(*first);
-				for (int i = 0; i < vb_size; i++)
+				for (size_type i = 0; i < vb_size; i++)
 					push_back(vb[i]);
 			}
 			delete[] vb;
@@ -660,7 +714,7 @@ namespace ft
 		{
 			difference_type diff = pos - begin();
 
-			for (int i = diff; i < _size - 1; i++)
+			for (size_type i = diff; i < _size - 1; i++)
 			{
 				_v[i] = _v[i + 1];
 			}
@@ -674,7 +728,7 @@ namespace ft
 
 			difference_type length = last - start;
 
-			for (int i = diff; last != end(); i++, last++)
+			for (size_type i = diff; last != end(); i++, last++)
 				_v[i] = *last;
 			_size -= length;
 			return (begin() + diff + 1);
@@ -701,8 +755,8 @@ namespace ft
 		/*
 		** FRIENDS
 		*/
-		friend void swap(Vector<T, Allocator>& x, Vector<T, Allocator>& y);
-	/*	friend bool operator == (const Vector<T,Allocator>& x, const Vector<T,Allocator>& y);
+	/*	friend void swap(Vector<T, Allocator>& x, Vector<T, Allocator>& y);
+		friend bool operator == (const Vector<T,Allocator>& x, const Vector<T,Allocator>& y);
 		friend bool operator != (const Vector<T,Allocator>& x, const Vector<T,Allocator>& y);
 		friend bool operator < (const Vector<T,Allocator>& x, const Vector<T,Allocator>& y);
 		friend bool operator <= (const Vector<T,Allocator>& x, const Vector<T,Allocator>& y);
@@ -728,7 +782,7 @@ bool operator == (const ft::Vector<T,Allocator>& x, const ft::Vector<T,Allocator
 {
 	if (x.size() == y.size())
 	{
-		for (int i = 0; i < x.size(); i++)
+		for (typename ft::Vector<T,Allocator>::size_type i = 0; i < x.size(); i++)
 		{
 			if (x[i] != y[i])
 				return (false);
@@ -747,38 +801,41 @@ bool operator != (const ft::Vector<T,Allocator>& x, const ft::Vector<T,Allocator
 template <class T, class Allocator>
 bool operator < (const ft::Vector<T,Allocator>& x, const ft::Vector<T,Allocator>& y)
 {
-	// check comportement on empty containers
-	for (int i = 0, j = 0; i < x.size() && j < y.size(); i++, j++)
+	typename ft::Vector<T,Allocator>::const_iterator it = x.begin();
+	typename ft::Vector<T,Allocator>::const_iterator it2 = y.begin();
+	typename ft::Vector<T,Allocator>::const_iterator end = x.end();
+	typename ft::Vector<T,Allocator>::const_iterator end2 = y.end();
+
+	while (it != end)
 	{
-		if (!(x[i] < y[i]))
+		if (it2 == end2 || *it2 < *it)
 			return (false);
+		else if (*it < *it2)
+			return (true);
+		it++;
+		it2++;
 	}
-	return (true);
+	return (it2 != end2);
 };
 
 template <class T, class Allocator>
 bool operator <= (const ft::Vector<T,Allocator>& x, const ft::Vector<T,Allocator>& y)
 {
 	// check comportement on empty containers
-	for (int i = 0, j = 0; i < x.size() && j < y.size(); i++, j++)
-	{
-		if (!(x[i] <= y[i]))
-			return (false);
-	}
-	return (true);
+	return (!(y < x));
 };
 
 template <class T, class Allocator>
 bool operator > (const ft::Vector<T,Allocator>& x, const ft::Vector<T,Allocator>& y)
 {
 	// check comportement on empty containers
-	return (!(x < y));
+	return (y < x);
 };
 template <class T, class Allocator>
 bool operator >= (const ft::Vector<T,Allocator>& x, const ft::Vector<T,Allocator>& y)
 {
 	// check comportement on empty containers
-	return (!(x <= y));
+	return (!(x < y));
 };
 
 #endif

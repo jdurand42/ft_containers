@@ -79,7 +79,9 @@ namespace ft
 		size_type max_size() const
 		{
 			// to implement
-			return (42);
+			//std::cout << "ici: " << sizeof(std::pair<Key, T>) << std::endl;
+			// c'est sizeof(pair<key, T> + n * pointeurs dans la struct)
+			return (std::numeric_limits<size_type>::max() / (sizeof(value_type) + 4 * 8));
 		}
 
 		/*

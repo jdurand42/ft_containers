@@ -16,6 +16,31 @@ namespace ft
 		class Node
 		{
 			public:
+			Node()
+			{
+				_next = NULL;
+				_prev = NULL;
+			}
+			Node(const Node& node)
+			{
+				_data = node._data;
+				_next = node._next;
+				_prev = node._prev;
+			}
+			void operator = (const Node& node)
+			{
+				_data = node._data;
+				_next = node._next;
+				_prev = node._prev;
+			}
+			Node(Node *prev, Node *next, const T& value = T())
+			{
+				_data = value;
+				_next = next;
+				_prev = prev;
+			}
+
+			public:
 			T		_data;
 			Node	*_next;
 			Node	*_prev;
@@ -150,6 +175,12 @@ namespace ft
 			};
 
 
+			const T* operator -> () const
+			{
+				return (Iterator::_node);
+			};
+
+
 		};
 
 		class Const_Reverse_Iterator: public Reverse_Iterator<Iterator>
@@ -173,6 +204,12 @@ namespace ft
 				return (*a);
 			//	return (*_base);
 			};
+
+			const_pointer operator -> () const
+			{
+				const_iterator a = Reverse_Iterator<Iterator>::_base;
+				return (Reverse_Iterator<Iterator>::_base::_node);
+			};
 		};
 
 		typedef Iterator iterator;
@@ -193,7 +230,7 @@ namespace ft
 		List(const List& list): _head(NULL), _tail(NULL), _size(0)
 		{
 			// Deep copy;
-			for (int i = 0; i < list._size; i++)
+			for (size_type  i = 0; i < list._size; i++)
 			{
 				push_back(list[i]);
 			}
@@ -204,7 +241,7 @@ namespace ft
 		{
 			// deep copy;
 			clear();
-			for (int i = 0; i < list._size; i++)
+			for (size_type  i = 0; i < list._size; i++)
 			{
 				push_back(list[i]);
 			}
@@ -214,7 +251,7 @@ namespace ft
 		~List()
 		{
 			// normal deallocations
-			/*for (int i = 0; i < _size; i++)
+			/*for (size_type  i = 0; i < _size; i++)
 			{
 				Node *b = _head->_next;
 				_allocator.deallocate(_head, 1);
@@ -232,7 +269,7 @@ namespace ft
 			set_up_head_tail();
 			if (size <= 0)
 				return ;
-			for (int i = 0; i < size; i++)
+			for (size_type  i = 0; i < size; i++)
 				push_back(value);
 			set_up_head_tail();
 		};
@@ -296,6 +333,7 @@ namespace ft
 			Node *b = _head->_next;
 			if (b)
 				b->_prev = NULL;
+			_allocator.destroy(_head);
 			_allocator.deallocate(_head, 1);
 			_head = b;
 			_size -= 1;
@@ -309,6 +347,7 @@ namespace ft
 			Node *b = _tail->_prev;
 			if (b)
 				b->_next = NULL;
+			_allocator.destroy(_tail);
 			_allocator.deallocate(_tail, 1);
 			_tail = b;
 			_size -= 1;
@@ -518,7 +557,7 @@ namespace ft
 				throw (std::out_of_range("Index is out of range"));
 			Node *b;
 			b = _head;
-			for (int i = 0; i != idx; i++)
+			for (size_type  i = 0; i != idx; i++)
 				b = b->_next;
 			return (b->_data);
 		};
@@ -529,7 +568,7 @@ namespace ft
 				throw (std::out_of_range("Index is out of range"));
 			Node *b;
 			b = _head;
-			for (int i = 0; i != idx; i++)
+			for (size_type  i = 0; i != idx; i++)
 				b = b->_next;
 			return (b->_data);
 		};
@@ -550,14 +589,15 @@ namespace ft
 
 		size_type max_size() const
 		{
-			return (std::numeric_limits<difference_type>::max());
+			return (std::numeric_limits<size_type>::max() / sizeof(Node));
 		}
 
 		void clear()
 		{
-			for (int i = 0; i < _size; i++)
+			for (size_type  i = 0; i < _size; i++)
 			{
 				Node *b = _head->_next;
+				_allocator.destroy(_head);
 				_allocator.deallocate(_head, 1);
 				_head = b;
 			}
@@ -589,7 +629,7 @@ namespace ft
 			Node *b = _head;
 			Node *next;
 			size_type size = _size;
-			for (int i = 0; i < size; i++)
+			for (size_type  i = 0; i < size; i++)
 			{
 				next = b->_next;
 				if (b->_data == value)
@@ -608,10 +648,10 @@ namespace ft
 			Node *b = _head;
 			Node *next;
 			size_type size = _size;
-			for (int i = 0; i < size; i++)
+			for (size_type i = 0; i < size; i++)
 			{
 				next = b->_next;
-				if (Predicate(b->_data) == true)
+				if (pred(b->_data) == true)
 				{
 					delete_node(b);
 					b = next;
@@ -626,7 +666,7 @@ namespace ft
 			Node *b = _head;
 			Node *next;
 			size_type size = _size;
-			for (int i = 0; i < size; i++)
+			for (size_type  i = 0; i < size; i++)
 			{
 				next = b->_next;
 				if (b->_prev && b->_prev->_data == b->_data)
@@ -644,9 +684,9 @@ namespace ft
 		void sort() // bubble sort
 		{
 			T b;
-			for (int i = _size - 1; i >= 1; i--)
+			for (size_type  i = _size - 1; i >= 1; i--)
 			{
-				for (int j = 0; j <= i - 1; j++)
+				for (size_type  j = 0; j <= i - 1; j++)
 				{
 					if ((*this)[j + 1]  < (*this)[j])
 					{
@@ -662,9 +702,9 @@ namespace ft
 		void sort(Compare comp) // bubble sort -> not tested
 		{
 			T b;
-			for (int i = _size - 1; i >= 1; i--)
+			for (size_type  i = _size - 1; i >= 1; i--)
 			{
-				for (int j = 0; j <= i - 1; j++)
+					for (size_type j = 0; j <= i - 1; j++)
 				{
 					if (comp((*this)[j + 1], (*this)[j]))
 					{
@@ -682,7 +722,41 @@ namespace ft
 				return ;
 	//		sort();
 	//		x.sort();
-			push_list(x);
+			if (_size == 0)
+			{
+				//assign(x.begin(), x.end());
+				//splice(begin(), x);
+				_head = x._head;
+				_tail = x._tail;
+				_size += x.size();
+				set_up_head_tail();
+				x._size = 0;
+				//x.clear();
+				return ;
+			}
+
+			iterator first = begin();
+			iterator last = end();
+			iterator first2 = x.begin();
+			iterator last2 = x.end();
+			iterator b;
+			iterator b2;
+
+			while (first2 != last2 && first != last)
+			{
+				if (*first < *first2)
+					first++;
+				else
+				{
+					//b = first2;
+					splice(first, x, first2);
+					first2 = x.begin();
+				}
+			}
+			if (first2 != last2)
+			{
+				splice(end(), x, first2);
+			}
 			x._size = 0;
 
 		}
@@ -692,18 +766,47 @@ namespace ft
 		{
 			if (this == &x)
 				return ;
-	//		sort(comp);
-	//		x.sort(comp);
-			push_list(x);
-			x._size = 0;
-		//	sort(comp);
+				if (_size == 0)
+				{
+					//assign(x.begin(), x.end());
+					//splice(begin(), x);
+					_head = x._head;
+					_tail = x._tail;
+					_size += x.size();
+					set_up_head_tail();
+					x._size = 0;
+					//x.clear();
+					return ;
+				}
+
+				iterator first = begin();
+				iterator last = end();
+				iterator first2 = x.begin();
+				iterator last2 = x.end();
+
+				while (first2 != last2 && first != last)
+				{
+					if (comp(*first, *first2))
+						first++;
+					else
+					{
+						//b = first2;
+						splice(first, x, first2);
+						first2 = x.begin();
+					}
+				}
+				if (first2 != last2)
+				{
+					splice(end(), x, first2);
+				}
+				x._size = 0;
 		}
 
 		void reverse()
 		{
 			T b;
 
-			for (int i = 0, j = _size - 1; i < j; i++, j--)
+			for (size_type i = 0, j = _size - 1; i < j; i++, j--)
 			{
 				b = (*this)[i];
 				(*this)[i] = (*this)[j];
@@ -811,18 +914,21 @@ namespace ft
 			_past_end._prev = _tail;
 		}
 
-		Node *allocate_node(Node *next, Node *prev)
+		Node *allocate_node()
 		{
 			Node *b = _allocator.allocate(1);
-			b->_next = next;
-			b->_prev = prev;
+		//	_allocator.construct(b);
+		//	b->_next = next;
+		//	b->_prev = prev;
 			return (b);
 		}
 
-		Node *allocate_node(Node *next, Node *prev, const T& value)
+		Node *allocate_node(Node *next, Node *prev, const T& value = T())
 		{
-			Node *b = allocate_node(next, prev);
-			b->_data = value;
+			Node *b = allocate_node();
+			Node base(prev, next, value);
+			_allocator.construct(b, base);
+			//b->_data = value;
 			return (b);
 		}
 
@@ -887,18 +993,17 @@ namespace ft
 		void deallocate_node(Node *node)
 		{
 			// call the destructor with destroy ?
+			_allocator.destroy(node);
 			_allocator.deallocate(node, 1);
 		}
 
 		iterator insert_in_place(iterator pos, Node *new_node)
 		{
-			std::cout << "lol\n";
 			Node* node = get_node(pos);
 
 			//Node *new_node = allocate_node(NULL, NULL, value);
 			new_node->_next = node;
 			new_node->_prev = node->_prev;
-			std::cout << "lol\n";
 			if (node == _head)
 				_head = new_node;
 			if (node == &_past_end)
@@ -908,9 +1013,7 @@ namespace ft
 			node->_prev->_next = new_node;
 			node->_prev = new_node;
 			_size += 1;
-			std::cout << "lol1\n";
 			set_up_head_tail();
-			std::cout << "lol2\n";
 			return (iterator(new_node));
 		}
 
@@ -947,7 +1050,7 @@ namespace ft
 				throw (std::out_of_range("Index is out of range"));
 			Node *b;
 			b = _head;
-			for (int i = 0; i != idx; i++)
+			for (size_type i = 0; i != idx; i++)
 				b = b->_next;
 			return (b->_data);
 		};
@@ -958,7 +1061,7 @@ namespace ft
 				throw (std::out_of_range("Index is out of range"));
 			Node *b;
 			b = _head;
-			for (int i = 0; i != idx; i++)
+			for (size_type  i = 0; i != idx; i++)
 				b = b->_next;
 			return (b->_data);
 		};
@@ -978,9 +1081,9 @@ bool operator == (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y
 {
 	if (x.size() == y.size())
 	{
-		typename ft::List<T,Allocator>::iterator it = x.begin();
-		typename ft::List<T,Allocator>::iterator it2 = y.begin();
-		typename ft::List<T,Allocator>::iterator end = x.end();
+		typename ft::List<T,Allocator>::const_iterator it = x.begin();
+		typename ft::List<T,Allocator>::const_iterator it2 = y.begin();
+		typename ft::List<T,Allocator>::const_iterator end = x.end();
 		for (; it != end; it++, it2++)
 		{
 			if (*it != *it2)
@@ -1001,44 +1104,41 @@ template <class T, class Allocator>
 bool operator < (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
 {
 	// check comportement on empty containers
-	typename ft::List<T,Allocator>::iterator it = x.begin();
-	typename ft::List<T,Allocator>::iterator it2 = y.begin();
-	typename ft::List<T,Allocator>::iterator end = x.end();
-	for (; it != end; it++, it2++)
+	typename ft::List<T,Allocator>::const_iterator it = x.begin();
+	typename ft::List<T,Allocator>::const_iterator it2 = y.begin();
+	typename ft::List<T,Allocator>::const_iterator end = x.end();
+	typename ft::List<T,Allocator>::const_iterator end2 = y.end();
+
+	while (it != end)
 	{
-		if (!(*it < *it2))
+		if (it2 == end2 || *it2 < *it)
 			return (false);
+		else if (*it < *it2)
+			return (true);
+		it++;
+		it2++;
 	}
-	return (true);
+	return (it2 != end2);
 };
 
 template <class T, class Allocator>
 bool operator <= (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
 {
-	// check comportement on empty containers
-	typename ft::List<T,Allocator>::iterator it = x.begin();
-	typename ft::List<T,Allocator>::iterator it2 = y.begin();
-	typename ft::List<T,Allocator>::iterator end = x.end();
-	for (; it != end; it++, it2++)
-	{
-		if (!(*it <= *it2))
-			return (false);
-	}
-	return (true);
+	return (!(y < x));
 };
 
 template <class T, class Allocator>
 bool operator > (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
 {
 	// check comportement on empty containers
-	return (!(x < y));
+	return (y < x);
 };
 
 template <class T, class Allocator>
 bool operator >= (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
 {
 	// check comportement on empty containers
-	return (!(x <= y));
+	return (!(x < y));
 };
 
 /*

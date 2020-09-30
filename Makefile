@@ -7,7 +7,7 @@ CC		=	clang++
 
 SANI	=	-fsanitize=address -g3
 
-CPP1FLAGS	=	-Wall -Wextra -Werror
+CPPFLAGS	=	-Wall -Wextra -Werror
 
 OBJS	=	$(SRCS:.cpp=.o)
 

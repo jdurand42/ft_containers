@@ -160,13 +160,6 @@ static void operations()
 	ft_print("equal_range(key non existing) ", check_range(m.equal_range("jean-michel").first, m.equal_range("jean-michel").second, mm.equal_range("jean-michel").first, mm.equal_range("jean-michel").second), true);
 }
 
-static void obeservers()
-{
-	std::map<std::string, std::string> m;
-	ft::Map<std::string, std::string> map;
-	// plus tard
-}
-
 static void modifiers()
 {
 	std::cout << BOLDMAGENTA << "------- MODIFIERS----------\n" << RESET;
@@ -301,7 +294,7 @@ static void const_iterators()
 	std::map<int, int>::const_iterator vet = l.end();
 	ft::Map<int, int>::const_iterator mvit = ml.begin();
 	ft::Map<int, int>::const_iterator mvet = ml.end();
-
+	//mvit->second = 12;
 	ft_print("Begin: ", vit->second, mvit->second);
 	ft_print("--end", (--vet)->second, (--mvet)->second);
 	ft_print("Post incrementqtion", (vit++)->second, (mvit++)->second);
@@ -327,6 +320,8 @@ static void const_reverse_iterators()
 	ft::Map<int, int>::const_reverse_iterator mvit = ml.rbegin();
 	ft::Map<int, int>::const_reverse_iterator mvet = ml.rend();
 
+
+//	mvit->second = 12;
 	ft_print("Begin: ", vit->second, mvit->second);
 	ft_print("--end", (--vet)->second, (--mvet)->second);
 	ft_print("Post incrementqtion", (vit++)->second, (mvit++)->second);

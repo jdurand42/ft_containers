@@ -5,7 +5,7 @@ static bool check_if_equals(vector v, my_vector mv)
 {
 	if (v.size() != mv.size())
 		return false;
-	for (int i = 0; i < v.size(); i++)
+	for (size_t i = 0; i < v.size(); i++)
 	{
 		if (v[i] != mv[i])
 			return (false);
@@ -75,10 +75,10 @@ static void capacity_tests()
 	ft_print("Max Size: ", v1.max_size(), mv1.max_size());
 	std::cout << std::endl;
 
-	ft_print("capacity: ", v.capacity(), mv.capacity());
+	ft_print("capacity: ", v1.capacity(), mv1.capacity());
 	std::cout << std::endl;
 
-	//v.resize(28);
+	v.resize(28);
 	mv.resize(28);
 	ft_print("Resize: ", v.size(), mv.size());
 	ft_print("Value: ", v[24], mv[24]);
@@ -319,6 +319,7 @@ static void const_iterator()
 	std::vector<int>::const_iterator vet = v.end();
 	ft::Vector<int>::const_iterator mvet = mv.end();
 
+
 	ft_print("Begin: ", *vit, *mvit);
 	ft_print("End ( end - begin)", vet - vit, mvet - mvit);
 	ft_print("Post incrementqtion", *(vit++), *(mvit++));
@@ -343,11 +344,48 @@ static void const_iterator()
 	ft_print("operator >=", vit >= vet, mvit >= mvet);
 	ft_print("operator !=", vit != vet, mvit != mvet);
 	ft_print("operator ==", vit == vet, mvit == mvet);
+}
 
-	ft::Vector<int>::const_reverse_iterator cri  = mv.rbegin();
-	std::cout << "ICICICI: " << *cri << std::endl;
-	//*cri = 12;
-	ft::Vector<int>::const_reverse_iterator cre = mv.rend();
+static void const_reverse_iterator()
+{
+	std::cout << BOLDYELLOW << "\n----- test on const_reverse_iterator ----- \n" << RESET;
+	std::vector<int> v(10);
+	ft::Vector<int> mv(10);
+	for (int i = 0; i < 10; i++)
+	{
+		v[i] = i;
+		mv[i] = i;
+	}
+	std::vector<int>::const_reverse_iterator vit = v.rbegin();
+	ft::Vector<int>::const_reverse_iterator mvit = mv.rbegin();
+	std::vector<int>::const_reverse_iterator vet = v.rend();
+	ft::Vector<int>::const_reverse_iterator mvet = mv.rend();
+
+
+	ft_print("Begin: ", *vit, *mvit);
+	ft_print("End ( end - begin)", vet - vit, mvet - mvit);
+	ft_print("Post incrementqtion", *(vit++), *(mvit++));
+	ft_print("Post incrementqtion", *vit, *mvit);
+	ft_print("Pre-incrementation", *(++vit), *(++mvit));
+	ft_print("Pre-decrementation", *(--vit), *(--mvit));
+	ft_print("Post-decrementation", *(vit--), *(mvit--));
+	ft_print("Post decrementqtion", *vit, *mvit);
+	vit += 2;
+	mvit += 2;
+	ft_print("it += int ", *vit , *mvit);
+	vit -= 2;
+	mvit -= 2;
+	ft_print("it -= int ", *vit, *mvit);
+//	vit[3] = 123;
+//	mvit[3] = 123;
+	ft_print("it + int", *(vit + 2), *(mvit + 2));
+	ft_print("it - int", *(vit + 4 - 3 ), *(mvit + 4 - 3));
+	ft_print("it[3] ", vit[3], mvit[3]);
+	ft_print("operator <", vit < vet, mvit < mvet);
+	ft_print("operator <=", vit <= vet, mvit <= mvet);
+	ft_print("operator >=", vit >= vet, mvit >= mvet);
+	ft_print("operator !=", vit != vet, mvit != mvet);
+	ft_print("operator ==", vit == vet, mvit == mvet);
 }
 
 void test_vector()
@@ -361,5 +399,6 @@ void test_vector()
 	const_iterator();
 	modifiers();
 	operators();
+	const_reverse_iterator();
 	//while (1);
 }
