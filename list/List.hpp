@@ -791,40 +791,40 @@ namespace ft
 		{
 			if (this == &x)
 				return ;
-				if (_size == 0)
-				{
+			if (_size == 0)
+			{
 					//assign(x.begin(), x.end());
 					//splice(begin(), x);
-					_head = x._head;
-					_tail = x._tail;
-					_size += x.size();
-					set_up_head_tail();
-					x._size = 0;
-					//x.clear();
-					return ;
-				}
-
-				iterator first = begin();
-				iterator last = end();
-				iterator first2 = x.begin();
-				iterator last2 = x.end();
-
-				while (first2 != last2 && first != last)
-				{
-					if (!comp(*first2, *first))
-						first++;
-					else
-					{
-						//b = first2;
-						splice(first, x, first2);
-						first2 = x.begin();
-					}
-				}
-				if (first2 != last2)
-				{
-					splice(end(), x);
-				}
+				_head = x._head;
+				_tail = x._tail;
+				_size += x.size();
+				set_up_head_tail();
 				x._size = 0;
+					//x.clear();
+				return ;
+			}
+
+			iterator first = begin();
+			iterator last = end();
+			iterator first2 = x.begin();
+			iterator last2 = x.end();
+
+			while (first2 != last2 && first != last)
+			{
+				if (!comp(*first2, *first))
+					first++;
+				else
+				{
+						//b = first2;
+					splice(first, x, first2);
+					first2 = x.begin();
+				}
+			}
+			if (first2 != last2)
+			{
+				splice(end(), x);
+			}
+			x._size = 0;
 		}
 
 		void reverse()
@@ -1090,8 +1090,6 @@ namespace ft
 				b = b->_next;
 			return (b->_data);
 		};
-
-		friend void swap(List<T, Allocator>& x, List<T, Allocator>& y);
 
 		};
 	template<typename T, class Allocator>
