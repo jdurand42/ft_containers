@@ -228,12 +228,22 @@ static void modifiers()
 	v.insert(v.end() - 2, v2.begin() + 10, v2.end());
 	mv.insert(mv.end() - 2, v2.begin() + 10, v2.end());
 	ft_print("insert(pos, first, last): ", check_if_equals(v, mv), true);
-	v.erase(v.end() - 3);
-	mv.erase(mv.end() - 3);
+	it = v.erase(v.end() - 3);
+	mit = mv.erase(mv.end() - 3);
 	ft_print("erase(pos) ", check_if_equals(v, mv), true);
-	v.erase(v.end() - 10, v.end() - 5);
-	mv.erase(mv.end() - 10, mv.end() - 5);
+	ft_print("erase(pos) check return", *it, *mit);
+	it = v.erase(v.end() - 1);
+	mit = mv.erase(mv.end() - 1);
+	ft_print("erase(pos) ", check_if_equals(v, mv), true);
+	ft_print("erase(pos) check return", it == v.end(), mit == mv.end());
+	it = v.erase(v.end() - 10, v.end() - 5);
+	mit = mv.erase(mv.end() - 10, mv.end() - 5);
 	ft_print("erase(start, last) ", check_if_equals(v, mv), true);
+	ft_print("erase(pos) check return", *it, *mit);
+	it = v.erase(++v.begin(), ++v.begin());
+	mit = mv.erase(++mv.begin(), ++mv.begin());
+	ft_print("erase(start, last) ", check_if_equals(v, mv), true);
+	ft_print("erase(pos) check return", *it, *mit);
 
 	std::vector<int> v3;
 	for (int i = 0; i < 100; i++)
@@ -263,6 +273,9 @@ static void modifiers()
 	v.clear();
 	mv.clear();
 	ft_print("clear", v.size(), mv.size());
+	v3.clear();
+	mv2.clear();
+	ft_print("clear", v3.size(), mv2.size());
 
 }
 

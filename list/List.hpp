@@ -284,6 +284,8 @@ namespace ft
 			_head = NULL;
 			_tail = NULL;
 			_size = 0;
+			if (first == last)
+				return ;
 			while (first != last)
 				push_back(*(first++));
 			set_up_head_tail();
@@ -415,41 +417,58 @@ namespace ft
 		template<typename input_iterator>
 		iterator insert(iterator pos, input_iterator first, input_iterator last)
 		{
-			iterator ret = pos;
+			iterator ret = begin();
+			size_type i = 0;
+
+			while (ret != pos)
+			{
+				ret++;
+				i++;
+			}
 
 			while (first != last)
 			{
-				ret = insert(pos, *first);
+				insert(pos, *first);
 				first++;
 			}
-			return (ret);
+
+			Node *b = _head;
+			for (size_type ib = 0; ib < i; ib++)
+				b = b->_next;
+			return (iterator(b));
 		}
 
 		iterator erase(iterator pos)
 		{
 			iterator base = begin();
 			Node *node = _head;
+			size_type i = 0;
 
 			while (base != pos)
 			{
 				base++;
+				i++;
 				node = node->_next;
 			}
-			base = iterator(node->_next);
+
 			delete_node(node);
-			return (base);
+			if (i == _size)
+				return (end());
+			node = _head;
+			while (i > 0)
+			{
+				node = node->_next;
+				i--;
+			}
+			return (iterator(node));
 		}
 
 		iterator erase(iterator first, iterator last)
 		{
-			iterator it = first;
 			while (first != last)
-			{
-				it = first;
-				first++;
-				erase(it);
-			}
-			return (it);
+				first = erase(first);
+
+			return (first);
 		}
 
 		void swap(List& x) // untested

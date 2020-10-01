@@ -294,12 +294,27 @@ namespace ft
 		template<typename InputIterator>
 		Vector(InputIterator first, InputIterator last)
 		{
-			_v = _allocator.allocate(last - first);
-			_size = last - first;
+			size_type bi = 0;
+			InputIterator it = first;
+
+			while (it != last)
+			{
+				it++;
+				bi++;
+			}
+
+			if (bi == 0)
+			{
+				_size = 0;
+				_capacity_size = 0;
+				return ;
+			}
+
+			_v = _allocator.allocate(bi);
+			_size = bi;
 			_capacity_size = _size;
 			for (size_type i = 0; i < _size; i++, first++)
 			{
-			//	_v[i] = *first;
 				_allocator.construct(&_v[i], *first);
 			}
 		};
@@ -565,13 +580,21 @@ namespace ft
 			}
 		};
 
-		template<typename input_iteraror>
-		void assign(input_iteraror first, input_iteraror last)
+		template<typename input_iterator>
+		void assign(input_iterator first, input_iterator last)
 		{
+			input_iterator bi = first;
+			size_type bsize = 0;
 
-			if ((size_type)(last - first) <= _capacity_size)
+			while (bi != last)
 			{
-				_size = last - first;
+				bi++;
+				bsize++;
+			}
+
+			if (bsize <= _capacity_size)
+			{
+				_size = bsize;
 				for (size_type i = 0; first != last; i++, first++)
 					_v[i] = *first;
 			}
@@ -634,30 +657,28 @@ namespace ft
 		Iterator insert(Iterator pos, const T& value)
 		{
 			iterator it = begin();
-			if (_capacity_size < _size + 1)
-			{
-				reserve(_size + 1);
-			}
+
 			size_type i = 0;
 			while (it != pos)
 			{
 				i++;
 				it++;
 			}
+			if (_capacity_size < _size + 1)
+			{
+				reserve(_size + 1);
+			}
+
 			for (size_type j = _size; j >= i; j--)
 				_allocator.construct(&_v[j + 1], _v[j]);
 			_size += 1;
 			_allocator.construct(&_v[i], value);
-			return (pos);
+			return (begin() + i);
 		};
 
 		void insert(Iterator pos, size_type n, const T& value)
 		{
 			iterator it = begin();
-			if (_capacity_size < _size + n)
-			{
-				reserve(_capacity_size + n);
-			}
 
 			size_type i = 0;
 
@@ -666,6 +687,11 @@ namespace ft
 				i++;
 				it++;
 			}
+			if (_capacity_size < _size + n)
+			{
+				reserve(_capacity_size + n);
+			}
+
 			for (size_type ib = 0; ib < n; ib++)
 			{
 				for (size_type j = _size; j >= i; j--)
@@ -691,15 +717,15 @@ namespace ft
 				insize++;
 			}
 
-			if (_capacity_size < _size + insize)
-			{
-				reserve(_capacity_size + insize);
-			}
-
 			while (it != pos)
 			{
 				i++;
 				it++;
+			}
+
+			if (_capacity_size < _size + insize)
+			{
+				reserve(_capacity_size + insize);
 			}
 
 			for (size_type ib = 0; ib < insize; ib++)
@@ -715,26 +741,37 @@ namespace ft
 
 		Iterator 	erase(Iterator pos)
 		{
-			difference_type diff = pos - begin();
+			size_type diff = 0;
+			iterator it = begin();
+
+			while (it != pos)
+			{
+				diff++;
+				it++;
+			}
 
 			for (size_type i = diff; i < _size - 1; i++)
 			{
 				_v[i] = _v[i + 1];
 			}
 			_size -= 1;
-			return (pos + 1);
+			if (diff == _size)
+				return (end());
+			else
+				return (pos);
 		};
 
-		Iterator	erase(Iterator start, Iterator last) // check errors ?
+		Iterator	erase(Iterator start, Iterator last)
 		{
 			difference_type diff = start - begin();
 
 			difference_type length = last - start;
-
+			if (length <= 0)
+				return (start);
 			for (size_type i = diff; last != end(); i++, last++)
 				_v[i] = *last;
 			_size -= length;
-			return (begin() + diff + 1);
+			return (begin() + diff);
 		};
 
 		void swap(Vector& x)

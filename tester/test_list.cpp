@@ -162,6 +162,9 @@ static void modifiers()
 	//	l.push_back(i);
 	ft::List<int> ml;
 
+	std::list<int>::iterator it;
+	ft::List<int>::iterator mit;
+
 	l.assign(50, 42);
 	ml.assign((ft::List<int>::size_type)50, (ft::List<int>::value_type)42);
 	ft_print("assign (count, value): ", check_if_equals(l, ml), true);
@@ -187,18 +190,22 @@ static void modifiers()
 	l.push_front(100);
 	ml.push_front(100);
 
-	l.insert(l.begin(), 58);
-	ml.insert(ml.begin(), 58);
+	it = l.insert(l.begin(), 58);
+	mit = ml.insert(ml.begin(), 58);
 	ft_print("insert(pos, value): ", check_if_equals(l, ml), true);
-	l.insert(++l.begin(), 10);
-	ml.insert(++ml.begin(), (ft::List<int>::value_type)10);
+	ft_print("insert(pos, value): check return", *it, *mit);
+	it = l.insert(++l.begin(), 10);
+	mit = ml.insert(++ml.begin(), (ft::List<int>::value_type)10);
 	ft_print("insert(pos, value): ", check_if_equals(l, ml), true);
-	l.insert(--l.end(), 10);
-	ml.insert(--ml.end(), (ft::List<int>::value_type)10);
+	ft_print("insert(pos, value): check return", *it, *mit);
+	it = l.insert(--l.end(), 10);
+	mit = ml.insert(--ml.end(), (ft::List<int>::value_type)10);
 	ft_print("insert(pos, value): ", check_if_equals(l, ml), true);
-	l.insert(l.end(), 10);
-	ml.insert(ml.end(), (ft::List<int>::value_type)10);
+	ft_print("insert(pos, value): check return", *it, *mit);
+	it = l.insert(l.end(), 10);
+	mit = ml.insert(ml.end(), (ft::List<int>::value_type)10);
 	ft_print("insert(pos, value): ", check_if_equals(l, ml), true);
+	ft_print("insert(pos, value): check return", *it, *mit);
 
 	l.insert(l.begin(), 15, 58);
 	ml.insert(ml.begin(), (ft::List<int>::size_type)15, (ft::List<int>::value_type)58);
@@ -216,34 +223,43 @@ static void modifiers()
 	std::list<int> l3(10, 25);
 	l3.push_back(12);
 	l3.push_front(389);
-	l.insert(l.begin(), l3.begin(), l3.end());
-	ml.insert(ml.begin(), l3.begin(), l3.end());
+	it = l.insert(l.begin(), l3.begin(), l3.end());
+	mit = ml.insert(ml.begin(), l3.begin(), l3.end());
 	ft_print("insert(pos, it, end): ", check_if_equals(l, ml), true);
-	l.insert(++l.begin(), l3.begin(), l3.end());
-	ml.insert(++ml.begin(), l3.begin(), l3.end());
+	ft_print("insert(pos, value): check return", *it, *mit);
+	it = l.insert(++l.begin(), l3.begin(), l3.end());
+	mit = ml.insert(++ml.begin(), l3.begin(), l3.end());
 	ft_print("insert(pos, it, end): ", check_if_equals(l, ml), true);
-	l.insert(--l.end(), l3.begin(), l3.end());
-	ml.insert(--ml.end(), l3.begin(), l3.end());
+	ft_print("insert(pos, value): check return", *it, *mit);
+	it = l.insert(--l.end(), l3.begin(), l3.end());
+	mit = ml.insert(--ml.end(), l3.begin(), l3.end());
 	ft_print("insert(pos, it, end): ", check_if_equals(l, ml), true);
-	l.insert(l.end(), l3.begin(), l3.end());
-	ml.insert(ml.end(), l3.begin(), l3.end());
+	ft_print("insert(pos, value): check return", *it, *mit);
+	it = l.insert(l.end(), l3.begin(), l3.end());
+	mit = ml.insert(ml.end(), l3.begin(), l3.end());
 	ft_print("insert(pos, it, end): ", check_if_equals(l, ml), true);
+	ft_print("insert(pos, value): check return", *it, *mit);
 
-	l.erase(l.begin());
-	ml.erase(ml.begin());
+	it = l.erase(l.begin());
+	mit = ml.erase(ml.begin());
 	ft_print("erase(pos): ", check_if_equals(l, ml), true);
-	l.erase(--l.end());
-	ml.erase(--ml.end());
+	ft_print("eraset(pos): check return", *it, *mit);
+	it = l.erase(--l.end());
+	mit = ml.erase(--ml.end());
 	ft_print("erase(pos): ", check_if_equals(l, ml), true);
-	l.erase(++l.begin());
-	ml.erase(++ml.begin());
+	ft_print("erase(pos): check return", it == l.end(), mit == ml.end());
+	it = l.erase(++l.begin());
+	mit = ml.erase(++ml.begin());
 	ft_print("erase(pos): ", check_if_equals(l, ml), true);
-	l.erase(++l.begin(), --l.end());
-	ml.erase(++ml.begin(),--ml.end());
+	ft_print("insert(pos): check return", *it, *mit);
+	it = l.erase(++l.begin(), --l.end());
+	mit = ml.erase(++ml.begin(),--ml.end());
 	ft_print("erase(it, end): ", check_if_equals(l, ml), true);
-	l.erase(l.begin(), l.end());
-	ml.erase(ml.begin(), ml.end());
+	ft_print("erase(it, end): check return", *it, *mit);
+	it = l.erase(l.begin(), l.end());
+	mit = ml.erase(ml.begin(), ml.end());
 	ft_print("erase(it, end): ", check_if_equals(l, ml), true);
+	ft_print("erase(it, end): check return", it == l.end(), mit == ml.end());
 
 	std::list<int> l2(10, 100);
 	std::list<int> l4(8, 2);
@@ -364,19 +380,29 @@ void operations()
 	l.splice(++l.begin(), l4, l4.begin());
 	ml.splice(++ml.begin(), ml4, ml4.begin());
 	ft_print("splice(pos, list, i): ", check_if_equals(l, ml), true);
+	ft_print("splice(pos, list, i): ", check_if_equals(l4, ml4), true);
 	l.splice(l.begin(), l4, l4.begin());
 	ml.splice(ml.begin(), ml4, ml4.begin());
 	ft_print("splice(pos, list, i): ", check_if_equals(l, ml), true);
+	ft_print("splice(pos, list, i): ", check_if_equals(l4, ml4), true);
 	l.splice(l.end(), l4, l4.begin());
 	ml.splice(ml.end(), ml4, ml4.begin());
 	ft_print("splice(pos, list, i): ", check_if_equals(l, ml), true);
+	ft_print("splice(pos, list, i): ", check_if_equals(l4, ml4), true);
 	l.splice(--l.end(), l4, l4.begin());
 	ml.splice(--ml.end(), ml4, ml4.begin());
 	ft_print("splice(pos, list, i): ", check_if_equals(l, ml), true);
+	ft_print("splice(pos, list, i): ", check_if_equals(l4, ml4), true);
 
 	l.splice(++l.begin(), l4, l4.begin(), ++l4.begin());
 	ml.splice(++ml.begin(), ml4, ml4.begin(), ++ml4.begin());
 	ft_print("splice(pos, list, i): ", check_if_equals(l, ml), true);
+	ft_print("splice(pos, list, i): ", check_if_equals(l4, ml4), true);
+
+	l.splice(++l.begin(), l4, l4.begin(), ++l4.begin());
+	ml.splice(++ml.begin(), ml4, ml4.begin(), ++ml4.begin());
+	ft_print("splice(pos, list, i): ", check_if_equals(l, ml), true);
+	ft_print("splice(pos, list, i): ", check_if_equals(l4, ml4), true);
 
 	/*ft::List<int>::iterator mit = ml.begin();
 	ft::List<int>::iterator mend = ml.end();
