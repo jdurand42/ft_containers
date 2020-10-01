@@ -88,43 +88,43 @@ namespace ft
 
 		public:
 		template <class Type, class Cont>
-		friend bool operator == (const ft::Queue<Type,Cont>& x, const ft::Queue<Type,Cont>& y)
+		friend bool operator == (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
 		{
 			return (x._queue == y._queue);
 		};
 
 		template <class Type, class Cont>
-		friend bool operator != (const ft::Queue<Type,Cont>& x, const ft::Queue<Type,Cont>& y)
+		friend bool operator != (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
 		{
 			return (x._queue != y._queue);
 		};
 
 		template <class Type, class Cont>
-		friend bool operator < (const ft::Queue<Type,Cont>& x, const ft::Queue<Type,Cont>& y)
+		friend bool operator < (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
 		{
 			return (x._queue < y._queue);
 		};
 
 		template <class Type, class Cont>
-		friend bool operator <= (const ft::Queue<Type,Cont>& x, const ft::Queue<Type,Cont>& y)
+		friend bool operator <= (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
 		{
 			return (x._queue <= y._queue);
 		};
 
 		template <class Type, class Cont>
-		friend bool operator > (const ft::Queue<Type,Cont>& x, const ft::Queue<Type,Cont>& y)
+		friend bool operator > (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
 		{
 			return (x._queue > y._queue);
 		};
 
 		template <class Type, class Cont>
-		friend bool operator >= (const ft::Queue<Type,Cont>& x, const ft::Queue<Type,Cont>& y)
+		friend bool operator >= (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
 		{
 			return (x._queue >= y._queue);
 		};
 
 		template <class Type, class Cont>
-		friend void swap(ft::Queue<Type,Cont>& x, ft::Queue<Type,Cont>& y);
+		friend void swap(Queue<Type,Cont>& x, Queue<Type,Cont>& y);
 	};
 
 	template <class Type, class Cont>
