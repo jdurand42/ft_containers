@@ -142,6 +142,13 @@ static void operations()
 	m["tamere"] = "lol";
 	m["richard"] = "henri";
 	m["henri"] = "richard";
+	m["xavier1"] = "niel";
+	m["niel2"] = "free";
+	m["lol3"] = "42";
+	m["lollol4"] = "420";
+	m["tamere5"] = "lol";
+	m["richard6"] = "henri";
+	m["henri7"] = "richard";
 	ft::Map<std::string, std::string> mm;
 	mm["xavier"] = "niel";
 	mm["niel"] = "free";
@@ -150,6 +157,13 @@ static void operations()
 	mm["tamere"] = "lol";
 	mm["richard"] = "henri";
 	mm["henri"] = "richard";
+	mm["xavier1"] = "niel";
+	mm["niel2"] = "free";
+	mm["lol3"] = "42";
+	mm["lollol4"] = "420";
+	mm["tamere5"] = "lol";
+	mm["richard6"] = "henri";
+	mm["henri7"] = "richard";
 
 	ft_print("find(key) ", m.find("xavier")->second, mm.find("xavier")->second);
 	ft_print("find(key) ", m.find("niel")->second, mm.find("niel")->second);
@@ -178,6 +192,14 @@ static void operations()
 	ft_print("equal_range(key) ", check_range(m.equal_range("lol").first, m.equal_range("lol").second, mm.equal_range("lol").first, mm.equal_range("lol").second), true);
 	ft_print("equal_range(key) ", check_range(m.equal_range("henri").first, m.equal_range("henri").second, mm.equal_range("henri").first, mm.equal_range("henri").second), true);
 	ft_print("equal_range(key non existing) ", check_range(m.equal_range("jean-michel").first, m.equal_range("jean-michel").second, mm.equal_range("jean-michel").first, mm.equal_range("jean-michel").second), true);
+
+	ft_print("lower_bound(key) ", m.lower_bound("lol")->first == mm.lower_bound("lol")->first, true);
+	ft_print("lower_bound(key) ", m.lower_bound("niel")->first == mm.lower_bound("niel")->first, true);
+	ft_print("lower_bound(key non existing) ", m.lower_bound("niel1")->second == mm.lower_bound("niel1")->second, true);
+
+	ft_print("upper_bound(key) ", m.upper_bound("tamere")->first == mm.upper_bound("tamere")->first, true);
+	ft_print("upper_bound(key) ", m.upper_bound("lol3")->first == mm.upper_bound("lol3")->first, true);
+	ft_print("upper_bound(key non existing) ", m.upper_bound("niel1")->second == mm.upper_bound("niel1")->second, true);
 }
 
 static void modifiers()
