@@ -1097,72 +1097,74 @@ namespace ft
 	{
 		x.swap(y);
 	};
-}
 
-template <class T, class Allocator>
-bool operator == (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
-{
-	if (x.size() == y.size())
+	template <class T, class Allocator>
+	bool operator == (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
 	{
+		if (x.size() == y.size())
+		{
+			typename ft::List<T,Allocator>::const_iterator it = x.begin();
+			typename ft::List<T,Allocator>::const_iterator it2 = y.begin();
+			typename ft::List<T,Allocator>::const_iterator end = x.end();
+			for (; it != end; it++, it2++)
+			{
+				if (*it != *it2)
+					return (false);
+			}
+			return (true);
+		}
+		return (false);
+	};
+
+	template <class T, class Allocator>
+	bool operator != (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
+	{
+		return (!(x == y));
+	};
+
+	template <class T, class Allocator>
+	bool operator < (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
+	{
+		// check comportement on empty containers
 		typename ft::List<T,Allocator>::const_iterator it = x.begin();
 		typename ft::List<T,Allocator>::const_iterator it2 = y.begin();
 		typename ft::List<T,Allocator>::const_iterator end = x.end();
-		for (; it != end; it++, it2++)
+		typename ft::List<T,Allocator>::const_iterator end2 = y.end();
+
+		while (it != end)
 		{
-			if (*it != *it2)
+			if (it2 == end2 || *it2 < *it)
 				return (false);
+			else if (*it < *it2)
+				return (true);
+			it++;
+			it2++;
 		}
-		return (true);
-	}
-	return (false);
-};
+		return (it2 != end2);
+	};
 
-template <class T, class Allocator>
-bool operator != (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
-{
-	return (!(x == y));
-};
-
-template <class T, class Allocator>
-bool operator < (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
-{
-	// check comportement on empty containers
-	typename ft::List<T,Allocator>::const_iterator it = x.begin();
-	typename ft::List<T,Allocator>::const_iterator it2 = y.begin();
-	typename ft::List<T,Allocator>::const_iterator end = x.end();
-	typename ft::List<T,Allocator>::const_iterator end2 = y.end();
-
-	while (it != end)
+	template <class T, class Allocator>
+	bool operator <= (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
 	{
-		if (it2 == end2 || *it2 < *it)
-			return (false);
-		else if (*it < *it2)
-			return (true);
-		it++;
-		it2++;
-	}
-	return (it2 != end2);
-};
+		return (!(y < x));
+	};
 
-template <class T, class Allocator>
-bool operator <= (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
-{
-	return (!(y < x));
-};
+	template <class T, class Allocator>
+	bool operator > (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
+	{
+		// check comportement on empty containers
+		return (y < x);
+	};
 
-template <class T, class Allocator>
-bool operator > (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
-{
-	// check comportement on empty containers
-	return (y < x);
-};
+	template <class T, class Allocator>
+	bool operator >= (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
+	{
+		// check comportement on empty containers
+		return (!(x < y));
+	};
+}
 
-template <class T, class Allocator>
-bool operator >= (const ft::List<T,Allocator>& x, const ft::List<T,Allocator>& y)
-{
-	// check comportement on empty containers
-	return (!(x < y));
-};
+
 
 /*
 template <class InputIterator1, class InputIterator2>

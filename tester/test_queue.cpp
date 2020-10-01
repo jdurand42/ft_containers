@@ -98,5 +98,5 @@ void test_queue()
 {
 	std::cout << BOLDMAGENTA << "\n------TEST QUEUE----------\n\n" << RESET;
 	constructors();
-	//operators();
+	operators();
 }

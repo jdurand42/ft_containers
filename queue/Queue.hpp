@@ -88,40 +88,22 @@ namespace ft
 
 		public:
 		template <class Type, class Cont>
-		friend bool operator == (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
-		{
-			return (x._queue == y._queue);
-		};
+		friend bool operator == (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y);
 
 		template <class Type, class Cont>
-		friend bool operator != (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
-		{
-			return (x._queue != y._queue);
-		};
+		friend bool operator != (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y);
 
 		template <class Type, class Cont>
-		friend bool operator < (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
-		{
-			return (x._queue < y._queue);
-		};
+		friend bool operator < (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y);
 
 		template <class Type, class Cont>
-		friend bool operator <= (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
-		{
-			return (x._queue <= y._queue);
-		};
+		friend bool operator <= (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y);
 
 		template <class Type, class Cont>
-		friend bool operator > (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
-		{
-			return (x._queue > y._queue);
-		};
+		friend bool operator > (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y);
 
 		template <class Type, class Cont>
-		friend bool operator >= (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
-		{
-			return (x._queue >= y._queue);
-		};
+		friend bool operator >= (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y);
 
 		template <class Type, class Cont>
 		friend void swap(Queue<Type,Cont>& x, Queue<Type,Cont>& y);
@@ -132,6 +114,43 @@ namespace ft
 	{
 		return (x._queue.swap(y._queue));
 	};
+
+	template <class Type, class Cont>
+	bool operator == (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
+	{
+		return (x._queue == y._queue);
+	};
+
+	template <class Type, class Cont>
+	bool operator != (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
+	{
+		return (x._queue != y._queue);
+	};
+
+	template <class Type, class Cont>
+	bool operator < (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
+	{
+		return (x._queue < y._queue);
+	};
+
+	template <class Type, class Cont>
+	bool operator <= (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
+	{
+		return (x._queue <= y._queue);
+	};
+
+	template <class Type, class Cont>
+	bool operator > (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
+	{
+		return (x._queue > y._queue);
+	};
+
+	template <class Type, class Cont>
+	bool operator >= (const Queue<Type,Cont>& x, const Queue<Type,Cont>& y)
+	{
+		return (x._queue >= y._queue);
+	};
+
 
 }
 

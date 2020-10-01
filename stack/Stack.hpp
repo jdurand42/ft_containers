@@ -77,40 +77,22 @@ namespace ft
 
 		public:
 		template <class Type, class Cont>
-		friend bool operator == (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
-		{
-			return (x._stack == y._stack);
-		};
+		friend bool operator == (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y);
 
 		template <class Type, class Cont>
-		friend bool operator != (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
-		{
-			return (x._stack != y._stack);
-		};
+		friend bool operator != (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y);
 
 		template <class Type, class Cont>
-		friend bool operator < (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
-		{
-			return (x._stack < y._stack);
-		};
+		friend bool operator < (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y);
 
 		template <class Type, class Cont>
-		friend bool operator <= (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
-		{
-			return (x._stack <= y._stack);
-		};
+		friend bool operator <= (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y);
 
 		template <class Type, class Cont>
-		friend bool operator > (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
-		{
-			return (x._stack > y._stack);
-		};
+		friend bool operator > (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y);
 
 		template <class Type, class Cont>
-		friend bool operator >= (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
-		{
-			return (x._stack >= y._stack);
-		};
+		friend bool operator >= (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y);
 
 		template <class Type, class Cont>
 		friend void swap(ft::Stack<Type,Cont>& x, ft::Stack<Type,Cont>& y);
@@ -122,6 +104,41 @@ namespace ft
 		return (x._stack.swap(y._stack));
 	};
 
+	template <class Type, class Cont>
+	bool operator == (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
+	{
+		return (x._stack == y._stack);
+	};
+
+	template <class Type, class Cont>
+	bool operator != (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
+	{
+		return (x._stack != y._stack);
+	};
+
+	template <class Type, class Cont>
+	bool operator < (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
+	{
+		return (x._stack < y._stack);
+	};
+
+	template <class Type, class Cont>
+	bool operator <= (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
+	{
+		return (x._stack <= y._stack);
+	};
+
+	template <class Type, class Cont>
+	bool operator > (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
+	{
+		return (x._stack > y._stack);
+	};
+
+	template <class Type, class Cont>
+	bool operator >= (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
+	{
+		return (x._stack >= y._stack);
+	};
 
 };
 #endif
