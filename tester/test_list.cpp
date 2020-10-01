@@ -220,22 +220,32 @@ static void modifiers()
 	ml.insert(ml.end(), (ft::List<int>::size_type)2, (ft::List<int>::value_type)10);
 	ft_print("insert(pos, n, value): ", check_if_equals(l, ml), true);
 
-	std::list<int> l3(10, 25);
+/*	std::list<int> l3(10, 25);
 	l3.push_back(12);
 	l3.push_front(389);
-	it = l.insert(l.begin(), (std::list<int>::iterator)l3.begin(), (std::list<int>::iterator)l3.end());
+	l3.push_front(38);
+	l3.push_front(3);
+	l3.push_front(150);*/
+	std::vector<int> l3;
+	l3.push_back(12);
+	l3.push_back(389);
+	l3.push_back(38);
+	l3.push_back(3);
+	l3.push_back(150);
+	l3.insert(--l3.end(), 10, 25);
+	it = l.insert(l.begin(), l3.begin(), l3.end());
 	mit = ml.insert(ml.begin(), l3.begin(), l3.end());
 	ft_print("insert(pos, it, end): ", check_if_equals(l, ml), true);
 	ft_print("insert(pos, value): check return", *it, *mit);
-	it = l.insert(++l.begin(), (std::list<int>::iterator)l3.begin(), (std::list<int>::iterator)l3.end());
+	it = l.insert(++l.begin(), l3.begin(), l3.end());
 	mit = ml.insert(++ml.begin(), l3.begin(), l3.end());
 	ft_print("insert(pos, it, end): ", check_if_equals(l, ml), true);
 	ft_print("insert(pos, value): check return", *it, *mit);
-	it = l.insert(--l.end(), (std::list<int>::iterator)l3.begin(), (std::list<int>::iterator)l3.end());
+	it = l.insert(--l.end(), l3.begin(), l3.end());
 	mit = ml.insert(--ml.end(), l3.begin(), l3.end());
 	ft_print("insert(pos, it, end): ", check_if_equals(l, ml), true);
 	ft_print("insert(pos, value): check return", *it, *mit);
-	it = l.insert(l.end(), (std::list<int>::iterator)l3.begin(), (std::list<int>::iterator)l3.end());
+	it = l.insert(l.end(), l3.begin(), l3.end());
 	mit = ml.insert(ml.end(), l3.begin(), l3.end());
 	ft_print("insert(pos, it, end): ", check_if_equals(l, ml), true);
 	ft_print("insert(pos, value): check return", *it, *mit);
