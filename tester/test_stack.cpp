@@ -96,5 +96,5 @@ void test_stack()
 	std::cout << BOLDMAGENTA << "\n------TEST STACK----------\n\n" << RESET;
 
 	constructors();
-	operators();
+//	operators();
 }
