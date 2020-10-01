@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <string>
-#include "../Reverse_Iterator.hpp"
-#include "../Utils.hpp"
+#include "../utils/Reverse_Iterator.hpp"
+#include "../utils/Utils.hpp"
 
 /*
 ** Recursive stuff

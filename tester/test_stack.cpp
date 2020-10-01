@@ -2,6 +2,7 @@
 
 static void constructors()
 {
+	std::cout << BOLDYELLOW << "\n------ CONSTRUCTORS AND METHODS -------\n\n" << RESET;
 	std::stack<int> s;
 	ft::Stack<int> ms;
 	ft_print("Stack() ", s.size(), ms.size());
@@ -37,7 +38,8 @@ static void constructors()
 }
 
 static void operators()
-{	std::cout << BOLDYELLOW << "\n------ RELATIONAL OPERATORS -------\n\n" << RESET;
+{
+	std::cout << BOLDYELLOW << "\n------ RELATIONAL OPERATORS -------\n\n" << RESET;
 	std::stack<int> v;
 	ft::Stack<int> mv;
 	std::stack<int> v2;
@@ -74,12 +76,24 @@ static void operators()
 	ft_print("Swap ", v.size(), mv.size());
 	ft_print("Swap ", v2.size(), mv2.size());
 
+	std::stack<std::string> v3;
+	ft::Stack<std::string> mv3;
+	std::stack<std::string> v4;
+	ft::Stack<std::string> mv4;
+
+	ft_print("v == v", v3 == v4, mv3 == mv4);
+	ft_print("v != v", v3 != v4, mv3 != mv4);
+	ft_print("v < v", v3 < v4, mv3 < mv4);
+	ft_print("v <= v", v3 <= v4, mv3 <= mv4);
+	ft_print("v > v", v3 > v4, mv3 > mv4);
+	ft_print("v >= v", v3 >= v4, mv3 >= mv4);
+
 
 }
 
 void test_stack()
 {
-	std::cout << "\n------TEST STACK----------\n\n";
+	std::cout << BOLDMAGENTA << "\n------TEST STACK----------\n\n" << RESET;
 
 	constructors();
 	operators();

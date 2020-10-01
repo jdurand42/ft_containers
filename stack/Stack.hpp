@@ -87,7 +87,7 @@ namespace ft
 		template <class Type, class Cont>
 		friend bool operator != (const ft::Stack<Type,Cont>& x, const ft::Stack<Type,Cont>& y)
 		{
-			return (!(x == y));
+			return (x._stack != y._stack);
 		};
 
 		template <class Type, class Cont>

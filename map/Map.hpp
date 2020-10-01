@@ -2,8 +2,8 @@
 #define MAP_HPP
 
 #include "BST.hpp"
-#include "../Reverse_Iterator.hpp"
-#include "../Utils.hpp"
+#include "../utils/Reverse_Iterator.hpp"
+#include "../utils/Utils.hpp"
 
 /*
 ** Needto do the iterate stuffs
@@ -45,8 +45,6 @@ namespace ft
 			while (first != last)
 			{
 				_bst.insert(*first);
-				std::cout << first->first << "  " << first->second << std::endl;
-			//	std::cout << last->first << std::endl;
 				++first;
 			}
 		}
@@ -145,7 +143,6 @@ namespace ft
 
 			while (first != last)
 			{
-				std::cout << "la\n";
 				b = first;
 				b++;
 				_bst.delete_key((*first).first);

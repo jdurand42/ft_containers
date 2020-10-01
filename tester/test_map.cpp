@@ -68,13 +68,12 @@ static void constructors()
 	mm4["xavier"] = 42;
 	mm4["niel"] = 420;
 	mm4["lol"] = 101;
-	std::cout << "lol\n";
 	ft::Map<std::string, int>::iterator i = mm4.begin();
 	ft::Map<std::string, int>::iterator e = mm4.end();
 	for (; i != e; i++)
-		std::cout << "LOOP\n";
+		;
+	ft_print("Test on small Iterations: ", true, true);
 	ft::Map<std::string, int> mm1(mm4.begin(), mm4.end());
-	std::cout << "lol\n";
 	ft_print("map(it, it) ", check_if_equals(m, mm1), true);
 	ft::Map<std::string, int> mm2(mm1);
 	ft_print("map(map) ", check_if_equals(m, mm2), true);
@@ -244,15 +243,9 @@ static void modifiers()
 	mm.erase(mm.find("hey"));
 	ft_print("Erase (pos): ", check_if_equals2(m, mm), true);
 
-	std::cout << "ici\n";
 	m.erase(m.find("bonjour"), ++m.find("bonjour"));
 	mm.erase(mm.find("bonjour"), ++mm.find("bonjour"));
-	std::cout << "ici\n";
 	ft_print("Erase (first, last): ", m.size(), mm.size());
-	//m.erase(m.find("henri"));
-	//mm.erase(mm.find("henri"));
-	//ft_print("Erase (pos): ", check_if_equals2(m, mm), true);
-
 	std::map<std::string, std::string> m2;
 	m2["xavier"] = "niel";
 	m2["niel"] = "free";

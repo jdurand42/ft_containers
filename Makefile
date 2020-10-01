@@ -1,4 +1,4 @@
-NAME		=	containers
+NAME		=	containers_tester
 
 SRCS	=	./tester/test_vector.cpp ./tester/main.cpp ./tester/test_list.cpp ./tester/test_queue.cpp \
 				./tester/test_stack.cpp ./tester/test_map.cpp
@@ -18,13 +18,13 @@ all	:	$(NAME)
 $(NAME): $(OBJS)
 		$(CC) -o $(NAME) $(OBJS)
 
-c1	:
+c	:
 		$(CC) -o $(NAME) $(OBJS) $(SRCS)
 
-s1	:
+s	:
 		$(CC) -o $(NAME) $(SANI) $(SRCS)
 
-w1	:
+w	:
 		$(CC) -o $(NAME) $(CFLAGS) $(SRCS)
 
 clean	:
@@ -35,4 +35,4 @@ fclean	:	clean
 
 re	:	fclean all
 
-.PHONY	:	clean fclean all c1 s1 w1
+.PHONY	:	clean fclean all c s w

@@ -2,6 +2,8 @@
 
 static void constructors()
 {
+	std::cout << BOLDYELLOW << "\n------ CONSTRUCTORS AND METHODS -------\n\n" << RESET;
+
 	std::queue<int> s;
 	ft::Queue<int> ms;
 	ft_print("queue() ", s.size(), ms.size());
@@ -35,11 +37,11 @@ static void constructors()
 	ms.pop();
 	ft_print("size() ", s.size(), ms.size());
 	ft_print("pop and back() ", s.back(), ms.back());
-
 }
 
 static void operators()
-{	std::cout << BOLDYELLOW << "\n------ RELATIONAL OPERATORS -------\n\n" << RESET;
+{
+	std::cout << BOLDYELLOW << "\n------ RELATIONAL OPERATORS -------\n\n" << RESET;
 	std::queue<int> v;
 	ft::Queue<int> mv;
 	std::queue<int> v2;
@@ -94,7 +96,7 @@ static void operators()
 
 void test_queue()
 {
-	std::cout << "\n------TEST QUEUE----------\n\n";
+	std::cout << BOLDMAGENTA << "\n------TEST QUEUE----------\n\n" << RESET;
 	constructors();
 	operators();
 }
