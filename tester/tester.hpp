@@ -32,32 +32,8 @@
 
 #define TIME 0
 
-class Generic
-{
-	public:
-	Generic()
-	{
-		std::cout << "Generic constructor called\n";
-		_a = 1;
-		_b = 2;
-	};
-
-	~Generic()
-	{
-		std::cout << "Generic destructor called\n";
-	};
-
-	void print()
-	{
-		std::cout << "Generic method called: " << _a << " " << _b << std::endl;
-	};
-
-	int _a;
-	int _b;
-};
-
 template<typename T>
-void ft_print(std::string method, T container, T my_container)
+void ft_print(const std::string& method, const T& container, const T& my_container)
 {
 	usleep(TIME);
 	std::cout << "---- Test on " << method << std::endl;

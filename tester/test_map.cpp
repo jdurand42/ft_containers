@@ -57,7 +57,7 @@ static bool check_it(it i, it i2)
 
 static void constructors()
 {
-	std::cout << BOLDMAGENTA << "------CONSTRUCTORS----------\n" << RESET;
+	std::cout << BOLDYELLOW << "------CONSTRUCTORS----------\n" << RESET;
 	std::map<std::string, int> m;
 	ft::Map<std::string, int> mm;
 	ft_print("map() ", check_if_equals(m, mm), true);
@@ -89,7 +89,7 @@ static void constructors()
 
 static void elements_access()
 {
-	std::cout << BOLDMAGENTA << "------elements_access----------\n" << RESET;
+	std::cout << BOLDYELLOW << "------elements_access----------\n" << RESET;
 	std::map<std::string, std::string> m;
 	m["xavier"] = "niel";
 	m["niel"] = "free";
@@ -109,7 +109,7 @@ static void elements_access()
 
 static void capacity()
 {
-	std::cout << BOLDMAGENTA << "------capacity----------\n" << RESET;
+	std::cout << BOLDYELLOW << "------capacity----------\n" << RESET;
 	std::map<std::string, std::string> m;
 	ft::Map<std::string, std::string> mm;
 	ft_print("empty(): ", m.empty(), mm.empty());
@@ -133,7 +133,7 @@ static void capacity()
 
 static void operations()
 {
-	std::cout << BOLDMAGENTA << "------OPERATIONS----------\n" << RESET;
+	std::cout << BOLDYELLOW << "------OPERATIONS----------\n" << RESET;
 	std::map<std::string, std::string> m;
 	m["xavier"] = "niel";
 	m["niel"] = "free";
@@ -182,7 +182,7 @@ static void operations()
 
 static void modifiers()
 {
-	std::cout << BOLDMAGENTA << "------- MODIFIERS----------\n" << RESET;
+	std::cout << BOLDYELLOW << "------- MODIFIERS----------\n" << RESET;
 	std::map<std::string, std::string> m;
 	m["xavier"] = "niel";
 	m["niel"] = "free";
@@ -376,7 +376,7 @@ static void const_reverse_iterators()
 
 void test_map()
 {
-	std::cout << BOLDYELLOW << "\n------TEST MAP----------\n\n" << RESET;
+	std::cout << BOLDMAGENTA << "\n------TEST MAP----------\n\n" << RESET;
 	constructors();
 	elements_access();
 	capacity();
