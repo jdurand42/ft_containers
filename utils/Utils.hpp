@@ -1,6 +1,9 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#include <cstddef>
+#include <limits>
+
 namespace ft
 {
 	template<typename Key, typename T>

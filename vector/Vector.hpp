@@ -3,24 +3,18 @@
 
 #include <iostream>
 #include <string>
+#include <cstddef>
+#include <limits>
+
 #include "../utils/Reverse_Iterator.hpp"
 #include "../utils/Utils.hpp"
 
 #include <cmath>
 
-/*
-** everything is implemented
-** Need to check return values, degree of protection agains't bad Iterators
-** Need to stress it
-** Need to throw outofrange exception and maybe, not permitted
-** Need to check on reverse_iterator
-** CONSTRUCTORS with iterators
-** need to double check and test comparison operators
-*/
 
 namespace ft
 {
-	#define CAPACITY 5
+	#define CAPACITY 2
 
 	template<typename T, class Allocator = Allocator<T> >
 	class Vector
@@ -332,6 +326,7 @@ namespace ft
 				for (size_type i = 0; i < _capacity_size; i++)
 					_allocator.destroy(&_v[i]);
 				_allocator.deallocate(_v, _capacity_size);
+				_capacity_size = 0;
 			}
 			_v = _allocator.allocate(v._capacity_size);
 			_size = v._size;
@@ -545,7 +540,7 @@ namespace ft
 						_allocator.destroy(&_v[i]);
 					_allocator.deallocate(_v, _capacity_size);
 				}
-				_capacity_size = count + CAPACITY;
+				_capacity_size = count;
 				_v = b;
 			}
 		};
@@ -577,13 +572,13 @@ namespace ft
 			if ((size_type)(last - first) <= _capacity_size)
 			{
 				_size = last - first;
-				for (int i = 0; first != last; i++, first++)
+				for (size_type i = 0; first != last; i++, first++)
 					_v[i] = *first;
 			}
 			else
 			{
 				clear();
-				_size = last - first;
+				//_size = last - first;
 				for (; first != last; first++)
 					push_back(*first);
 			}
@@ -594,16 +589,23 @@ namespace ft
 			_size = 0;
 		};
 
-		void push_back(T t)
+		void push_back(const T& t)
 		{
-			if (_capacity_size > _size + 1)
+			size_type capacity;
+
+			if (_capacity_size > _size)
 			{
-				_v[_size] = t;
+				//_v[_size] = t;
+				_allocator.construct(&_v[_size], t);
 				_size += 1;
 				return ;
 			}
 			T* b;
-			size_type capacity = _size + CAPACITY;;
+
+			if (_size > 0)
+				capacity = _size * 2;
+			else
+				capacity = 1;
 			//_capacity_size = _size + CAPACITY;
 			b =_allocator.allocate(capacity);
 
@@ -618,7 +620,7 @@ namespace ft
 					_allocator.destroy(&_v[i]);
 				_allocator.deallocate(_v, _capacity_size);
 			}
-			_capacity_size = _size + CAPACITY;
+			_capacity_size = capacity;
 			_v = b;
 			_size += 1;
 		};
@@ -631,84 +633,84 @@ namespace ft
 
 		Iterator insert(Iterator pos, const T& value)
 		{
-			T* vb = new T[end() - pos];
-
-			for (difference_type i = 0; i < end() - pos; i++)
-				vb[i] = _v[pos - begin() + i];
-
-			if (_size + 1 <= _capacity_size)
+			iterator it = begin();
+			if (_capacity_size < _size + 1)
 			{
-				_v[pos - begin()] = value;
-				_size += 1;
-				for (size_type i = pos - begin() + 1, j = 0; i < _size; i++, j++)
-					_v[i] = vb[j];
+				reserve(_size + 1);
 			}
-			else
+			size_type i = 0;
+			while (it != pos)
 			{
-				size_type vb_size = end() - pos;
-				_size = pos - begin();
-				push_back(value);
-				for (size_type i = 0; i < vb_size; i++)
-					push_back(vb[i]);
+				i++;
+				it++;
 			}
-			delete[] vb;
+			for (size_type j = _size; j >= i; j--)
+				_allocator.construct(&_v[j + 1], _v[j]);
+			_size += 1;
+			_allocator.construct(&_v[i], value);
 			return (pos);
 		};
 
 		void insert(Iterator pos, size_type n, const T& value)
 		{
-			T* vb = new T[end() - pos];
-
-			for (difference_type i = 0; i < end() - pos; i++)
-				vb[i] = _v[pos - begin() + i];
-
-			if (_size + n <= _capacity_size)
+			iterator it = begin();
+			if (_capacity_size < _size + n)
 			{
-				for (size_type i = pos - begin(), j = 0; j < n; i++, j++)
-					_v[i] = value;
-				_size += n;
-				for (size_type i = pos - begin() + n, j = 0; i < _size; i++, j++)
-					_v[i] = vb[j];
+				reserve(_capacity_size + n);
 			}
-			else
+
+			size_type i = 0;
+
+			while (it != pos)
 			{
-				size_type vb_size = end() - pos;
-				_size = pos - begin();
-				for (size_type i = 0; i < n; i++)
-					push_back(value);
-				for (size_type i = 0; i < vb_size; i++)
-					push_back(vb[i]);
+				i++;
+				it++;
 			}
-			delete[] vb;
+			for (size_type ib = 0; ib < n; ib++)
+			{
+				for (size_type j = _size; j >= i; j--)
+					_allocator.construct(&_v[j + 1], _v[j]);
+				_size += 1;
+				_allocator.construct(&_v[i], value);
+				i++;
+				it++;
+			}
 		};
 
-		template<class InputIterator> // probleme dans l'overload -> try catch?
-		void insert(Iterator pos, InputIterator first, InputIterator last)
+		template<class Input_Iterator> // probleme dans l'overload -> try catch?
+		void insert(Iterator pos, Input_Iterator first, Input_Iterator last)
 		{
-			T* vb = new T[end() - pos];
+			iterator it = begin();
+			Input_Iterator bit = first;
+			size_type i = 0;
+			size_type insize = 0;
 
-
-			for (difference_type i = 0; i < end() - pos; i++)
-				vb[i] = _v[pos - begin() + i];
-
-			if ((size_type)(_size + last - first) <= _capacity_size)
+			while (bit != last)
 			{
-				for (size_type i = pos - begin(); first != last; i++, first++)
-					_v[i] = *first;
-				_size += last - first;
-				for (size_type i = pos - begin() + last - first, j = 0; i < _size; i++, j++)
-					_v[i] = vb[j];
+				bit++;
+				insize++;
 			}
-			else
+
+			if (_capacity_size < _size + insize)
 			{
-				size_type vb_size = end() - pos;
-				_size = pos - begin();
-				for (; first != last ; first++)
-					push_back(*first);
-				for (size_type i = 0; i < vb_size; i++)
-					push_back(vb[i]);
+				reserve(_capacity_size + insize);
 			}
-			delete[] vb;
+
+			while (it != pos)
+			{
+				i++;
+				it++;
+			}
+
+			for (size_type ib = 0; ib < insize; ib++)
+			{
+				for (size_type j = _size; j >= i; j--)
+					_allocator.construct(&_v[j + 1], _v[j]);
+				_size += 1;
+				_allocator.construct(&_v[i], *first);
+				i++;
+				first++;
+			}
 		};
 
 		Iterator 	erase(Iterator pos)

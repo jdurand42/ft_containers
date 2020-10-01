@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <string>
+#include <cstddef>
+#include <limits>
+
 namespace ft
 {
 	template<typename iterator>

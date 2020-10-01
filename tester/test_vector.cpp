@@ -88,8 +88,7 @@ static void capacity_tests()
 	v.resize(10, "lol");
 	mv.resize(10, "lol");
 	ft_print("Value : ", v[9], mv[9]);
-	ft_print("Test if not deallocated: ", v[18], mv[18]);
-	ft_print("new size: ", v.size(), mv.size()); //for a seg faut :)
+	ft_print("new size: ", v.size(), mv.size());
 	std::cout << std::endl;
 
 	v1.reserve(150);
@@ -216,12 +215,13 @@ static void modifiers()
 	std::vector<int>::iterator it = v.insert(v.end() - 4, (int)42);
 	ft::Vector<int>::iterator mit = mv.insert(mv.end() - 4, (int)42);
 	ft_print("insert (pos, value): ", v[v.size() - 5], mv[mv.size() - 5]);
+	ft_print("insert (pos, value) check size: ", v.size(), mv.size());
 	ft_print("insert return: ", *it == 42, *mit == 42);
 	v.insert(v.end() - 2, (std::vector<int>::size_type)10, (std::vector<int>::value_type)21);
 	mv.insert(mv.end() - 2, (ft::Vector<int>::size_type)10, (ft::Vector<int>::value_type)21);
 	ft_print("insert (pos, n, value): ", check_if_equals(v, mv), true);
-/*	ft_print("insert (pos, n, value): ", v[v.size() - 3], mv[mv.size() - 3]);
-	ft_print("insert (pos, n, value): ", v[v.size() - 1], mv[mv.size() - 1]);*/
+	ft_print("insert (pos, n, value): ", v[v.size() - 3], mv[mv.size() - 3]);
+	ft_print("insert (pos, n, value): ", v[v.size() - 1], mv[mv.size() - 1]);
 	std::vector<int> v2;
 	for (int i = 0; i < 20; i++)
 		v2.push_back(i);

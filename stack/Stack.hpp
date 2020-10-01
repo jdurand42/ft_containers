@@ -3,11 +3,9 @@
 
 #include <iostream>
 #include <string>
+#include <cstddef>
+#include <limits>
 #include "../list/List.hpp"
-
-/*
-** Don't forget to do relationnal operators
-*/
 
 namespace ft
 {
