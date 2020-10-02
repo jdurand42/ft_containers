@@ -616,10 +616,6 @@ namespace ft
 
 		Iterator find(const Key& key) const
 		{
-//			Iterator it;
-
-//			it._root = _root;
-
 			Node *node = search_node(key, _root);
 			if (node)
 				return (Iterator(node, _root));

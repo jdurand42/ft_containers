@@ -29,7 +29,6 @@ namespace ft
 		typedef const T&	const_reference;
 		typedef const T*	const_pointer;
 
-
 		public:
 		class Iterator // random access iterator
 		{

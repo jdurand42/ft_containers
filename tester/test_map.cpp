@@ -396,6 +396,27 @@ static void const_reverse_iterators()
 	ft_print(" it != it: ", vit != l.rbegin(), mvit != ml.rbegin());
 }
 
+static  void observers()
+{
+	std::cout << BOLDYELLOW << "\n ---- OBSERVERS ----\n" << RESET;
+	ft::Map<int, char> mm;
+	mm[0] = 'c';
+	mm[1] = 'd';
+
+	ft::Map<int, char>::key_compare key_comp = mm.key_comp();
+	ft_print("Test key comp", key_comp(0, 1), true);
+	ft_print("Test key comp", key_comp(1, 0), false);
+	ft_print("Test key comp", key_comp(0, 0), false);
+
+
+	ft::Map<int, char>::value_compare value_comp = mm.value_comp();
+	ft::Pair<const int, char> p1(0, 'c');
+	ft::Pair<const int, char> p2(1, 'd');
+	ft_print("Test value comp", value_comp(p1, p2), true);
+	ft_print("Test value comp", value_comp(p2, p1), false);
+	ft_print("Test value comp", value_comp(p1, p1), false);
+}
+
 void test_map()
 {
 	std::cout << BOLDMAGENTA << "\n------TEST MAP----------\n\n" << RESET;
@@ -408,4 +429,5 @@ void test_map()
 	reverse_iterators();
 	const_iterators();
 	const_reverse_iterators();
+	observers();
 }

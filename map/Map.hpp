@@ -8,8 +8,14 @@
 #include "../utils/Reverse_Iterator.hpp"
 #include "../utils/Utils.hpp"
 
+
+
 namespace ft
 {
+
+	/*template<typename Key, typename T>
+	*/
+
 	template<class Key, class T, class Compare = Less<Key>,
 	class Allocator = Allocator<Pair<const Key,T> > >
 	class Map
@@ -30,7 +36,18 @@ namespace ft
 		typedef value_type* pointer;
 		typedef const value_type* const_pointer;
 
+		protected:
+		struct Value_Compare
+		{
+			bool operator()(const_reference x, const_reference y)
+			{
+				return (x.first < y.first);
+			}
+		};
+
 		public:
+		typedef Value_Compare value_compare;
+
 		Map()
 		{
 		}
@@ -236,6 +253,11 @@ namespace ft
 			return (_comp);
 		}
 
+		value_compare value_comp() const
+		{
+			return (_value_comp);
+		}
+
 		/*value_comp value_comp() const
 		{
 			return (_value_comp);
@@ -286,10 +308,15 @@ namespace ft
 			return (_bst.rend());
 		}
 
+		/*
+		** OBSERVERS
+		*/
+
 		private:
 		BST<Key,T,Compare,Allocator>	_bst;
 		allocator_type 					_allocator;
 		key_compare 					_comp;
+		value_compare					_value_comp;
 	};
 };
 
